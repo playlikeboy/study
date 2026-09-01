@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Module 5: Code Optimization & Target Generation</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
-<style>
+  <meta charset="UTF-8">
+  <title>Module 5: Code Optimization & Code Generation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
 
 :root {
@@ -29,42 +30,58 @@
   --bg-page: #f8fafc;
 }
 
+@page {
+  size: A4 portrait;
+  margin: 14mm 11mm 14mm 11mm;
+  @bottom-right {
+    content: "Page " counter(page);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 8pt;
+    color: #64748b;
+  }
+  @bottom-left {
+    content: "Compiler Design (CS24301) | BIT Mesra CSE";
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 8pt;
+    color: #64748b;
+  }
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: var(--text);
-  background-color: var(--bg-page);
-  line-height: 1.6;
-  font-size: 12.6px;
+  background-color: #ffffff;
+  line-height: 1.58;
+  font-size: 12.2px;
   padding: 0;
 }
 
 .page-container {
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
   background: #ffffff;
-  padding: 35px 40px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  padding: 0;
 }
 
 .doc-header {
-  border-bottom: 3px solid var(--primary);
-  padding-bottom: 18px;
-  margin-bottom: 22px;
+  border-bottom: 2.5px solid var(--primary);
+  padding-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .badge-container {
   display: flex;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   flex-wrap: wrap;
 }
 
 .badge {
   display: inline-block;
-  padding: 3px 10px;
-  font-size: 10px;
+  padding: 3px 9px;
+  font-size: 9.5px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -77,15 +94,15 @@ body {
 .badge-amber { background: #fef3c7; color: #92400e; }
 
 h1.doc-title {
-  font-size: 23px;
+  font-size: 21px;
   font-weight: 800;
   color: var(--dark);
   line-height: 1.25;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
 .doc-subtitle {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--text-muted);
   font-weight: 500;
 }
@@ -95,8 +112,7 @@ h1.doc-title {
   border: 1px solid #bae6fd;
   border-radius: 8px;
   padding: 14px 18px;
-  margin-bottom: 25px;
-  page-break-inside: avoid;
+  margin-bottom: 22px;
 }
 
 .toc-title {
@@ -104,29 +120,34 @@ h1.doc-title {
   font-weight: 700;
   color: #0369a1;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .toc-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5px 20px;
-  font-size: 11.5px;
+  font-size: 11.2px;
 }
 
 h2.section-title {
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 700;
   color: var(--dark);
-  border-left: 4px solid var(--accent);
+  border-left: 4px solid var(--primary);
   padding-left: 10px;
-  margin: 24px 0 12px 0;
+  margin: 22px 0 10px 0;
+  page-break-after: avoid;
 }
 
 h3.subsection-title {
-  font-size: 13.5px;
+  font-size: 13.2px;
   font-weight: 700;
-  color: var(--secondary);
-  margin: 15px 0 7px 0;
+  color: #0369a1;
+  margin: 16px 0 6px 0;
+  page-break-after: avoid;
 }
 
 p { margin-bottom: 8px; text-align: justify; }
@@ -134,17 +155,13 @@ p { margin-bottom: 8px; text-align: justify; }
 .callout {
   border-radius: 6px;
   padding: 10px 14px;
-  margin: 11px 0;
-  font-size: 11.8px;
+  margin: 10px 0;
+  font-size: 11.5px;
   border-left: 4px solid;
   page-break-inside: avoid;
 }
-
-.callout-info { background: #f0fdf4; border-color: #16a34a; color: #14532d; }
-.callout-blue { background: #f0f9ff; border-color: #0284c7; color: #0c4a6e; }
-.callout-warning { background: #fffbeb; border-color: #d97706; color: #78350f; }
-.callout-danger { background: #fef2f2; border-color: #dc2626; color: #7f1d1d; }
-.callout-pyq { background: #faf5ff; border-color: #9333ea; color: #581c87; }
+.callout-info { background: #f0f9ff; border-color: #0284c7; color: #0c4a6e; }
+.callout-warning { background: #fffbeb; border-color: #f59e0b; color: #78350f; }
 
 .callout-title {
   font-weight: 700;
@@ -154,229 +171,332 @@ p { margin-bottom: 8px; text-align: justify; }
   gap: 6px;
 }
 
-table.custom-table {
+.custom-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 11px 0;
-  font-size: 11.5px;
-  background: #ffffff;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid var(--border);
+  margin: 12px 0;
+  font-size: 11px;
   page-break-inside: avoid;
 }
 
-table.custom-table th {
-  background: #1e293b;
-  color: #ffffff;
-  font-weight: 600;
+.custom-table th, .custom-table td {
+  border: 1px solid #cbd5e1;
+  padding: 7px 10px;
   text-align: left;
-  padding: 6px 10px;
-  font-size: 11px;
 }
 
-table.custom-table td {
-  padding: 5.5px 10px;
-  border-bottom: 1px solid #e2e8f0;
-  vertical-align: middle;
-}
-
-table.custom-table tr:nth-child(even) td { background-color: #f8fafc; }
-
-code {
-  font-family: 'Fira Code', monospace;
-  font-size: 11px;
+.custom-table th {
   background: #f1f5f9;
-  color: #0f172a;
-  padding: 1.5px 4px;
-  border-radius: 3px;
-  border: 1px solid #e2e8f0;
+  font-weight: 700;
+  color: #1e293b;
 }
 
 pre {
   background: #0f172a;
   color: #f8fafc;
-  padding: 9px 13px;
+  padding: 11px 14px;
   border-radius: 6px;
   font-family: 'Fira Code', monospace;
-  font-size: 11px;
-  line-height: 1.4;
+  font-size: 10.8px;
+  margin: 10px 0;
+  page-break-inside: avoid;
   overflow-x: auto;
-  margin: 9px 0;
+}
+
+code {
+  font-family: 'Fira Code', monospace;
+  background: #f1f5f9;
+  color: #0f172a;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.qa-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid var(--secondary);
+  border-radius: 6px;
+  padding: 11px 15px;
+  margin: 12px 0;
   page-break-inside: avoid;
 }
 
-ul, ol { margin: 5px 0 9px 18px; font-size: 12px; }
-li { margin-bottom: 3px; }
+.qa-q {
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 6px;
+  font-size: 12.2px;
+}
+
+.qa-a {
+  color: #334155;
+  font-size: 11.5px;
+  line-height: 1.55;
+}
+
+.worked-box {
+  background: #ffffff;
+  border: 1.5px solid #3b82f6;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  page-break-inside: avoid;
+}
+
+.worked-title {
+  font-size: 12.8px;
+  font-weight: 800;
+  color: #1e40af;
+  margin-bottom: 10px;
+}
+
+.formula-card {
+  background: #eff6ff;
+  border-left: 4px solid #2563eb;
+  padding: 10px 14px;
+  margin: 10px 0;
+  font-size: 11.8px;
+  page-break-inside: avoid;
+}
 
 .diagram-container {
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px;
-  margin: 12px 0;
+  margin: 14px auto;
   text-align: center;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
   page-break-inside: avoid;
 }
 
 .diagram-caption {
   font-size: 10px;
-  font-weight: 600;
   color: var(--text-muted);
-  margin-top: 5px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-top: 6px;
 }
 
-.qa-card {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 11px 15px;
-  margin: 11px 0;
-  page-break-inside: avoid;
-}
-
-.qa-q { font-weight: 700; color: #1e3a8a; font-size: 12.2px; margin-bottom: 5px; }
-.qa-a { font-size: 11.8px; color: var(--text); }
-
-@media print {
-  body { background: #ffffff; font-size: 11.8px; }
-  .page-container { padding: 0; max-width: 100%; box-shadow: none; }
-  @page {
-    size: A4 portrait;
-    margin: 14mm 11mm 14mm 11mm;
-    @bottom-right {
-      content: "Page " counter(page);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 8px;
-      color: #94a3b8;
-    }
-    @bottom-left {
-      content: "Compiler Design (CS24301) Study Notes | BIT Mesra";
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 8px;
-      color: #94a3b8;
-    }
-  }
-  .toc-box, .diagram-container, .callout, table, pre, .qa-card {
-    page-break-inside: avoid;
-  }
+.page-break {
+  page-break-before: always;
+  break-before: page;
 }
 </style>
 </head>
 <body>
-<div class="page-container">
-  <div class="doc-header">
-    <div class="badge-container">
-      <span class="badge badge-blue">CS24301 — Theory (3.0 Cr)</span>
-      <span class="badge badge-purple">Module V Notes</span>
-      <span class="badge badge-green">BIT Mesra | NEP Scheme</span>
+  <div class="page-container">
+    <div class="doc-header">
+      <div class="badge-container">
+        <span class="badge badge-blue">CS24301 — Theory (3.0 Cr)</span>
+        <span class="badge badge-purple">Module V Notes</span>
+        <span class="badge badge-green">BIT Mesra</span>
+        <span class="badge badge-amber">NEP Scheme</span>
+      </div>
+      <h1 class="doc-title">Module 5: Code Optimization & Code Generation</h1>
+      <div class="doc-subtitle">Basic Blocks, CFG, DAG, Loop Optimizations, Data-Flow Equations & Register Coloring</div>
     </div>
-    <h1 class="doc-title">Module 5: Code Optimization & Target Generation</h1>
-    <div class="doc-subtitle">Basic Blocks, CFG, DAG Optimizations, Register Allocation & Peephole</div>
-  </div>
-  
+    
 <div class="toc-box">
-  <div class="toc-title">Module V: Code Optimization & Target Generation — Topics Covered</div>
+  <div class="toc-title"><i class="fa-solid fa-list-check"></i> Module V: Code Optimization & Target Code Generation — Complete Syllabus Topics</div>
   <div class="toc-grid">
-    <div>1. Basic Blocks & Leader Instruction Algorithm</div>
-    <div>2. Control Flow Graph (CFG) & Loop Dominators</div>
-    <div>3. DAG Construction & Local Optimizations</div>
-    <div>4. Machine-Independent Global Optimizations</div>
-    <div>5. Register Allocation (Graph Coloring Heuristics)</div>
-    <div>6. Peephole Optimization Techniques</div>
+    <div>1. Principal Sources of Optimization (Machine-Independent)</div>
+    <div>2. Basic Blocks Partitioning Algorithm & Control Flow Graphs (CFG)</div>
+    <div>3. Directed Acyclic Graphs (DAG) Representation for Basic Blocks</div>
+    <div>4. Local vs. Global Code Optimization Techniques</div>
+    <div>5. Loop Optimizations (Loop Invariant Code Motion, Strength Reduction, Unrolling)</div>
+    <div>6. Dominators, Natural Loops & Reducible Flow Graphs</div>
+    <div>7. Data-Flow Analysis Equations (Reaching Definitions & Available Expressions)</div>
+    <div>8. Live Variable Analysis & Dead Code Elimination</div>
+    <div>9. Target Code Generation Issues & Register Allocation by Graph Coloring</div>
+    <div>10. Peephole Optimization Techniques (Redundant Load/Store, Algebraic Identities)</div>
   </div>
 </div>
 
-<h2 class="section-title">1. Basic Blocks & Leader Identification Algorithm</h2>
+<h2 class="section-title">Topic 1 & 4: Principal Sources of Code Optimization</h2>
 <p>
-  A <strong>Basic Block</strong> is a sequence of consecutive Three-Address Code statements in which flow of control enters at the beginning and leaves at the end without halt or possibility of branching except at the end.
-</p>
-
-<div class="callout callout-info">
-  <div class="callout-title">Algorithm: Identifying Leader Instructions</div>
-  1. The <strong>first statement</strong> in the TAC program is a leader.<br>
-  2. Any statement that is the <strong>target of a conditional or unconditional goto</strong> is a leader.<br>
-  3. Any statement that <strong>immediately follows a conditional or unconditional goto</strong> is a leader.
-</div>
-
-<h2 class="section-title">2. Directed Acyclic Graph (DAG) for Basic Blocks</h2>
-<p>
-  A DAG represents basic block expressions without redundancy:
-  <ul>
-    <li>Leaves represent initial variable values or constants.</li>
-    <li>Interior nodes represent operators.</li>
-    <li>Nodes are annotated with variable labels currently holding the computed value.</li>
-  </ul>
+  Code optimization transforms intermediate or target code to run faster, consume less memory, or use less power, while strictly preserving program semantics.
 </p>
 
 <table class="custom-table">
   <thead>
     <tr>
-      <th style="width: 30%;">Optimization Technique</th>
-      <th>Description & Realized Benefits</th>
+      <th style="width: 25%;">Optimization Technique</th>
+      <th style="width: 45%;">Mechanisms & Transformations</th>
+      <th>Before $\rightarrow$ After Example</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Common Subexpression Elimination (CSE)</strong></td>
-      <td>Identifies identical subexpression computations whose operand values have not changed, eliminating redundant operations.</td>
+      <td><strong>1. Constant Folding</strong></td>
+      <td>Evaluating operations on compile-time constants upfront.</td>
+      <td>`x = 3 + 4 * 2` $\rightarrow$ `x = 11`</td>
     </tr>
     <tr>
-      <td><strong>Constant Folding</strong></td>
-      <td>Evaluates operations with constant operands at <em>compile-time</em> (e.g., replacing `2 * 3.1415 * r` with `6.283 * r`).</td>
+      <td><strong>2. Constant Propagation</strong></td>
+      <td>Replacing variables holding known constant values with the constant.</td>
+      <td>`pi = 3.14; r = 2; area = pi * r * r` $\rightarrow$ `area = 3.14 * 2 * 2`</td>
     </tr>
     <tr>
-      <td><strong>Constant Propagation</strong></td>
-      <td>Replaces variable uses with known compile-time constants.</td>
+      <td><strong>3. Common Subexpression Elimination</strong></td>
+      <td>Reusing previously computed values instead of re-evaluating identical expressions.</td>
+      <td>`t1 = a + b; ... ; t2 = a + b` $\rightarrow$ `t2 = t1`</td>
     </tr>
     <tr>
-      <td><strong>Dead Code Elimination</strong></td>
-      <td>Deletes instructions that compute values never used on any execution path.</td>
+      <td><strong>4. Dead Code Elimination</strong></td>
+      <td>Removing instructions whose results are never read by subsequent code or unreachable blocks.</td>
+      <td>`if (0) { do_something(); }` $\rightarrow$ `/* Removed */`</td>
     </tr>
     <tr>
-      <td><strong>Loop-Invariant Code Motion (Hoisting)</strong></td>
-      <td>Moves computations whose operands are constant throughout the loop to the loop pre-header.</td>
+      <td><strong>5. Strength Reduction</strong></td>
+      <td>Replacing expensive operations (e.g., multiplication) with cheaper equivalents (addition, bit-shift).</td>
+      <td>`x = y * 8` $\rightarrow$ `x = y << 3`</td>
     </tr>
     <tr>
-      <td><strong>Induction Variable Elimination & Strength Reduction</strong></td>
-      <td>Replaces expensive multiplications (e.g., $i \times 4$) inside loops with incremental additions ($t = t + 4$).</td>
+      <td><strong>6. Loop Invariant Code Motion</strong></td>
+      <td>Hoisting computations that evaluate to the same value in every loop iteration outside the loop header.</td>
+      <td>`while (i < n) { x = a + b; i++; }` $\rightarrow$ `x = a + b; while (i < n) { i++; }`</td>
     </tr>
   </tbody>
 </table>
 
-<h2 class="section-title">3. Register Allocation via Graph Coloring (Chaitin's Algorithm)</h2>
-<p>
-  Given $k$ hardware registers, we construct the <strong>Interference Graph</strong> where nodes are variables/temporaries and edges represent live ranges that overlap. If the graph can be colored with $k$ colors such that no two adjacent nodes share the same color, no register spilling occurs.
-</p>
+<div class="page-break"></div>
 
-<h2 class="section-title">4. Peephole Optimization</h2>
-<p>
-  Examines a short sliding window (peephole) of target instructions to apply local transformations:
+<h2 class="section-title">Topic 2: Basic Blocks & Control Flow Graphs (CFG)</h2>
+
+<div class="callout callout-info">
+  <div class="callout-title">Algorithm: Partitioning Three-Address Code into Basic Blocks</div>
+  <p><strong>Step 1: Identify the Leaders (first instructions of basic blocks):</strong></p>
+  <ol>
+    <li>The first Three-Address instruction of the intermediate code is a Leader.</li>
+    <li>Any instruction that is the target of a conditional or unconditional jump (`goto L`) is a Leader.</li>
+    <li>Any instruction that immediately follows a conditional or unconditional jump is a Leader.</li>
+  </ol>
+  <p><strong>Step 2: Construct Basic Blocks:</strong></p>
+  <p>For each Leader, its Basic Block consists of the Leader and all subsequent instructions up to, but not including, the next Leader or the end of the program.</p>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: Basic Block Partitioning on Dot Product Code</div>
+  <p><strong>Three-Address Code:</strong></p>
+  <pre><code>(1)  prod = 0          <-- Leader (Rule 1: First instruction)
+(2)  i = 1
+(3)  t1 = 4 * i        <-- Leader (Rule 2: Target of goto (3) in line 9)
+(4)  t2 = a[t1]
+(5)  t3 = 4 * i
+(6)  t4 = b[t3]
+(7)  t5 = t2 * t4
+(8)  prod = prod + t5
+(9)  i = i + 1
+(10) if i <= 20 goto (3)
+(11) print(prod)       <-- Leader (Rule 3: Follows conditional jump at line 10)</code></pre>
+  <p><strong>Resulting Basic Blocks:</strong></p>
   <ul>
-    <li><strong>Redundant Load/Store Elimination:</strong> `MOV R0, x` followed by `MOV x, R0` $\rightarrow$ remove 2nd move.</li>
-    <li><strong>Unreachable Code Elimination:</strong> Removing instructions immediately following unconditional jumps.</li>
-    <li><strong>Flow-of-Control Optimizations:</strong> `goto L1 ... L1: goto L2` $\rightarrow$ replace with `goto L2`.</li>
-    <li><strong>Algebraic Simplifications:</strong> Replacing `x = x + 0` or `x = x * 1` with no-op; replacing `x = x * 2` with `x = x << 1`.</li>
+    <li><strong>Block $B_1$:</strong> Instructions (1) to (2).</li>
+    <li><strong>Block $B_2$ (Loop Body):</strong> Instructions (3) to (10).</li>
+    <li><strong>Block $B_3$:</strong> Instruction (11).</li>
   </ul>
-</p>
+</div>
 
-  <div style="margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 10px; color: var(--text-muted); display: flex; justify-content: space-between;">
-    <span>Compiler Design (CS24301) — Comprehensive Study Suite</span>
-    <span>BIT Mesra | B.Tech CSE</span>
+<div class="page-break"></div>
+
+<h2 class="section-title">Topic 3: Directed Acyclic Graphs (DAG) for Basic Blocks</h2>
+
+<p>
+  A <strong>DAG (Directed Acyclic Graph)</strong> is an efficient representation for basic blocks that makes local common subexpression elimination, dead code elimination, and array dependency tracking straightforward:
+</p>
+<ul>
+  <li>Leaves correspond to initial values of variables or constants.</li>
+  <li>Interior nodes correspond to operators.</li>
+  <li>Nodes have labels attached showing current identifier names having that computed value.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2 class="section-title">Topic 7 & 8: Data-Flow Analysis Frameworks</h2>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 22%;">Framework</th>
+      <th style="width: 45%;">Data-Flow Transfer Equations</th>
+      <th>Direction & Confluence Operator</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. Reaching Definitions</strong></td>
+      <td>$$\text{OUT}[B] = \text{GEN}[B] \cup (\text{IN}[B] \setminus \text{KILL}[B])$$
+          $$\text{IN}[B] = \bigcup_{P \in \text{Pred}(B)} \text{OUT}[P]$$</td>
+      <td>Forward Data-Flow; Union ($\cup$) confluence.</td>
+    </tr>
+    <tr>
+      <td><strong>2. Available Expressions</strong></td>
+      <td>$$\text{OUT}[B] = e\_\text{GEN}[B] \cup (\text{IN}[B] \setminus e\_\text{KILL}[B])$$
+          $$\text{IN}[B] = \bigcap_{P \in \text{Pred}(B)} \text{OUT}[P]$$</td>
+      <td>Forward Data-Flow; Intersection ($\cap$) confluence.</td>
+    </tr>
+    <tr>
+      <td><strong>3. Live Variable Analysis</strong></td>
+      <td>$$\text{IN}[B] = \text{USE}[B] \cup (\text{OUT}[B] \setminus \text{DEF}[B])$$
+          $$\text{OUT}[B] = \bigcup_{S \in \text{Succ}(B)} \text{IN}[S]$$</td>
+      <td>Backward Data-Flow; Union ($\cup$) confluence.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2 class="section-title">Topic 9 & 10: Target Code Generation & Peephole Optimization</h2>
+
+<h3 class="subsection-title">1. Register Allocation by Graph Coloring (Chaitin's Algorithm):</h3>
+<ol>
+  <li>Construct the <strong>Interference Graph</strong> where nodes represent variables/temporaries and edges connect variables that are simultaneously live at the same program point.</li>
+  <li>Find a $K$-coloring of the graph, where $K$ is the number of available physical hardware CPU registers. If successful, no two interfering variables share the same register.</li>
+  <li>If the graph cannot be $K$-colored, select candidate variables to <strong>spill</strong> into RAM stack slots.</li>
+</ol>
+
+<h3 class="subsection-title">2. Peephole Optimization:</h3>
+<p>
+  A local optimization method that examines a short slide window of target assembly instructions ("peephole") and applies immediate algebraic and redundant instruction eliminations:
+</p>
+<ul>
+  <li><strong>Eliminating Redundant Loads and Stores:</strong>
+    <pre><code>MOV R0, a
+MOV a, R0     ; Redundant - Eliminated!</code></pre>
+  </li>
+  <li><strong>Eliminating Unreachable Code:</strong> Instructions immediately following an unconditional jump without a label are deleted.</li>
+  <li><strong>Algebraic Simplifications:</strong> Replacing $x + 0 \rightarrow x$, $x * 1 \rightarrow x$, $x * 0 \rightarrow 0$.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2 class="section-title">🏛️ Top BIT Mesra Exam Questions & Answers (Module V)</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Q1. State the algorithm to identify Basic Blocks and construct a Control Flow Graph. (8 Marks)</div>
+  <div class="qa-a">
+    1. <strong>Identify Leaders:</strong> (i) First instruction of program, (ii) Target of any jump (`goto`), (iii) Instruction immediately following any jump.<br>
+    2. <strong>Construct Blocks:</strong> For each leader, its basic block consists of all instructions up to the next leader or program end.<br>
+    3. <strong>Build Control Flow Graph (CFG):</strong> Nodes are the basic blocks. Directed edges $B_i \rightarrow B_j$ exist if control can transfer from $B_i$ to $B_j$ (via conditional/unconditional jump or sequential fall-through).
   </div>
 </div>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    renderMathInElement(document.body, {
-      delimiters: [
-        {left: '$$', right: '$$', display: true},
-        {left: '$', right: '$', display: false}
-      ],
-      throwOnError: false
-    });
-  });
-</script>
+
+<div class="qa-card">
+  <div class="qa-q">Q2. Explain Loop Invariant Code Motion and Strength Reduction with code examples. (8 Marks)</div>
+  <div class="qa-a">
+    - <strong>Loop Invariant Code Motion:</strong> Moves computations whose operand values do not change across loop iterations outside the loop header.<br>
+      <em>Example:</em> `for (int i=0; i<n; i++) { a = x + y; b[i] = a * i; }` $\rightarrow$ `a = x + y; for (int i=0; i<n; i++) { b[i] = a * i; }`<br>
+    - <strong>Strength Reduction:</strong> Replaces computationally expensive operations (e.g., multiplication inside loops driven by induction variables) with cheaper operations (addition).<br>
+      <em>Example:</em> `for (int i=0; i<100; i++) { t = i * 4; }` $\rightarrow$ `t = 0; for (int i=0; i<100; i++) { ... t += 4; }`
+  </div>
+</div>
+
+  </div>
 </body>
 </html>

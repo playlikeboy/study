@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Module 4: Advanced ICG & Runtime Environment</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
-<style>
+  <meta charset="UTF-8">
+  <title>Module 4: Intermediate Code & Runtime</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
 
 :root {
@@ -29,42 +30,58 @@
   --bg-page: #f8fafc;
 }
 
+@page {
+  size: A4 portrait;
+  margin: 14mm 11mm 14mm 11mm;
+  @bottom-right {
+    content: "Page " counter(page);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 8pt;
+    color: #64748b;
+  }
+  @bottom-left {
+    content: "Compiler Design (CS24301) | BIT Mesra CSE";
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 8pt;
+    color: #64748b;
+  }
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: var(--text);
-  background-color: var(--bg-page);
-  line-height: 1.6;
-  font-size: 12.6px;
+  background-color: #ffffff;
+  line-height: 1.58;
+  font-size: 12.2px;
   padding: 0;
 }
 
 .page-container {
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
   background: #ffffff;
-  padding: 35px 40px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  padding: 0;
 }
 
 .doc-header {
-  border-bottom: 3px solid var(--primary);
-  padding-bottom: 18px;
-  margin-bottom: 22px;
+  border-bottom: 2.5px solid var(--primary);
+  padding-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .badge-container {
   display: flex;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   flex-wrap: wrap;
 }
 
 .badge {
   display: inline-block;
-  padding: 3px 10px;
-  font-size: 10px;
+  padding: 3px 9px;
+  font-size: 9.5px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -77,15 +94,15 @@ body {
 .badge-amber { background: #fef3c7; color: #92400e; }
 
 h1.doc-title {
-  font-size: 23px;
+  font-size: 21px;
   font-weight: 800;
   color: var(--dark);
   line-height: 1.25;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
 .doc-subtitle {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--text-muted);
   font-weight: 500;
 }
@@ -95,8 +112,7 @@ h1.doc-title {
   border: 1px solid #bae6fd;
   border-radius: 8px;
   padding: 14px 18px;
-  margin-bottom: 25px;
-  page-break-inside: avoid;
+  margin-bottom: 22px;
 }
 
 .toc-title {
@@ -104,29 +120,34 @@ h1.doc-title {
   font-weight: 700;
   color: #0369a1;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .toc-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5px 20px;
-  font-size: 11.5px;
+  font-size: 11.2px;
 }
 
 h2.section-title {
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 700;
   color: var(--dark);
-  border-left: 4px solid var(--accent);
+  border-left: 4px solid var(--primary);
   padding-left: 10px;
-  margin: 24px 0 12px 0;
+  margin: 22px 0 10px 0;
+  page-break-after: avoid;
 }
 
 h3.subsection-title {
-  font-size: 13.5px;
+  font-size: 13.2px;
   font-weight: 700;
-  color: var(--secondary);
-  margin: 15px 0 7px 0;
+  color: #0369a1;
+  margin: 16px 0 6px 0;
+  page-break-after: avoid;
 }
 
 p { margin-bottom: 8px; text-align: justify; }
@@ -134,17 +155,13 @@ p { margin-bottom: 8px; text-align: justify; }
 .callout {
   border-radius: 6px;
   padding: 10px 14px;
-  margin: 11px 0;
-  font-size: 11.8px;
+  margin: 10px 0;
+  font-size: 11.5px;
   border-left: 4px solid;
   page-break-inside: avoid;
 }
-
-.callout-info { background: #f0fdf4; border-color: #16a34a; color: #14532d; }
-.callout-blue { background: #f0f9ff; border-color: #0284c7; color: #0c4a6e; }
-.callout-warning { background: #fffbeb; border-color: #d97706; color: #78350f; }
-.callout-danger { background: #fef2f2; border-color: #dc2626; color: #7f1d1d; }
-.callout-pyq { background: #faf5ff; border-color: #9333ea; color: #581c87; }
+.callout-info { background: #f0f9ff; border-color: #0284c7; color: #0c4a6e; }
+.callout-warning { background: #fffbeb; border-color: #f59e0b; color: #78350f; }
 
 .callout-title {
   font-weight: 700;
@@ -154,241 +171,308 @@ p { margin-bottom: 8px; text-align: justify; }
   gap: 6px;
 }
 
-table.custom-table {
+.custom-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 11px 0;
-  font-size: 11.5px;
-  background: #ffffff;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid var(--border);
+  margin: 12px 0;
+  font-size: 11px;
   page-break-inside: avoid;
 }
 
-table.custom-table th {
-  background: #1e293b;
-  color: #ffffff;
-  font-weight: 600;
+.custom-table th, .custom-table td {
+  border: 1px solid #cbd5e1;
+  padding: 7px 10px;
   text-align: left;
-  padding: 6px 10px;
-  font-size: 11px;
 }
 
-table.custom-table td {
-  padding: 5.5px 10px;
-  border-bottom: 1px solid #e2e8f0;
-  vertical-align: middle;
-}
-
-table.custom-table tr:nth-child(even) td { background-color: #f8fafc; }
-
-code {
-  font-family: 'Fira Code', monospace;
-  font-size: 11px;
+.custom-table th {
   background: #f1f5f9;
-  color: #0f172a;
-  padding: 1.5px 4px;
-  border-radius: 3px;
-  border: 1px solid #e2e8f0;
+  font-weight: 700;
+  color: #1e293b;
 }
 
 pre {
   background: #0f172a;
   color: #f8fafc;
-  padding: 9px 13px;
+  padding: 11px 14px;
   border-radius: 6px;
   font-family: 'Fira Code', monospace;
-  font-size: 11px;
-  line-height: 1.4;
+  font-size: 10.8px;
+  margin: 10px 0;
+  page-break-inside: avoid;
   overflow-x: auto;
-  margin: 9px 0;
+}
+
+code {
+  font-family: 'Fira Code', monospace;
+  background: #f1f5f9;
+  color: #0f172a;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.qa-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid var(--secondary);
+  border-radius: 6px;
+  padding: 11px 15px;
+  margin: 12px 0;
   page-break-inside: avoid;
 }
 
-ul, ol { margin: 5px 0 9px 18px; font-size: 12px; }
-li { margin-bottom: 3px; }
+.qa-q {
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 6px;
+  font-size: 12.2px;
+}
+
+.qa-a {
+  color: #334155;
+  font-size: 11.5px;
+  line-height: 1.55;
+}
+
+.worked-box {
+  background: #ffffff;
+  border: 1.5px solid #3b82f6;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  page-break-inside: avoid;
+}
+
+.worked-title {
+  font-size: 12.8px;
+  font-weight: 800;
+  color: #1e40af;
+  margin-bottom: 10px;
+}
+
+.formula-card {
+  background: #eff6ff;
+  border-left: 4px solid #2563eb;
+  padding: 10px 14px;
+  margin: 10px 0;
+  font-size: 11.8px;
+  page-break-inside: avoid;
+}
 
 .diagram-container {
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px;
-  margin: 12px 0;
+  margin: 14px auto;
   text-align: center;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
   page-break-inside: avoid;
 }
 
 .diagram-caption {
   font-size: 10px;
-  font-weight: 600;
   color: var(--text-muted);
-  margin-top: 5px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-top: 6px;
 }
 
-.qa-card {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 11px 15px;
-  margin: 11px 0;
-  page-break-inside: avoid;
-}
-
-.qa-q { font-weight: 700; color: #1e3a8a; font-size: 12.2px; margin-bottom: 5px; }
-.qa-a { font-size: 11.8px; color: var(--text); }
-
-@media print {
-  body { background: #ffffff; font-size: 11.8px; }
-  .page-container { padding: 0; max-width: 100%; box-shadow: none; }
-  @page {
-    size: A4 portrait;
-    margin: 14mm 11mm 14mm 11mm;
-    @bottom-right {
-      content: "Page " counter(page);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 8px;
-      color: #94a3b8;
-    }
-    @bottom-left {
-      content: "Compiler Design (CS24301) Study Notes | BIT Mesra";
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 8px;
-      color: #94a3b8;
-    }
-  }
-  .toc-box, .diagram-container, .callout, table, pre, .qa-card {
-    page-break-inside: avoid;
-  }
+.page-break {
+  page-break-before: always;
+  break-before: page;
 }
 </style>
 </head>
 <body>
-<div class="page-container">
-  <div class="doc-header">
-    <div class="badge-container">
-      <span class="badge badge-blue">CS24301 — Theory (3.0 Cr)</span>
-      <span class="badge badge-purple">Module IV Notes</span>
-      <span class="badge badge-green">BIT Mesra | NEP Scheme</span>
+  <div class="page-container">
+    <div class="doc-header">
+      <div class="badge-container">
+        <span class="badge badge-blue">CS24301 — Theory (3.0 Cr)</span>
+        <span class="badge badge-purple">Module IV Notes</span>
+        <span class="badge badge-green">BIT Mesra</span>
+        <span class="badge badge-amber">NEP Scheme</span>
+      </div>
+      <h1 class="doc-title">Module 4: Intermediate Code & Runtime</h1>
+      <div class="doc-subtitle">Three-Address Code (Quadruples/Triples), Arrays, Backpatching & Activation Records</div>
     </div>
-    <h1 class="doc-title">Module 4: Advanced ICG & Runtime Environment</h1>
-    <div class="doc-subtitle">Short-Circuit Booleans, Backpatching, Activation Records & Parameter Passing</div>
-  </div>
-  
+    
 <div class="toc-box">
-  <div class="toc-title">Module IV: Advanced ICG & Runtime Environment — Topics Covered</div>
+  <div class="toc-title"><i class="fa-solid fa-list-check"></i> Module IV: Intermediate Code Generation & Runtime Environments — Complete Topics</div>
   <div class="toc-grid">
-    <div>1. Short-Circuit vs. Numerical Boolean Evaluation</div>
-    <div>2. Control Flow Translation (if-else, while, for)</div>
-    <div>3. Backpatching: makelist, merge, backpatch</div>
-    <div>4. Procedure Calls & Return Mechanisms</div>
-    <div>5. Runtime Memory Organization (Text, Data, Heap, Stack)</div>
-    <div>6. Activation Records (Stack Frames) & Parameter Passing</div>
+    <div>1. Intermediate Representations (Syntax Trees, DAG, Postfix, TAC)</div>
+    <div>2. Three-Address Code (TAC) Representations: Quadruples, Triples, Indirect Triples</div>
+    <div>3. Translation of Expressions & Type Coercion TAC</div>
+    <div>4. Multi-Dimensional Array Addressing (Row-Major vs Column-Major Proofs)</div>
+    <div>5. Boolean Expressions Translation & Short-Circuit Evaluation</div>
+    <div>6. Backpatching Techniques (`makelist`, `merge`, `backpatch`)</div>
+    <div>7. Runtime Storage Organization & Activation Records (Stack Frames)</div>
+    <div>8. Storage Allocation Strategies (Static, Stack, Heap)</div>
+    <div>9. Access Links & Displays for Nested Block Scopes</div>
+    <div>10. Parameter Passing Mechanisms & Garbage Collection</div>
   </div>
 </div>
 
-<h2 class="section-title">1. Translation of Boolean Expressions (Short-Circuit Evaluation)</h2>
+<h2 class="section-title">Topic 1 & 2: Three-Address Code (TAC) Representations</h2>
 <p>
-  In programming languages like C and Java, boolean operators `&&` and `||` evaluate conditionally:
-  <ul>
-    <li>In $B_1 \text{ || } B_2$: If $B_1$ is true, $B_2$ is skipped entirely.</li>
-    <li>In $B_1 \text{ \&\& } B_2$: If $B_1$ is false, $B_2$ is skipped entirely.</li>
-  </ul>
+  <strong>Three-Address Code (TAC)</strong> is a linear intermediate representation where each instruction has at most one operator on the right-hand side:
 </p>
+$$x = y \ \mathbf{op} \ z$$
 
-<h2 class="section-title">2. Backpatching Technique</h2>
-<p>
-  In a single-pass compiler, forward jump targets are not known when the jump instruction is emitted. **Backpatching** leaves target addresses blank and fills them once the target label is generated.
-</p>
-<ul>
-  <li><code>makelist(i)</code>: Creates a new list containing just the jump instruction index $i$.</li>
-  <li><code>merge(p1, p2)</code>: Concatenates two lists of jump instructions $p1$ and $p2$.</li>
-  <li><code>backpatch(p, i)</code>: Inserts label $i$ as the target for each instruction on list $p$.</li>
-</ul>
-
-<h2 class="section-title">3. Runtime Storage Organization & Activation Records</h2>
-
-<div class="diagram-container">
-  <svg width="100%" height="150" viewBox="0 0 740 150" xmlns="http://www.w3.org/2000/svg">
-    <!-- Memory Layout -->
-    <g transform="translate(40, 10)">
-      <text x="75" y="15" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" fill="#1e3a8a" text-anchor="middle">Runtime Memory Layout</text>
-      <rect x="10" y="25" width="130" height="25" fill="#f1f5f9" stroke="#64748b"/>
-      <text x="75" y="42" font-family="Plus Jakarta Sans" font-size="10" text-anchor="middle">Code / Text Segment</text>
-      <rect x="10" y="50" width="130" height="25" fill="#f8fafc" stroke="#64748b"/>
-      <text x="75" y="67" font-family="Plus Jakarta Sans" font-size="10" text-anchor="middle">Static / Global Data</text>
-      <rect x="10" y="75" width="130" height="25" fill="#ecfdf5" stroke="#059669"/>
-      <text x="75" y="92" font-family="Plus Jakarta Sans" font-size="10" font-weight="600" fill="#065f46" text-anchor="middle">Heap (grows downward ↓)</text>
-      <rect x="10" y="100" width="130" height="30" fill="#dbeafe" stroke="#1e40af"/>
-      <text x="75" y="118" font-family="Plus Jakarta Sans" font-size="10" font-weight="600" fill="#1e3a8a" text-anchor="middle">Stack (grows upward ↑)</text>
-    </g>
-
-    <!-- Activation Record -->
-    <g transform="translate(280, 10)">
-      <text x="210" y="15" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" fill="#1e3a8a" text-anchor="middle">Structure of an Activation Record (Stack Frame)</text>
-      <rect x="30" y="25" width="360" height="105" rx="5" fill="#ffffff" stroke="#1e40af" stroke-width="1.5"/>
-      <line x1="30" y1="42" x2="390" y2="42" stroke="#cbd5e1"/>
-      <line x1="30" y1="59" x2="390" y2="59" stroke="#cbd5e1"/>
-      <line x1="30" y1="76" x2="390" y2="76" stroke="#cbd5e1"/>
-      <line x1="30" y1="93" x2="390" y2="93" stroke="#cbd5e1"/>
-      <line x1="30" y1="110" x2="390" y2="110" stroke="#cbd5e1"/>
-
-      <text x="210" y="38" font-family="Plus Jakarta Sans" font-size="10" text-anchor="middle">Actual Parameters (Arguments passed by caller)</text>
-      <text x="210" y="55" font-family="Plus Jakarta Sans" font-size="10" font-weight="600" fill="#dc2626" text-anchor="middle">Return Value & Return Address (Program Counter PC)</text>
-      <text x="210" y="72" font-family="Plus Jakarta Sans" font-size="10" font-weight="600" fill="#0284c7" text-anchor="middle">Control Link (Dynamic Link) -> Points to caller's frame</text>
-      <text x="210" y="89" font-family="Plus Jakarta Sans" font-size="10" text-anchor="middle">Access Link (Static Link) -> Points to lexical parent frame</text>
-      <text x="210" y="106" font-family="Plus Jakarta Sans" font-size="10" text-anchor="middle">Saved Machine Status (Registers, Status Flags)</text>
-      <text x="210" y="124" font-family="Plus Jakarta Sans" font-size="10" text-anchor="middle">Local Variables & Temporaries</text>
-    </g>
-  </svg>
-  <div class="diagram-caption">Figure 4.1: Memory Layout & Activation Record Architecture</div>
-</div>
-
-<h2 class="section-title">4. Parameter Passing Mechanisms</h2>
 <table class="custom-table">
   <thead>
     <tr>
-      <th>Mechanism</th>
-      <th>How Arguments are Passed</th>
-      <th>Effect of Changes on Actual Arguments</th>
+      <th style="width: 22%;">Representation</th>
+      <th style="width: 45%;">Internal Data Structure & Fields</th>
+      <th>Key Advantages & Tradeoffs</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Call by Value</strong></td>
-      <td>Evaluates r-value and passes a copy to local parameter.</td>
-      <td>Changes to formal parameter have <strong>zero effect</strong> on caller.</td>
+      <td><strong>1. Quadruples</strong></td>
+      <td>Four fields: `(op, arg1, arg2, result)`. Explicit temporary names (e.g., `t1`, `t2`) are stored in `result`.</td>
+      <td>Easy to reorder during code optimization; requires extra memory for temporary names.</td>
     </tr>
     <tr>
-      <td><strong>Call by Reference</strong></td>
-      <td>Passes l-value (memory address / pointer) of actual argument.</td>
-      <td>Changes directly <strong>mutate caller's variable</strong>.</td>
+      <td><strong>2. Triples</strong></td>
+      <td>Three fields: `(op, arg1, arg2)`. Results of operations are referred to by their instruction index position (e.g., `(0)`, `(1)`).</td>
+      <td>Space efficient; moving or inserting instructions requires updating all index references.</td>
     </tr>
     <tr>
-      <td><strong>Call by Name</strong></td>
-      <td>Textual macro substitution (evaluated lazily via Thunk).</td>
-      <td>Re-evaluated each time parameter is referenced.</td>
+      <td><strong>3. Indirect Triples</strong></td>
+      <td>Uses an array of pointers to separate triple structures.</td>
+      <td>Optimizers can reorder instructions by simply swapping pointers in the array without touching the underlying triples.</td>
     </tr>
   </tbody>
 </table>
 
-  <div style="margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 10px; color: var(--text-muted); display: flex; justify-content: space-between;">
-    <span>Compiler Design (CS24301) — Comprehensive Study Suite</span>
-    <span>BIT Mesra | B.Tech CSE</span>
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: Quadruples, Triples & Indirect Triples for `a = b * - c + b * - c`</div>
+  <p><strong>Step 1: Generate Three-Address Code:</strong></p>
+  <pre><code>(0) t1 = uminus c
+(1) t2 = b * t1
+(2) t3 = uminus c
+(3) t4 = b * t3
+(4) t5 = t2 + t4
+(5) a = t5</code></pre>
+
+  <p><strong>Step 2: Quadruple Representation:</strong></p>
+  <table class="custom-table">
+    <tr><th>#</th><th>op</th><th>arg1</th><th>arg2</th><th>result</th></tr>
+    <tr><td>0</td><td>uminus</td><td>c</td><td>-</td><td>t1</td></tr>
+    <tr><td>1</td><td>*</td><td>b</td><td>t1</td><td>t2</td></tr>
+    <tr><td>2</td><td>uminus</td><td>c</td><td>-</td><td>t3</td></tr>
+    <tr><td>3</td><td>*</td><td>b</td><td>t3</td><td>t4</td></tr>
+    <tr><td>4</td><td>+</td><td>t2</td><td>t4</td><td>t5</td></tr>
+    <tr><td>5</td><td>=</td><td>t5</td><td>-</td><td>a</td></tr>
+  </table>
+
+  <p><strong>Step 3: Triple Representation:</strong></p>
+  <table class="custom-table">
+    <tr><th>#</th><th>op</th><th>arg1</th><th>arg2</th></tr>
+    <tr><td>(0)</td><td>uminus</td><td>c</td><td>-</td></tr>
+    <tr><td>(1)</td><td>*</td><td>b</td><td>(0)</td></tr>
+    <tr><td>(2)</td><td>uminus</td><td>c</td><td>-</td></tr>
+    <tr><td>(3)</td><td>*</td><td>b</td><td>(2)</td></tr>
+    <tr><td>(4)</td><td>+</td><td>(1)</td><td>(3)</td></tr>
+    <tr><td>(5)</td><td>assign</td><td>a</td><td>(4)</td></tr>
+  </table>
+</div>
+
+<div class="page-break"></div>
+
+<h2 class="section-title">Topic 4: Multi-Dimensional Array Addressing Formulations</h2>
+
+<div class="formula-card">
+  <strong>1. 1D Array Address Formula:</strong>
+  $$\text{Address}(A[i]) = \text{base} + (i - \text{low}) \times w$$
+  Where $\text{base}$ is the start memory address, $\text{low}$ is lower index bound (typically 0 or 1), and $w$ is byte width per element.
+</div>
+
+<div class="formula-card">
+  <strong>2. 2D Array Address Formula (Row-Major Order — C / C++ / Java):</strong>
+  $$\text{Address}(A[i_1, i_2]) = \text{base} + \Big( (i_1 - \text{low}_1) \times n_2 + (i_2 - \text{low}_2) \Big) \times w$$
+  Where $n_2 = \text{high}_2 - \text{low}_2 + 1$ is the number of elements in each row.
+</div>
+
+<div class="formula-card">
+  <strong>3. 2D Array Address Formula (Column-Major Order — FORTRAN / MATLAB):</strong>
+  $$\text{Address}(A[i_1, i_2]) = \text{base} + \Big( (i_2 - \text{low}_2) \times n_1 + (i_1 - \text{low}_1) \Big) \times w$$
+  Where $n_1 = \text{high}_1 - \text{low}_1 + 1$ is the number of elements in each column.
+</div>
+
+<div class="page-break"></div>
+
+<h2 class="section-title">Topic 5 & 6: Backpatching in Boolean Expressions</h2>
+
+<p>
+  <strong>Backpatching</strong> is a single-pass technique for generating intermediate code for control flow and boolean expressions without leaving unresolved forward jump target addresses.
+</p>
+<ul>
+  <li><strong>`makelist(i)`:</strong> Creates a new list containing only jump instruction index $i$.</li>
+  <li><strong>`merge(p1, p2)`:</strong> Concatenates two jump target lists $p_1$ and $p_2$.</li>
+  <li><strong>`backpatch(p, i)`:</strong> Inserts target instruction label $i$ as the jump destination into all instructions indexed in list $p$.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2 class="section-title">Topics 7 – 9: Runtime Storage Organization & Activation Records</h2>
+
+<p>
+  During program execution, the operating system allocates a contiguous block of memory divided into 4 major logical segments:
+</p>
+<ol>
+  <li><strong>Code Segment (Text):</strong> Read-only region holding compiled target machine instructions.</li>
+  <li><strong>Static / Global Segment:</strong> Holds global variables, static constants, and compiler metadata fixed at compile time.</li>
+  <li><strong>Call Stack:</strong> Grows downward dynamically; stores <strong>Activation Records (Stack Frames)</strong> for function invocations.</li>
+  <li><strong>Heap:</strong> Grows upward dynamically; handles explicit dynamic memory allocation (`malloc`, `free`, `new`).</li>
+</ol>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 25%;">Activation Record Field</th>
+      <th>Functional Purpose in Procedure Call / Return</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Actual Parameters</strong></td><td>Arguments passed by the caller to the callee.</td></tr>
+    <tr><td><strong>Returned Values</strong></td><td>Space for return data passed back to caller.</td></tr>
+    <tr><td><strong>Control Link (Dynamic Link)</strong></td><td>Points to caller's activation record; used to restore caller's stack frame on return.</td></tr>
+    <tr><td><strong>Access Link (Static Link)</strong></td><td>Points to activation record of the statically enclosing lexical scope; used to access non-local variables.</td></tr>
+    <tr><td><strong>Saved Machine Status</strong></td><td>Program counter (PC), CPU registers, and status flags saved before function call.</td></tr>
+    <tr><td><strong>Local Data</strong></td><td>Local automatic variables allocated within the function.</td></tr>
+    <tr><td><strong>Temporaries</strong></td><td>Temporary values generated during expression evaluation.</td></tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2 class="section-title">🏛️ Top BIT Mesra Exam Questions & Answers (Module IV)</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Q1. Compare Quadruples, Triples, and Indirect Triples with examples. (8 Marks)</div>
+  <div class="qa-a">
+    1. <strong>Quadruples:</strong> Explicit 4-field structures `(op, arg1, arg2, res)` where temporary names (`t1`) are explicitly stated. Highly flexible for compiler optimization reordering, but uses more memory.<br>
+    2. <strong>Triples:</strong> 3-field structures `(op, arg1, arg2)` where intermediate results are referenced by instruction array indices `(0)`. Memory compact, but relocating code requires patching all dependent instruction references.<br>
+    3. <strong>Indirect Triples:</strong> Stores pointers to triple structures in an array. Allows optimizers to reorder and eliminate code simply by modifying pointer positions without touching underlying triple records.
   </div>
 </div>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    renderMathInElement(document.body, {
-      delimiters: [
-        {left: '$$', right: '$$', display: true},
-        {left: '$', right: '$', display: false}
-      ],
-      throwOnError: false
-    });
-  });
-</script>
+
+<div class="qa-card">
+  <div class="qa-q">Q2. Explain Call-by-Value, Call-by-Reference, and Call-by-Name parameter passing. (6 Marks)</div>
+  <div class="qa-a">
+    - <strong>Call-by-Value:</strong> Actual parameter expression is evaluated and a local copy of the value is passed to the callee. Changes inside the function do not affect the caller's variable.<br>
+    - <strong>Call-by-Reference:</strong> Memory address (pointer) of the actual parameter is passed. Any modification inside the function directly modifies caller's variable.<br>
+    - <strong>Call-by-Name (Algol 60):</strong> The parameter is not evaluated upfront; instead, the parameter text is literally substituted into the function body (evaluated lazily via thunks every time it is referenced).
+  </div>
+</div>
+
+  </div>
 </body>
 </html>

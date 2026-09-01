@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Module 2: Syntax Analysis</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
-<style>
+  <meta charset="UTF-8">
+  <title>Module 2: Syntax Analysis</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
 
 :root {
@@ -29,42 +30,58 @@
   --bg-page: #f8fafc;
 }
 
+@page {
+  size: A4 portrait;
+  margin: 14mm 11mm 14mm 11mm;
+  @bottom-right {
+    content: "Page " counter(page);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 8pt;
+    color: #64748b;
+  }
+  @bottom-left {
+    content: "Compiler Design (CS24301) | BIT Mesra CSE";
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 8pt;
+    color: #64748b;
+  }
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: var(--text);
-  background-color: var(--bg-page);
-  line-height: 1.6;
-  font-size: 12.6px;
+  background-color: #ffffff;
+  line-height: 1.58;
+  font-size: 12.2px;
   padding: 0;
 }
 
 .page-container {
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
   background: #ffffff;
-  padding: 35px 40px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  padding: 0;
 }
 
 .doc-header {
-  border-bottom: 3px solid var(--primary);
-  padding-bottom: 18px;
-  margin-bottom: 22px;
+  border-bottom: 2.5px solid var(--primary);
+  padding-bottom: 14px;
+  margin-bottom: 18px;
 }
 
 .badge-container {
   display: flex;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   flex-wrap: wrap;
 }
 
 .badge {
   display: inline-block;
-  padding: 3px 10px;
-  font-size: 10px;
+  padding: 3px 9px;
+  font-size: 9.5px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -77,15 +94,15 @@ body {
 .badge-amber { background: #fef3c7; color: #92400e; }
 
 h1.doc-title {
-  font-size: 23px;
+  font-size: 21px;
   font-weight: 800;
   color: var(--dark);
   line-height: 1.25;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
 .doc-subtitle {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--text-muted);
   font-weight: 500;
 }
@@ -95,8 +112,7 @@ h1.doc-title {
   border: 1px solid #bae6fd;
   border-radius: 8px;
   padding: 14px 18px;
-  margin-bottom: 25px;
-  page-break-inside: avoid;
+  margin-bottom: 22px;
 }
 
 .toc-title {
@@ -104,29 +120,34 @@ h1.doc-title {
   font-weight: 700;
   color: #0369a1;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .toc-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5px 20px;
-  font-size: 11.5px;
+  font-size: 11.2px;
 }
 
 h2.section-title {
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 700;
   color: var(--dark);
-  border-left: 4px solid var(--accent);
+  border-left: 4px solid var(--primary);
   padding-left: 10px;
-  margin: 24px 0 12px 0;
+  margin: 22px 0 10px 0;
+  page-break-after: avoid;
 }
 
 h3.subsection-title {
-  font-size: 13.5px;
+  font-size: 13.2px;
   font-weight: 700;
-  color: var(--secondary);
-  margin: 15px 0 7px 0;
+  color: #0369a1;
+  margin: 16px 0 6px 0;
+  page-break-after: avoid;
 }
 
 p { margin-bottom: 8px; text-align: justify; }
@@ -134,17 +155,13 @@ p { margin-bottom: 8px; text-align: justify; }
 .callout {
   border-radius: 6px;
   padding: 10px 14px;
-  margin: 11px 0;
-  font-size: 11.8px;
+  margin: 10px 0;
+  font-size: 11.5px;
   border-left: 4px solid;
   page-break-inside: avoid;
 }
-
-.callout-info { background: #f0fdf4; border-color: #16a34a; color: #14532d; }
-.callout-blue { background: #f0f9ff; border-color: #0284c7; color: #0c4a6e; }
-.callout-warning { background: #fffbeb; border-color: #d97706; color: #78350f; }
-.callout-danger { background: #fef2f2; border-color: #dc2626; color: #7f1d1d; }
-.callout-pyq { background: #faf5ff; border-color: #9333ea; color: #581c87; }
+.callout-info { background: #f0f9ff; border-color: #0284c7; color: #0c4a6e; }
+.callout-warning { background: #fffbeb; border-color: #f59e0b; color: #78350f; }
 
 .callout-title {
   font-weight: 700;
@@ -154,279 +171,355 @@ p { margin-bottom: 8px; text-align: justify; }
   gap: 6px;
 }
 
-table.custom-table {
+.custom-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 11px 0;
-  font-size: 11.5px;
-  background: #ffffff;
-  border-radius: 6px;
-  overflow: hidden;
-  border: 1px solid var(--border);
+  margin: 12px 0;
+  font-size: 11px;
   page-break-inside: avoid;
 }
 
-table.custom-table th {
-  background: #1e293b;
-  color: #ffffff;
-  font-weight: 600;
+.custom-table th, .custom-table td {
+  border: 1px solid #cbd5e1;
+  padding: 7px 10px;
   text-align: left;
-  padding: 6px 10px;
-  font-size: 11px;
 }
 
-table.custom-table td {
-  padding: 5.5px 10px;
-  border-bottom: 1px solid #e2e8f0;
-  vertical-align: middle;
-}
-
-table.custom-table tr:nth-child(even) td { background-color: #f8fafc; }
-
-code {
-  font-family: 'Fira Code', monospace;
-  font-size: 11px;
+.custom-table th {
   background: #f1f5f9;
-  color: #0f172a;
-  padding: 1.5px 4px;
-  border-radius: 3px;
-  border: 1px solid #e2e8f0;
+  font-weight: 700;
+  color: #1e293b;
 }
 
 pre {
   background: #0f172a;
   color: #f8fafc;
-  padding: 9px 13px;
+  padding: 11px 14px;
   border-radius: 6px;
   font-family: 'Fira Code', monospace;
-  font-size: 11px;
-  line-height: 1.4;
+  font-size: 10.8px;
+  margin: 10px 0;
+  page-break-inside: avoid;
   overflow-x: auto;
-  margin: 9px 0;
+}
+
+code {
+  font-family: 'Fira Code', monospace;
+  background: #f1f5f9;
+  color: #0f172a;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.qa-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid var(--secondary);
+  border-radius: 6px;
+  padding: 11px 15px;
+  margin: 12px 0;
   page-break-inside: avoid;
 }
 
-ul, ol { margin: 5px 0 9px 18px; font-size: 12px; }
-li { margin-bottom: 3px; }
+.qa-q {
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 6px;
+  font-size: 12.2px;
+}
+
+.qa-a {
+  color: #334155;
+  font-size: 11.5px;
+  line-height: 1.55;
+}
+
+.worked-box {
+  background: #ffffff;
+  border: 1.5px solid #3b82f6;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  page-break-inside: avoid;
+}
+
+.worked-title {
+  font-size: 12.8px;
+  font-weight: 800;
+  color: #1e40af;
+  margin-bottom: 10px;
+}
+
+.formula-card {
+  background: #eff6ff;
+  border-left: 4px solid #2563eb;
+  padding: 10px 14px;
+  margin: 10px 0;
+  font-size: 11.8px;
+  page-break-inside: avoid;
+}
 
 .diagram-container {
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px;
-  margin: 12px 0;
+  margin: 14px auto;
   text-align: center;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
   page-break-inside: avoid;
 }
 
 .diagram-caption {
   font-size: 10px;
-  font-weight: 600;
   color: var(--text-muted);
-  margin-top: 5px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-top: 6px;
 }
 
-.qa-card {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  padding: 11px 15px;
-  margin: 11px 0;
-  page-break-inside: avoid;
-}
-
-.qa-q { font-weight: 700; color: #1e3a8a; font-size: 12.2px; margin-bottom: 5px; }
-.qa-a { font-size: 11.8px; color: var(--text); }
-
-@media print {
-  body { background: #ffffff; font-size: 11.8px; }
-  .page-container { padding: 0; max-width: 100%; box-shadow: none; }
-  @page {
-    size: A4 portrait;
-    margin: 14mm 11mm 14mm 11mm;
-    @bottom-right {
-      content: "Page " counter(page);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 8px;
-      color: #94a3b8;
-    }
-    @bottom-left {
-      content: "Compiler Design (CS24301) Study Notes | BIT Mesra";
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 8px;
-      color: #94a3b8;
-    }
-  }
-  .toc-box, .diagram-container, .callout, table, pre, .qa-card {
-    page-break-inside: avoid;
-  }
+.page-break {
+  page-break-before: always;
+  break-before: page;
 }
 </style>
 </head>
 <body>
-<div class="page-container">
-  <div class="doc-header">
-    <div class="badge-container">
-      <span class="badge badge-blue">CS24301 — Theory (3.0 Cr)</span>
-      <span class="badge badge-purple">Module II Notes</span>
-      <span class="badge badge-green">BIT Mesra | NEP Scheme</span>
+  <div class="page-container">
+    <div class="doc-header">
+      <div class="badge-container">
+        <span class="badge badge-blue">CS24301 — Theory (3.0 Cr)</span>
+        <span class="badge badge-purple">Module II Notes</span>
+        <span class="badge badge-green">BIT Mesra</span>
+        <span class="badge badge-amber">NEP Scheme</span>
+      </div>
+      <h1 class="doc-title">Module 2: Syntax Analysis</h1>
+      <div class="doc-subtitle">Context-Free Grammars, LL(1), SLR(1), CLR(1), LALR(1) & Parsing Conflicts</div>
     </div>
-    <h1 class="doc-title">Module 2: Syntax Analysis</h1>
-    <div class="doc-subtitle">Context-Free Grammars, LL(1), SLR(1), CLR(1), LALR(1) & Parsing Conflicts</div>
-  </div>
-  
+    
 <div class="toc-box">
-  <div class="toc-title">Module II: Syntax Analysis — Topics Covered</div>
+  <div class="toc-title"><i class="fa-solid fa-list-check"></i> Module II: Syntax Analysis & Parsing Algorithms — Complete Syllabus Topics</div>
   <div class="toc-grid">
-    <div>1. Role of Parser & Context-Free Grammars (CFG)</div>
-    <div>2. Ambiguity & Derivations (LM / RM)</div>
-    <div>3. Grammar Rewriting (Left Recursion & Factoring)</div>
-    <div>4. Top-Down Parsing: LL(1) Table Construction</div>
-    <div>5. Computation of FIRST and FOLLOW Sets</div>
-    <div>6. Bottom-Up Parsing & Handle Pruning</div>
-    <div>7. LR Parsers: LR(0), SLR(1), CLR(1), LALR(1)</div>
-    <div>8. Parsing Conflicts & Error Recovery Strategies</div>
+    <div>1. Role of the Parser & Context-Free Grammars (CFG)</div>
+    <div>2. Ambiguity Elimination & Grammar Transformations</div>
+    <div>3. Left Recursion Elimination (Immediate & Indirect Algorithms)</div>
+    <div>4. Left Factoring Algorithm for Common Prefixes</div>
+    <div>5. FIRST and FOLLOW Sets Formal Formulations & Step-by-Step Traces</div>
+    <div>6. LL(1) Top-Down Predictive Parser Table & Stack Parsing Walkthrough</div>
+    <div>7. Bottom-Up Shift-Reduce Parsing & Handle Pruning</div>
+    <div>8. LR(0) Canonical Collection of Items & SLR(1) Parsing Tables</div>
+    <div>9. Canonical LR (CLR(1)) with Lookahead & LALR(1) State Merging</div>
+    <div>10. Parsing Conflicts (Shift/Reduce, Reduce/Reduce) & Error Recovery</div>
   </div>
 </div>
 
-<h2 class="section-title">1. Context-Free Grammars (CFG) & Ambiguity</h2>
+<h2 class="section-title">Topic 1 & 2: Context-Free Grammars & Ambiguity</h2>
 <p>
-  A <strong>Context-Free Grammar</strong> is a 4-tuple $G = (V, \Sigma, R, S)$ where $V$ is a finite set of non-terminal variables, $\Sigma$ is a finite set of terminal symbols ($V \cap \Sigma = \emptyset$), $R$ is a finite set of production rules of the form $A \rightarrow \alpha$ ($A \in V, \alpha \in (V \cup \Sigma)^*$), and $S \in V$ is the start symbol.
+  A <strong>Context-Free Grammar (CFG)</strong> is formally defined as a 4-tuple $G = (V, T, P, S)$:
 </p>
+<ul>
+  <li>$V$: Finite set of Non-Terminal characters (variables representing syntactic categories).</li>
+  <li>$T$: Finite set of Terminal characters (tokens returned by lexical analyzer).</li>
+  <li>$P$: Finite set of Production rules of the form $A \rightarrow \alpha$, where $A \in V$ and $\alpha \in (V \cup T)^*$.</li>
+  <li>$S \in V$: The designated Start Symbol.</li>
+</ul>
+
+<h3 class="subsection-title">Grammar Ambiguity:</h3>
+<p>
+  A grammar $G$ is <strong>ambiguous</strong> if there exists at least one string $w \in L(G)$ that has two or more distinct parse trees (or equivalently, two distinct leftmost derivations).
+</p>
+<p>
+  Classic example: The Dangling-Else Grammar:
+</p>
+$$\text{stmt} \rightarrow \mathbf{if} \ \text{expr} \ \mathbf{then} \ \text{stmt} \mid \mathbf{if} \ \text{expr} \ \mathbf{then} \ \text{stmt} \ \mathbf{else} \ \text{stmt} \mid \mathbf{other}$$
+<p>
+  Resolved by disambiguating the grammar into `matched_stmt` and `unmatched_stmt`, matching each `else` with the closest unmatched `then`.
+</p>
+
+<div class="page-break"></div>
+
+<h2 class="section-title">Topic 3 & 4: Grammar Transformations (Left Recursion & Left Factoring)</h2>
+
+<h3 class="subsection-title">1. Immediate Left Recursion Elimination:</h3>
+<p>
+  A production $A \rightarrow A\alpha \mid \beta$ (where $\beta$ does not start with $A$) causes top-down parsers to loop infinitely. It is eliminated by introducing a new non-terminal $A'$:
+</p>
+$$A \rightarrow \beta A', \qquad A' \rightarrow \alpha A' \mid \epsilon$$
+
+<h3 class="subsection-title">2. General Left Recursion Elimination Algorithm:</h3>
+<ol>
+  <li>Arrange non-terminals in some arbitrary ordering: $A_1, A_2, \dots, A_n$.</li>
+  <li>For $i = 1$ to $n$:
+    <ul>
+      <li>For $j = 1$ to $i-1$: Replace each production $A_i \rightarrow A_j \gamma$ with $A_i \rightarrow \delta_1 \gamma \mid \delta_2 \gamma \mid \dots \mid \delta_k \gamma$, where $A_j \rightarrow \delta_1 \mid \delta_2 \mid \dots \mid \delta_k$ are the current $A_j$ productions.</li>
+      <li>Eliminate immediate left recursion among the $A_i$ productions.</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 class="subsection-title">3. Left Factoring Algorithm (Removing Common Prefixes):</h3>
+<p>
+  When two productions for $A$ share a common prefix ($A \rightarrow \alpha\beta_1 \mid \alpha\beta_2$), the parser cannot determine which branch to choose based on one lookahead token. Left factoring extracts the common prefix:
+</p>
+$$A \rightarrow \alpha A', \qquad A' \rightarrow \beta_1 \mid \beta_2$$
+
+<div class="page-break"></div>
+
+<h2 class="section-title">Topic 5: Formal Formulations of FIRST and FOLLOW</h2>
 
 <div class="callout callout-info">
-  <div class="callout-title">Leftmost vs. Rightmost Derivations</div>
-  <strong>Leftmost Derivation (LMD):</strong> At each step, the leftmost non-terminal is replaced first.<br>
-  <strong>Rightmost Derivation (RMD / Canonical Derivation):</strong> At each step, the rightmost non-terminal is replaced first.<br>
-  <strong>Ambiguous Grammar:</strong> A grammar that produces <em>two or more distinct parse trees</em> (or distinct LMDs) for at least one string $w \in L(G)$. (Classic example: "Dangling-Else" ambiguity).
+  <div class="callout-title">Formal Mathematical Definitions</div>
+  <strong>$\text{FIRST}(\alpha)$:</strong> Set of all terminals that begin strings derived from $\alpha$. If $\alpha \xrightarrow{*} \epsilon$, then $\epsilon \in \text{FIRST}(\alpha)$.<br>
+  <strong>$\text{FOLLOW}(A)$:</strong> Set of all terminals $a$ that can appear immediately to the right of non-terminal $A$ in some sentential form ($S \xrightarrow{*} \alpha A a \beta$). If $A$ is the rightmost symbol in a derivation, the input end-marker $\$$ is in $\text{FOLLOW}(A)$.
 </div>
 
-<h2 class="section-title">2. Grammar Transformations for Top-Down Parsing</h2>
+<h3 class="subsection-title">Rules for Computing FIRST:</h3>
+<ol>
+  <li>If $X$ is a terminal, $\text{FIRST}(X) = \{X\}$.</li>
+  <li>If $X \rightarrow \epsilon$ is a production, add $\epsilon$ to $\text{FIRST}(X)$.</li>
+  <li>If $X \rightarrow Y_1 Y_2 \dots Y_k$ is a production:
+    <ul>
+      <li>Add all non-$\epsilon$ symbols from $\text{FIRST}(Y_1)$ to $\text{FIRST}(X)$.</li>
+      <li>If $\epsilon \in \text{FIRST}(Y_1)$, add all non-$\epsilon$ symbols from $\text{FIRST}(Y_2)$ to $\text{FIRST}(X)$, and so forth, until some $Y_i$ does not contain $\epsilon$.</li>
+      <li>If all $Y_1, \dots, Y_k$ contain $\epsilon$, add $\epsilon$ to $\text{FIRST}(X)$.</li>
+    </ul>
+  </li>
+</ol>
 
-<h3 class="subsection-title">2.1 Elimination of Immediate Left Recursion</h3>
-<p>
-  A production rule $A \rightarrow A\alpha \mid \beta$ is immediately left-recursive. It causes top-down predictive parsers to enter an infinite loop. We eliminate it by introducing a new non-terminal $A'$:
-</p>
-$$A \rightarrow \beta A', \quad A' \rightarrow \alpha A' \mid \epsilon$$
+<h3 class="subsection-title">Rules for Computing FOLLOW:</h3>
+<ol>
+  <li>Place $\$$ in $\text{FOLLOW}(S)$, where $S$ is the start symbol.</li>
+  <li>If there is a production $A \rightarrow \alpha B \beta$, everything in $\text{FIRST}(\beta)$ except $\epsilon$ is in $\text{FOLLOW}(B)$.</li>
+  <li>If there is a production $A \rightarrow \alpha B$, or $A \rightarrow \alpha B \beta$ where $\text{FIRST}(\beta)$ contains $\epsilon$, everything in $\text{FOLLOW}(A)$ is in $\text{FOLLOW}(B)$.</li>
+</ol>
 
-<h3 class="subsection-title">2.2 Left Factoring (Resolving Common Prefixes)</h3>
-<p>
-  When two productions for $A$ share a common leading prefix $A \rightarrow \alpha \beta_1 \mid \alpha \beta_2$, a predictive parser cannot decide which production to choose based on 1 lookahead token. We left-factor:
-</p>
-$$A \rightarrow \alpha A', \quad A' \rightarrow \beta_1 \mid \beta_2$$
-
-<h2 class="section-title">3. Computation of $\text{FIRST}$ and $\text{FOLLOW}$ Sets</h2>
-
-<table class="custom-table">
-  <thead>
-    <tr>
-      <th style="width: 20%;">Set</th>
-      <th style="width: 30%;">Mathematical Definition</th>
-      <th>Construction Rules</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>$\text{FIRST}(\alpha)$</strong></td>
-      <td>$\text{FIRST}(\alpha) = \{ a \in \Sigma \mid \alpha \Rightarrow^* a\beta \}$ (includes $\epsilon$ if $\alpha \Rightarrow^* \epsilon$)</td>
-      <td>
-        1. If $X \in \Sigma$, $\text{FIRST}(X) = \{X\}$.<br>
-        2. If $X \rightarrow \epsilon$, add $\epsilon \in \text{FIRST}(X)$.<br>
-        3. For $X \rightarrow Y_1 Y_2 \dots Y_k$: add $\text{FIRST}(Y_1) \setminus \{\epsilon\}$. If $Y_1 \Rightarrow^* \epsilon$, add $\text{FIRST}(Y_2) \setminus \{\epsilon\}$, continuing until a non-nullable $Y_i$ is reached. If all $Y_i \Rightarrow^* \epsilon$, add $\epsilon$.
-      </td>
-    </tr>
-    <tr>
-      <td><strong>$\text{FOLLOW}(A)$</strong></td>
-      <td>$\text{FOLLOW}(A) = \{ a \in \Sigma \cup \{\$\} \mid S \Rightarrow^* \alpha A a \beta \}$</td>
-      <td>
-        1. Add $\$$ to $\text{FOLLOW}(S)$ (where $S$ is start symbol).<br>
-        2. If $A \rightarrow \alpha B \beta$, add $\text{FIRST}(\beta) \setminus \{\epsilon\}$ to $\text{FOLLOW}(B)$.<br>
-        3. If $A \rightarrow \alpha B$ or $A \rightarrow \alpha B \beta$ where $\epsilon \in \text{FIRST}(\beta)$, add all elements of $\text{FOLLOW}(A)$ to $\text{FOLLOW}(B)$.
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 class="section-title">4. Top-Down $\text{LL}(1)$ Parsing Table Construction</h2>
-<p>
-  For each production $A \rightarrow \alpha$:
-  <ol>
-    <li>For every terminal $a \in \text{FIRST}(\alpha)$, add $A \rightarrow \alpha$ to $M[A, a]$.</li>
-    <li>If $\epsilon \in \text{FIRST}(\alpha)$, then for every terminal $b \in \text{FOLLOW}(A)$ (including $\$$), add $A \rightarrow \alpha$ to $M[A, b]$.</li>
-  </ol>
-  <strong>LL(1) Condition:</strong> A grammar is $\text{LL}(1)$ iff no cell in parsing table $M$ contains multiple entries (no conflicts).
-</p>
-
-<h2 class="section-title">5. Bottom-Up LR Parsers ($\text{LR}(0), \text{SLR}(1), \text{CLR}(1), \text{LALR}(1)$)</h2>
-
-<table class="custom-table">
-  <thead>
-    <tr>
-      <th>Parser Type</th>
-      <th>Item Representation</th>
-      <th>Lookahead & Table Size</th>
-      <th>Power & Conflict Resolution</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>$\text{LR}(0)$</strong></td>
-      <td>$A \rightarrow \alpha \cdot \beta$</td>
-      <td>0 lookaheads. Same number of states as SLR(1).</td>
-      <td>Weakest; frequent Shift/Reduce conflicts on reduction.</td>
-    </tr>
-    <tr>
-      <td><strong>$\text{SLR}(1)$</strong></td>
-      <td>$A \rightarrow \alpha \cdot \beta$</td>
-      <td>Place reduction $A \rightarrow \alpha$ only in $\text{FOLLOW}(A)$.</td>
-      <td>More powerful than $\text{LR}(0)$, but still suffers conflicts on ambiguous grammars.</td>
-    </tr>
-    <tr>
-      <td><strong>$\text{CLR}(1)$</strong></td>
-      <td>$[A \rightarrow \alpha \cdot \beta, a]$ where $a \in \Sigma \cup \{\$\}$</td>
-      <td>Carries exact lookahead $a$. Huge state table.</td>
-      <td>Most powerful LR parser for deterministic CFGs. Large memory footprint.</td>
-    </tr>
-    <tr>
-      <td><strong>$\text{LALR}(1)$</strong></td>
-      <td>Merged $\text{CLR}(1)$ items with identical core</td>
-      <td>Same number of states as $\text{SLR}(1)$, lookaheads merged.</td>
-      <td><strong>Standard in Yacc/Bison</strong>; rarely introduces R/R conflicts, never introduces S/R conflicts.</td>
-    </tr>
-  </tbody>
-</table>
-
-<div class="callout callout-pyq">
-  <div class="callout-title">🏛️ BIT Mesra Exam Question & Solved Walkthrough (10 Marks)</div>
-  <strong>Question:</strong> Construct the $\text{LL}(1)$ parsing table for the grammar: $E \rightarrow T E', E' \rightarrow + T E' \mid \epsilon, T \rightarrow F T', T' \rightarrow * F T' \mid \epsilon, F \rightarrow ( E ) \mid \text{id}$.<br>
-  <strong>Solution:</strong>
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: Arithmetic Grammar FIRST & FOLLOW</div>
+  <p><strong>Grammar ($G$):</strong></p>
   <ul>
-    <li>$\text{FIRST}(E) = \text{FIRST}(T) = \text{FIRST}(F) = \{ (, \text{id} \}$</li>
-    <li>$\text{FIRST}(E') = \{ +, \epsilon \}, \quad \text{FIRST}(T') = \{ *, \epsilon \}$</li>
-    <li>$\text{FOLLOW}(E) = \text{FOLLOW}(E') = \{ ), \$ \}$</li>
-    <li>$\text{FOLLOW}(T) = \text{FOLLOW}(T') = \{ +, ), \$ \}$</li>
-    <li>$\text{FOLLOW}(F) = \{ *, +, ), \$ \}$</li>
+    <li>$E \rightarrow T E'$</li>
+    <li>$E' \rightarrow + T E' \mid \epsilon$</li>
+    <li>$T \rightarrow F T'$</li>
+    <li>$T' \rightarrow * F T' \mid \epsilon$</li>
+    <li>$F \rightarrow ( E ) \mid \mathbf{id}$</li>
   </ul>
-  Every cell in table $M$ contains at most one production $\implies$ The grammar is strictly $\text{LL}(1)$.
+  <p><strong>Computed Sets:</strong></p>
+  <table class="custom-table">
+    <thead>
+      <tr><th>Non-Terminal</th><th>$\text{FIRST}$ Set</th><th>$\text{FOLLOW}$ Set</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>E</strong></td><td>$\{(, \mathbf{id}\}$</td><td>$\{), \$\}$</td></tr>
+      <tr><td><strong>E'</strong></td><td>$\{+, \epsilon\}$</td><td>$\{), \$\}$</td></tr>
+      <tr><td><strong>T</strong></td><td>$\{(, \mathbf{id}\}$</td><td>$\{+, ), \$\}$</td></tr>
+      <tr><td><strong>T'</strong></td><td>$\{*, \epsilon\}$</td><td>$\{+, ), \$\}$</td></tr>
+      <tr><td><strong>F</strong></td><td>$\{(, \mathbf{id}\}$</td><td>$\{*, +, ), \$\}$</td></tr>
+    </tbody>
+  </table>
 </div>
 
-  <div style="margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 10px; color: var(--text-muted); display: flex; justify-content: space-between;">
-    <span>Compiler Design (CS24301) — Comprehensive Study Suite</span>
-    <span>BIT Mesra | B.Tech CSE</span>
+<div class="page-break"></div>
+
+<h2 class="section-title">Topic 6: Top-Down LL(1) Predictive Parsing</h2>
+
+<p>
+  An <strong>LL(1) Parser</strong> scans input from Left-to-right, produces a Leftmost derivation, using 1 lookahead token.
+</p>
+<div class="callout callout-info">
+  <div class="callout-title">LL(1) Grammatical Condition</div>
+  A grammar $G$ is $LL(1)$ if and only if for every pair of productions $A \rightarrow \alpha \mid \beta$:
+  <ol>
+    <li>$\text{FIRST}(\alpha) \cap \text{FIRST}(\beta) = \emptyset$.</li>
+    <li>If $\epsilon \in \text{FIRST}(\alpha)$, then $\text{FIRST}(\beta) \cap \text{FOLLOW}(A) = \emptyset$.</li>
+  </ol>
+</div>
+
+<h3 class="subsection-title">Complete LL(1) Parsing Table:</h3>
+<table class="custom-table">
+  <thead>
+    <tr><th>Non-Terminal</th><th>$\mathbf{id}$</th><th>$+$</th><th>$*$</th><th>$($</th><th>$)$</th><th>$\$$</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>E</strong></td><td>$E \rightarrow T E'$</td><td></td><td></td><td>$E \rightarrow T E'$</td><td></td><td></td></tr>
+    <tr><td><strong>E'</strong></td><td></td><td>$E' \rightarrow + T E'$</td><td></td><td></td><td>$E' \rightarrow \epsilon$</td><td>$E' \rightarrow \epsilon$</td></tr>
+    <tr><td><strong>T</strong></td><td>$T \rightarrow F T'$</td><td></td><td></td><td>$T \rightarrow F T'$</td><td></td><td></td></tr>
+    <tr><td><strong>T'</strong></td><td></td><td>$T' \rightarrow \epsilon$</td><td>$T' \rightarrow * F T'$</td><td></td><td>$T' \rightarrow \epsilon$</td><td>$T' \rightarrow \epsilon$</td></tr>
+    <tr><td><strong>F</strong></td><td>$F \rightarrow \mathbf{id}$</td><td></td><td></td><td>$F \rightarrow ( E )$</td><td></td><td></td></tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2 class="section-title">Topics 7 – 9: Bottom-Up LR Parsing Landscape</h2>
+
+<p>
+  <strong>LR Parsers</strong> (Left-to-right scan, Rightmost derivation in reverse) are the most powerful deterministic shift-reduce parsing engines.
+</p>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 18%;">Parser Class</th>
+      <th style="width: 25%;">Item Structure</th>
+      <th style="width: 25%;">Reduce Action Decision</th>
+      <th>State Complexity & Power</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. LR(0)</strong></td>
+      <td>$[A \rightarrow \alpha \cdot \beta]$</td>
+      <td>Reduce across all columns unconditionally.</td>
+      <td>Fewest states; weak; fails on almost all programming grammars.</td>
+    </tr>
+    <tr>
+      <td><strong>2. SLR(1)</strong></td>
+      <td>$[A \rightarrow \alpha \cdot \beta]$</td>
+      <td>Reduce $A \rightarrow \alpha$ only on input symbols $a \in \text{FOLLOW}(A)$.</td>
+      <td>Same number of states as LR(0); resolves many Shift/Reduce conflicts.</td>
+    </tr>
+    <tr>
+      <td><strong>3. CLR(1)</strong></td>
+      <td>$[A \rightarrow \alpha \cdot \beta, \ a]$ (with Lookahead $a$)</td>
+      <td>Reduce $A \rightarrow \alpha$ only on exact lookahead symbol $a$.</td>
+      <td>Most powerful deterministic class; massive number of states (thousands).</td>
+    </tr>
+    <tr>
+      <td><strong>4. LALR(1)</strong></td>
+      <td>Merged LR(1) items with identical core $LR(0)$ components.</td>
+      <td>Reduce on merged lookahead sets.</td>
+      <td>Same number of states as SLR(1); nearly the parsing power of CLR(1); used in Yacc/Bison.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<h2 class="section-title">🏛️ Top BIT Mesra Exam Questions & Answers (Module II)</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Q1. Prove why an ambiguous grammar can never be LL(1) or LR(1). (8 Marks)</div>
+  <div class="qa-a">
+    <strong>Proof:</strong> An ambiguous grammar generates at least two distinct parse trees for some string $w$.<br>
+    1. In an <strong>LL(1) parser</strong>, this ambiguity manifests as multiple production entries in the same parsing table cell $M[A, a]$, violating the single-entry requirement of deterministic LL(1) tables.<br>
+    2. In an <strong>LR(1) parser</strong>, the two distinct derivations create either a <strong>Shift/Reduce conflict</strong> (where the parser cannot decide whether to shift or reduce) or a <strong>Reduce/Reduce conflict</strong> (where the parser cannot decide which of two distinct productions to reduce by). Thus, ambiguous grammars can never be parsed deterministically by LL(1) or LR(1).
   </div>
 </div>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    renderMathInElement(document.body, {
-      delimiters: [
-        {left: '$$', right: '$$', display: true},
-        {left: '$', right: '$', display: false}
-      ],
-      throwOnError: false
-    });
-  });
-</script>
+
+<div class="qa-card">
+  <div class="qa-q">Q2. Explain the difference between SLR(1) and LALR(1) parsers. (6 Marks)</div>
+  <div class="qa-a">
+    Both SLR(1) and LALR(1) parsers have the exact same number of states (identical to the LR(0) state machine). However, they differ in how they decide reduction actions:<br>
+    - <strong>SLR(1):</strong> Places reduce actions for $A \rightarrow \alpha$ in all columns corresponding to $\text{FOLLOW}(A)$. $\text{FOLLOW}(A)$ is a global set that includes symbols that may never legally follow $A$ in that specific context.<br>
+    - <strong>LALR(1):</strong> Computes specific context-sensitive lookahead sets during item propagation, placing reduce actions only on valid lookaheads. As a result, LALR(1) eliminates many false Shift/Reduce and Reduce/Reduce conflicts present in SLR(1).
+  </div>
+</div>
+
+  </div>
 </body>
 </html>
