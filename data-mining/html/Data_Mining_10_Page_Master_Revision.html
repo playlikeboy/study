@@ -11,9 +11,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
 
 :root {
-  --primary: #0f766e;       /* Dark Teal */
+  --primary: #0f766e;       /* Deep Teal */
   --primary-light: #f0fdfa;
-  --accent: #0284c7;        /* Blue */
+  --accent: #0284c7;        /* Sky Blue */
   --secondary: #d97706;     /* Amber */
   --success: #059669;
   --success-bg: #ecfdf5;
@@ -21,6 +21,8 @@
   --warning-bg: #fffbeb;
   --danger: #dc2626;
   --danger-bg: #fef2f2;
+  --purple: #7e22ce;
+  --purple-bg: #faf5ff;
   --dark: #0f172a;
   --text: #1e293b;
   --text-muted: #64748b;
@@ -35,16 +37,16 @@ body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: var(--text);
   background-color: var(--bg-page);
-  line-height: 1.6;
-  font-size: 12.6px;
+  line-height: 1.65;
+  font-size: 12.5px;
   padding: 0;
 }
 
 .page-container {
-  max-width: 900px;
+  max-width: 920px;
   margin: 0 auto;
   background: #ffffff;
-  padding: 35px 40px;
+  padding: 38px 44px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.06);
 }
 
@@ -74,9 +76,11 @@ body {
 .badge-teal { background: #ccfbf1; color: #0f766e; }
 .badge-amber { background: #fef3c7; color: #92400e; }
 .badge-green { background: #d1fae5; color: #065f46; }
+.badge-blue { background: #e0f2fe; color: #0369a1; }
+.badge-purple { background: #ede9fe; color: #5b21b6; }
 
 h1.doc-title {
-  font-size: 23px;
+  font-size: 24px;
   font-weight: 800;
   color: var(--dark);
   line-height: 1.25;
@@ -93,47 +97,60 @@ h1.doc-title {
   background: #f0fdfa;
   border: 1px solid #99f6e4;
   border-radius: 8px;
-  padding: 14px 18px;
-  margin-bottom: 25px;
+  padding: 16px 20px;
+  margin-bottom: 26px;
   page-break-inside: avoid;
 }
 
 .toc-title {
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
   color: #0f766e;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .toc-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 5px 20px;
+  gap: 6px 24px;
   font-size: 11.5px;
 }
 
 h2.section-title {
-  font-size: 16px;
+  font-size: 16.5px;
   font-weight: 700;
   color: var(--dark);
   border-left: 4px solid var(--primary);
   padding-left: 10px;
-  margin: 24px 0 12px 0;
+  margin: 28px 0 12px 0;
+  page-break-after: avoid;
 }
 
 h3.subsection-title {
-  font-size: 13.5px;
+  font-size: 13.8px;
   font-weight: 700;
-  color: var(--secondary);
-  margin: 15px 0 7px 0;
+  color: #0d9488;
+  margin: 18px 0 8px 0;
+  page-break-after: avoid;
 }
 
-p { margin-bottom: 8px; text-align: justify; }
+h4.subsubsection-title {
+  font-size: 12.8px;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin: 14px 0 6px 0;
+  page-break-after: avoid;
+}
+
+p { margin-bottom: 9px; text-align: justify; }
 
 .callout {
   border-radius: 6px;
-  padding: 10px 14px;
-  margin: 11px 0;
+  padding: 11px 15px;
+  margin: 12px 0;
   font-size: 11.8px;
   border-left: 4px solid;
   page-break-inside: avoid;
@@ -142,7 +159,9 @@ p { margin-bottom: 8px; text-align: justify; }
 .callout-info { background: #f0fdf4; border-color: #16a34a; color: #14532d; }
 .callout-blue { background: #f0fdfa; border-color: #0f766e; color: #134e4a; }
 .callout-warning { background: #fffbeb; border-color: #d97706; color: #78350f; }
+.callout-danger { background: #fef2f2; border-color: #dc2626; color: #7f1d1d; }
 .callout-pyq { background: #faf5ff; border-color: #9333ea; color: #581c87; }
+.callout-neuro { background: #eff6ff; border-color: #2563eb; color: #1e3a8a; }
 
 .callout-title {
   font-weight: 700;
@@ -155,7 +174,7 @@ p { margin-bottom: 8px; text-align: justify; }
 table.custom-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 11px 0;
+  margin: 12px 0;
   font-size: 11.5px;
   background: #ffffff;
   border-radius: 6px;
@@ -169,12 +188,12 @@ table.custom-table th {
   color: #ffffff;
   font-weight: 600;
   text-align: left;
-  padding: 6px 10px;
+  padding: 7px 10px;
   font-size: 11px;
 }
 
 table.custom-table td {
-  padding: 5.5px 10px;
+  padding: 6px 10px;
   border-bottom: 1px solid #e2e8f0;
   vertical-align: middle;
 }
@@ -194,25 +213,25 @@ code {
 pre {
   background: #0f172a;
   color: #f8fafc;
-  padding: 9px 13px;
+  padding: 10px 14px;
   border-radius: 6px;
   font-family: 'Fira Code', monospace;
   font-size: 11px;
-  line-height: 1.4;
+  line-height: 1.45;
   overflow-x: auto;
-  margin: 9px 0;
+  margin: 10px 0;
   page-break-inside: avoid;
 }
 
-ul, ol { margin: 5px 0 9px 18px; font-size: 12px; }
-li { margin-bottom: 3px; }
+ul, ol { margin: 6px 0 10px 18px; font-size: 12px; }
+li { margin-bottom: 3.5px; }
 
 .diagram-container {
   background: #ffffff;
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 12px;
-  margin: 12px 0;
+  padding: 14px;
+  margin: 14px 0;
   text-align: center;
   page-break-inside: avoid;
 }
@@ -221,7 +240,7 @@ li { margin-bottom: 3px; }
   font-size: 10px;
   font-weight: 600;
   color: var(--text-muted);
-  margin-top: 5px;
+  margin-top: 6px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -230,13 +249,45 @@ li { margin-bottom: 3px; }
   background: #ffffff;
   border: 1px solid #cbd5e1;
   border-radius: 6px;
-  padding: 11px 15px;
-  margin: 11px 0;
+  padding: 12px 16px;
+  margin: 12px 0;
   page-break-inside: avoid;
 }
 
-.qa-q { font-weight: 700; color: #0f766e; font-size: 12.2px; margin-bottom: 5px; }
+.qa-q { font-weight: 700; color: #0f766e; font-size: 12.3px; margin-bottom: 5px; }
 .qa-a { font-size: 11.8px; color: var(--text); }
+
+.worked-box {
+  background: #f8fafc;
+  border: 1px solid #94a3b8;
+  border-left: 5px solid #0284c7;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin: 14px 0;
+  page-break-inside: avoid;
+}
+
+.worked-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #0369a1;
+  margin-bottom: 6px;
+}
+
+.formula-card {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 10px 0;
+  text-align: center;
+  page-break-inside: avoid;
+}
+
+.page-break {
+  page-break-before: always;
+  break-before: page;
+}
 
 @media print {
   body { background: #ffffff; font-size: 11.8px; }
@@ -257,7 +308,7 @@ li { margin-bottom: 3px; }
       color: #94a3b8;
     }
   }
-  .toc-box, .diagram-container, .callout, table, pre, .qa-card {
+  .toc-box, .diagram-container, .callout, table, pre, .qa-card, .worked-box, .formula-card {
     page-break-inside: avoid;
   }
 }
@@ -276,37 +327,152 @@ li { margin-bottom: 3px; }
   </div>
   
 <div class="toc-box">
-  <div class="toc-title">⛏️ 10-Page Master Quick Revision — Data Mining (CS24303)</div>
+  <div class="toc-title">⛏️ 10-Page Master Quick Revision — Data Mining Concepts & Techniques (CS24303)</div>
   <div class="toc-grid">
-    <div>Page 1-2: Attribute Types, Statistical Summaries & Distance Metrics</div>
-    <div>Page 3-4: Data Cleaning, Chi-Square Correlation & Normalization Formulas</div>
-    <div>Page 5-6: OLAP Cubes, Star vs. Snowflake Schemas & Operations</div>
-    <div>Page 7-8: Apriori Join/Prune, FP-Tree Construction & Lift Analysis</div>
-    <div>Page 9-10: Antimonotonic Constraints, Colossal Patterns & Exam PYQs</div>
+    <div>Page 1: KDD Pipeline & 4 Fundamental Attribute Types</div>
+    <div>Page 2: Proximity Metrics (L1, L2, Cosine, Jaccard, SMC)</div>
+    <div>Page 3: Data Cleaning, Binning Smoothing & Outlier Fences</div>
+    <div>Page 4: Chi-Square Contingency Test & Normalization Formulations</div>
+    <div>Page 5: PCA Dimensionality Reduction & Numerosity Sampling</div>
+    <div>Page 6: Data Warehousing, Star/Snowflake Schemas & 5 OLAP Operations</div>
+    <div>Page 7: Data Cube Lattice & Attribute-Oriented Induction (AOI)</div>
+    <div>Page 8: Apriori Downward Closure Proof & Join/Prune Trace</div>
+    <div>Page 9: FP-Tree Construction, Recursive Mining & Lift Analysis</div>
+    <div>Page 10: Advanced Constraint Types, Colossal Patterns & Top BIT Mesra PYQs</div>
   </div>
 </div>
 
-<h2 class="section-title">⚡ High-Yield Data Mining Formulas Matrix</h2>
+<h2 class="section-title">⚡ Master Formula, Schema & Metric Matrix</h2>
+
 <table class="custom-table">
   <thead>
     <tr>
-      <th>Concept</th>
-      <th>Exact Formula / Rule</th>
-      <th>Key Insight</th>
+      <th style="width: 25%;">Core Concept</th>
+      <th style="width: 45%;">Mathematical Formulation / Rule</th>
+      <th>Key Exam Insight</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td><strong>Chi-Square ($\chi^2$)</strong></td><td>$\chi^2 = \sum \frac{(O - E)^2}{E}$ where $E = \frac{\text{row\_total} \times \text{col\_total}}{N}$</td><td>Tests nominal attribute independence.</td></tr>
-    <tr><td><strong>Min-Max Norm</strong></td><td>$v' = \frac{v - \min}{\max - \min}(new\_\max - new\_\min) + new\_\min$</td><td>Maps to target range linearly.</td></tr>
-    <tr><td><strong>Z-Score Norm</strong></td><td>$v' = \frac{v - \mu}{\sigma}$</td><td>Zero mean, unit variance.</td></tr>
-    <tr><td><strong>Apriori Property</strong></td><td>Subset of frequent itemset is frequent $\implies$ Superset of infrequent is infrequent</td><td>Foundation of candidate pruning.</td></tr>
-    <tr><td><strong>Lift Metric</strong></td><td>$\text{Lift}(A, B) = \frac{P(A \cup B)}{P(A)P(B)}$</td><td>$>1$: Positively correlated; $<1$: Negatively correlated.</td></tr>
+    <tr>
+      <td><strong>Euclidean Distance ($L_2$)</strong></td>
+      <td>$$d(x, y) = \sqrt{\sum_{i=1}^p (x_i - y_i)^2}$$</td>
+      <td>Standard straight-line distance; sensitive to scale.</td>
+    </tr>
+    <tr>
+      <td><strong>Manhattan Distance ($L_1$)</strong></td>
+      <td>$$d(x, y) = \sum_{i=1}^p |x_i - y_i|$$</td>
+      <td>City-block grid distance; robust to single-attribute outliers.</td>
+    </tr>
+    <tr>
+      <td><strong>Cosine Similarity</strong></td>
+      <td>$$\text{sim}(x, y) = \frac{\vec{x} \cdot \vec{y}}{\|\vec{x}\| \|\vec{y}\|}$$</td>
+      <td>Invariant to document vector length.</td>
+    </tr>
+    <tr>
+      <td><strong>Jaccard Coefficient</strong></td>
+      <td>$$J(A, B) = \frac{q}{q + r + s}$$</td>
+      <td>Asymmetric binary; ignores joint absence ($t$).</td>
+    </tr>
+    <tr>
+      <td><strong>Chi-Square Test ($\chi^2$)</strong></td>
+      <td>$$\chi^2 = \sum \frac{(O_{ij} - E_{ij})^2}{E_{ij}}, \quad E_{ij} = \frac{\text{Row}_i \times \text{Col}_j}{N}$$</td>
+      <td>Tests independence between two nominal attributes.</td>
+    </tr>
+    <tr>
+      <td><strong>Min-Max Normalization</strong></td>
+      <td>$$v' = \frac{v - \min_A}{\max_A - \min_A}(new\_\max - new\_\min) + new\_\min$$</td>
+      <td>Linearly maps to target interval $[0, 1]$.</td>
+    </tr>
+    <tr>
+      <td><strong>Z-Score Normalization</strong></td>
+      <td>$$v' = \frac{v - \mu_A}{\sigma_A}$$</td>
+      <td>Zero mean, unit variance. Robust against outliers.</td>
+    </tr>
+    <tr>
+      <td><strong>Rule Support & Confidence</strong></td>
+      <td>$$\text{Supp} = \frac{\sigma(A \cup B)}{|D|}, \qquad \text{Conf} = \frac{\sigma(A \cup B)}{\sigma(A)}$$</td>
+      <td>$\text{Supp}$ measures frequency; $\text{Conf}$ measures rule certainty.</td>
+    </tr>
+    <tr>
+      <td><strong>Lift Metric</strong></td>
+      <td>$$\text{Lift}(A, B) = \frac{P(A \cup B)}{P(A) P(B)} = \frac{\text{Conf}(A \implies B)}{\text{Supp}(B)}$$</td>
+      <td>$> 1$: Positive correlation; $< 1$: Negative correlation.</td>
+    </tr>
+    <tr>
+      <td><strong>Kulczynski Measure</strong></td>
+      <td>$$\text{Kulc}(A, B) = \frac{1}{2}\Big( P(A \mid B) + P(B \mid A) \Big)$$</td>
+      <td>Null-invariant correlation measure.</td>
+    </tr>
   </tbody>
 </table>
 
-  <div style="margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 10px; color: var(--text-muted); display: flex; justify-content: space-between;">
-    <span>Data Mining Concepts & Techniques (CS24303) — Study Suite</span>
-    <span>BIT Mesra | B.Tech CSE</span>
+<div class="page-break"></div>
+
+<h2 class="section-title">🔥 Top 10 High-Yield BIT Mesra Exam Questions & Model Answers</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Q1. Explain the Apriori property and how it reduces candidate itemset generation. (8 Marks)</div>
+  <div class="qa-a">
+    <strong>Apriori Property (Downward Closure):</strong> All non-empty subsets of a frequent itemset must also be frequent. If an itemset $I$ is infrequent ($\text{count}(I) < \text{min\_sup}$), any superset containing $I$ cannot be frequent.<br>
+    <strong>Pruning Mechanism:</strong> When generating candidate $k$-itemsets ($C_k$) by joining $L_{k-1} \Join L_{k-1}$, if any $(k-1)$-subset of a candidate $c \in C_k$ is not in $L_{k-1}$, $c$ is immediately pruned from $C_k$ without scanning the database.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q2. Compare Star Schema and Snowflake Schema across 5 technical criteria. (8 Marks)</div>
+  <div class="qa-a">
+    1. <strong>Structure:</strong> Star has single central fact table and denormalized dimension tables; Snowflake normalizes dimension tables into multiple sub-tables.<br>
+    2. <strong>Redundancy:</strong> Star contains data redundancy in dimensions; Snowflake eliminates redundancy.<br>
+    3. <strong>Storage:</strong> Star requires slightly more disk space; Snowflake is storage-optimized.<br>
+    4. <strong>Query Performance:</strong> Star requires simple single-join SQL queries with superior performance; Snowflake requires complex multi-table joins reducing query speed.<br>
+    5. <strong>Maintenance:</strong> Star has simpler ETL updates; Snowflake has complex hierarchical maintenance.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q3. Detail the difference between ROLAP, MOLAP, and HOLAP servers. (6 Marks)</div>
+  <div class="qa-a">
+    <strong>ROLAP:</strong> Relational OLAP storing data in RDBMS with Star/Snowflake schemas. Scalable to petabytes, leverages SQL.<br>
+    <strong>MOLAP:</strong> Multidimensional OLAP storing data in dense arrays. Blazing fast query times, pre-computed materialization.<br>
+    <strong>HOLAP:</strong> Hybrid OLAP storing base records in ROLAP relational tables and high-level aggregated summary cuboids in MOLAP arrays.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q4. State the difference between Closed Frequent Itemsets and Maximal Frequent Itemsets. (6 Marks)</div>
+  <div class="qa-a">
+    <strong>Closed Frequent Itemset:</strong> An itemset $X$ is closed if no proper superset $Y \supset X$ has the same support count ($\text{supp}(Y) = \text{supp}(X)$). It is a <em>lossless representation</em> (exact counts of all subsets can be derived).<br>
+    <strong>Maximal Frequent Itemset (Max-Itemset):</strong> An itemset $X$ is maximal frequent if no proper superset $Y \supset X$ is frequent. It is a <em>lossy representation</em> (subset counts are not uniquely recoverable).
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q5. Explain the two core operators in Attribute-Oriented Induction (AOI). (6 Marks)</div>
+  <div class="qa-a">
+    <strong>1. Attribute Removal:</strong> If an attribute contains a large number of distinct values with no concept hierarchy (e.g., `Social_Security_Number`), remove it from the generalized relation.<br>
+    <strong>2. Attribute Generalization:</strong> If an attribute has a concept hierarchy and distinct values exceed attribute threshold, replace lower-level values with higher-level concepts.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q6. Differentiate between Descriptive and Predictive Data Mining with examples. (6 Marks)</div>
+  <div class="qa-a">
+    <strong>Descriptive Mining:</strong> Characterizes general structural properties of existing data (Clustering, Association Rules, Data Summarization). Example: Segmenting customers into 4 distinct demographic spending clusters.<br>
+    <strong>Predictive Mining:</strong> Constructs inference models based on historical labeled data to forecast unknown or future values (Classification, Regression). Example: Predicting whether a loan applicant will default based on credit score.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q7. What is the difference between Interdimension and Hybrid Association Rules? (5 Marks)</div>
+  <div class="qa-a">
+    <strong>Interdimension Rules:</strong> Contain multiple distinct predicates where each predicate occurs at most once (e.g., $\text{Age}(X, 20) \land \text{Income}(X, \text{High}) \implies \text{Buys}(X, \text{Laptop})$).<br>
+    <strong>Hybrid Rules:</strong> Contain multiple predicates where one or more predicates may occur repeatedly with different attribute values (e.g., $\text{Age}(X, 20) \land \text{Buys}(X, \text{Laptop}) \implies \text{Buys}(X, \text{Backpack})$).
+  </div>
+</div>
+
+  <div style="margin-top: 25px; padding-top: 14px; border-top: 1px solid var(--border); font-size: 10px; color: var(--text-muted); display: flex; justify-content: space-between;">
+    <span>Data Mining Concepts & Techniques (CS24303) — In-Depth Study Suite</span>
+    <span>BIT Mesra | B.Tech CSE (5th Sem)</span>
   </div>
 </div>
 <script>
