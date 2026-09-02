@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Module 2: Data Encoding & Multiplexing Techniques</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Fira+Code:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ]});"></script>
+  <style>
+    
+@page {
+  size: A4 portrait;
+  margin: 15mm 12mm 15mm 12mm;
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 8.5pt;
+    color: #64748b;
+  }
+  @bottom-left {
+    content: "DCCN (CS24305) • BIT Mesra CSE";
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 8.5pt;
+    color: #64748b;
+  }
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 11.8px;
+  line-height: 1.60;
+  color: #1e293b;
+  background: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+.cover-container {
+  padding: 30px 20px;
+  text-align: center;
+  border-bottom: 2px solid #0284c7;
+  margin-bottom: 24px;
+}
+
+.course-badge {
+  display: inline-block;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  border: 1px solid #bae6fd;
+}
+
+.book-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+  line-height: 1.25;
+}
+
+.book-subtitle {
+  font-size: 13.5px;
+  color: #475569;
+  margin: 0 0 16px 0;
+  font-weight: 500;
+}
+
+.toc-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 20px 0 28px 0;
+}
+
+.toc-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0369a1;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  font-size: 11px;
+  color: #334155;
+}
+
+h2.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: 1.5px solid #e2e8f0;
+  padding-bottom: 5px;
+  margin: 26px 0 14px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  page-break-after: avoid;
+}
+
+h3.subsection-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 18px 0 8px 0;
+  page-break-after: avoid;
+}
+
+p {
+  margin: 0 0 10px 0;
+  text-align: justify;
+}
+
+.callout {
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 11.5px;
+  page-break-inside: avoid;
+}
+
+.callout-info {
+  background: #f0f9ff;
+  border-left: 4px solid #0284c7;
+  color: #0c4a6e;
+}
+
+.callout-warning {
+  background: #fefce8;
+  border-left: 4px solid #eab308;
+  color: #713f12;
+}
+
+.callout-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 11px;
+  page-break-inside: avoid;
+}
+
+.custom-table th, .custom-table td {
+  border: 1px solid #cbd5e1;
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.custom-table th {
+  background: #f1f5f9;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.custom-table tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.formula-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #6366f1;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  page-break-inside: avoid;
+}
+
+.worked-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-left: 4px solid #22c55e;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  page-break-inside: avoid;
+}
+
+.worked-title {
+  font-weight: 700;
+  color: #15803d;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.diagram-container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px;
+  margin: 14px 0;
+  text-align: center;
+  page-break-inside: avoid;
+}
+
+.diagram-caption {
+  font-size: 10.5px;
+  color: #64748b;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.qa-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin: 12px 0;
+  page-break-inside: avoid;
+}
+
+.qa-q {
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.qa-a {
+  color: #334155;
+  line-height: 1.55;
+}
+
+pre {
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-family: 'Fira Code', monospace;
+  font-size: 10.5px;
+  line-height: 1.45;
+  overflow-x: auto;
+  margin: 12px 0;
+  page-break-inside: avoid;
+}
+
+code {
+  font-family: 'Fira Code', monospace;
+  font-size: 11px;
+  background: #f1f5f9;
+  color: #0369a1;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.page-break {
+  page-break-before: always;
+}
+
+  </style>
+</head>
+<body>
+  <div class="cover-container">
+    <div class="course-badge">CS24305 • Module 2</div>
+    <h1 class="book-title">Module 2: Data Encoding & Multiplexing Techniques</h1>
+    <div class="book-subtitle">Topics 14 to 19 • Line Coding, Scrambling, QAM Modulation, PCM & TDM/FDM</div>
+  </div>
+  
+<div class="toc-box">
+  <div class="toc-title"><i class="fa-solid fa-list-check"></i> Module II: Transmission Media & Signal Encoding — Complete 6-Topic Tracker</div>
+  <div class="toc-grid">
+    <div><strong>Topic 14:</strong> Guided Media (Twisted Pair UTP/STP, Coaxial Cable, Optical Fiber)</div>
+    <div><strong>Topic 15:</strong> Wireless Media & Propagation (Ground, Sky, LOS, Satellite Microwave)</div>
+    <div><strong>Topic 16:</strong> Digital Signaling (Line Codes: NRZ-L, NRZ-I, Manchester, AMI)</div>
+    <div><strong>Topic 17:</strong> Analog Signaling (Carrier Parameter Representations)</div>
+    <div><strong>Topic 18:</strong> Encoding Techniques (Line Coding Comparison & Tradeoffs)</div>
+    <div><strong>Topic 19:</strong> Modulation Techniques (ASK, FSK, PSK & Constellation QAM)</div>
+  </div>
+</div>
+
+<h2 class="section-title">Topic 14: Guided Transmission Media</h2>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 22%;">Guided Medium</th>
+      <th style="width: 45%;">Physical Architecture & Transmission Physics</th>
+      <th>Key Advantages & Tradeoffs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. Twisted Pair Cable</strong></td>
+      <td>Two insulated copper wires twisted in a helical spiral. Twisting ensures both wires receive equal electromagnetic interference (EMI), which cancels out at the differential receiver. Available as <strong>UTP</strong> (Unshielded) and <strong>STP</strong> (Shielded with metal foil).</td>
+      <td>Inexpensive, lightweight, easy to terminate with RJ-45 connectors. Limited bandwidth ($\le 10 \text{ Gbps}$ over short distances), prone to crosstalk.</td>
+    </tr>
+    <tr>
+      <td><strong>2. Coaxial Cable</strong></td>
+      <td>Solid central copper conductor surrounded by dielectric insulating layer, enclosed in a braided cylindrical wire mesh shield and outer protective plastic jacket.</td>
+      <td>Better noise immunity and higher bandwidth than twisted pair. Bulkier, stiffer, harder to install. Used in Cable TV broadband (DOCSIS).</td>
+    </tr>
+    <tr>
+      <td><strong>3. Optical Fiber</strong></td>
+      <td>Ultra-pure cylindrical glass core ($n_1$) surrounded by concentric glass cladding ($n_2$) where refractive index $n_1 > n_2$. Transmits light pulses via <strong>Total Internal Reflection</strong> whenever incident angle $\theta > \theta_{\text{critical}}$.</td>
+      <td>Enormous bandwidth (terabits/sec), ultra-low attenuation ($\approx 0.2 \text{ dB/km}$), zero EMI susceptibility, lightweight, highly secure against wiretapping. Expensive splicing and optical transceivers.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">Topic 15: Wireless Transmission & Propagation [UPLOADED PYQ]</h2>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 25%;">Propagation Mode</th>
+      <th style="width: 45%;">Atmospheric Interaction & Frequency Band</th>
+      <th>Representative Applications</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. Ground-Wave Propagation</strong></td>
+      <td>Signals follow the curvature of the earth via diffraction over the conductive ground surface ($< 2 \text{ MHz}$).</td>
+      <td>AM radio broadcasting, maritime navigation.</td>
+    </tr>
+    <tr>
+      <td><strong>2. Sky-Wave Propagation</strong></td>
+      <td>Signals bounce back and forth between earth's surface and the charged ionosphere ($2\text{–}30 \text{ MHz}$).</td>
+      <td>Shortwave (SW) international radio broadcasting, amateur radio.</td>
+    </tr>
+    <tr>
+      <td><strong>3. Line-of-Sight (LOS)</strong></td>
+      <td>Straight-line path between transmitting and receiving directional horn antennas ($> 30 \text{ MHz}$). Antennas must have clear Fresnel zone.</td>
+      <td>Terrestrial microwave links, cellular base stations, Wi-Fi.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="subsection-title">Satellite Microwave vs. Terrestrial Microwave [UPLOADED PYQ]:</h3>
+<ul>
+  <li><strong>Terrestrial Microwave:</strong> Uses parabolic dish antennas mounted on high towers spaced $30\text{–}50 \text{ km}$ apart due to Earth's horizon curvature. Low propagation delay ($< 1 \text{ ms}$).</li>
+  <li><strong>Satellite Microwave:</strong> Earth station beams signal to a geostationary satellite at $35,786 \text{ km}$ altitude (Uplink), which amplifies and retransmits it on a different downlink frequency. High round-trip latency ($\approx 270\text{–}540 \text{ ms}$), but provides massive continental coverage.</li>
+</ul>
+
+<h2 class="section-title">Topic 16 & 18: Digital Line Coding Schemes [UPLOADED PYQ]</h2>
+
+<div class="callout callout-warning">
+  <div class="callout-title">[UPLOADED PYQ] Step-by-Step Waveform Rules for Bit Stream `001110011`</div>
+  <table class="custom-table">
+    <thead><tr><th>Encoding Scheme</th><th>Bit Transition Invariant Rule</th><th>Waveform Encoding for `001110011`</th></tr></thead>
+    <tbody>
+      <tr><td><strong>NRZ-L (Level)</strong></td><td>Bit `0` = Positive voltage ($+V$), Bit `1` = Negative voltage ($-V$).</td><td>`+V, +V, -V, -V, -V, +V, +V, -V, -V`</td></tr>
+      <tr><td><strong>NRZ-I (Invert)</strong></td><td>Bit `1` = Transition at start of bit interval; Bit `0` = No transition.</td><td>Maintains previous level on `0`, flips on `1`.</td></tr>
+      <tr><td><strong>Bipolar AMI</strong></td><td>Bit `0` = Zero voltage ($0V$); Bit `1` = Alternating $+V$ and $-V$.</td><td>`0V, 0V, +V, -V, +V, 0V, 0V, -V, +V`</td></tr>
+      <tr><td><strong>Manchester (802.3)</strong></td><td>Bit `0` = High-to-Low transition at bit center; Bit `1` = Low-to-High transition at center.</td><td>Guarantees a mid-bit clock transition in every single bit!</td></tr>
+      <tr><td><strong>Differential Manchester</strong></td><td>Always transitions at center. Bit `0` = Transition at start; Bit `1` = No transition at start.</td><td>Token Ring standard; immune to wire polarity inversion.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 class="section-title">Topic 17 & 19: Carrier Modulation Techniques (ASK, FSK, PSK, QAM)</h2>
+
+<p>
+  Digital modulation alters one or more parameters of a high-frequency analog sinusoidal carrier $c(t) = A \cos(2\pi f_c t + \phi)$:
+</p>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 20%;">Modulation</th>
+      <th style="width: 25%;">Modulated Parameter</th>
+      <th style="width: 30%;">Mathematical Signal Equation</th>
+      <th>Key Advantages & Tradeoffs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>ASK</strong></td><td>Amplitude</td><td>$s(t) = A_1 \cos(2\pi f_c t)$ for `1`, $A_0 \cos(2\pi f_c t)$ for `0`</td><td>Simple; highly susceptible to noise and fading.</td></tr>
+    <tr><td><strong>FSK</strong></td><td>Frequency</td><td>$s(t) = A \cos(2\pi f_1 t)$ for `1`, $A \cos(2\pi f_2 t)$ for `0`</td><td>High noise immunity; requires more channel bandwidth.</td></tr>
+    <tr><td><strong>BPSK / QPSK</strong></td><td>Phase</td><td>$s(t) = A \cos(2\pi f_c t + \phi_i)$ where $\phi_i \in \{0, \pi\}$</td><td>Excellent bit error rate (BER); standard in modern wireless.</td></tr>
+    <tr><td><strong>QAM (16/64/256)</strong></td><td>Amplitude + Phase</td><td>$s(t) = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)$</td><td>Enormous spectral efficiency ($\log_2 M$ bits/baud); used in Wi-Fi & 5G.</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">🧠 M2 Active Recall & Exam Questions [UPLOADED PYQ]</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Q1. [UPLOADED PYQ] Draw the line coding waveforms for bit stream `001110011` using NRZ-L, NRZ-I, Bipolar AMI, Manchester, and Differential Manchester. (10 Marks)</div>
+  <div class="qa-a">
+    1. <strong>NRZ-L:</strong> High for `0`, Low for `1` $\rightarrow$ `High, High, Low, Low, Low, High, High, Low, Low`.<br>
+    2. <strong>NRZ-I:</strong> Invert signal level on every `1`; no change on `0`.<br>
+    3. <strong>Bipolar AMI:</strong> Zero volts for all `0`s; alternating $+V$ and $-V$ for each successive `1` $\rightarrow$ `0, 0, +V, -V, +V, 0, 0, -V, +V`.<br>
+    4. <strong>Manchester:</strong> Every bit has mid-interval transition. `0` = High-to-Low; `1` = Low-to-High.<br>
+    5. <strong>Differential Manchester:</strong> Mandatory mid-bit transition. Start-of-bit transition for `0`; no start transition for `1`.
+  </div>
+</div>
+<h2 class="section-title">Topic 19.2: Advanced Modulation, Constellation Geometry & Delta Modulation</h2>
+
+<p>
+  In modern high-speed modems (such as V.90, V.92, DSL, DOCSIS cable modems, and 4G/5G LTE), multi-dimensional constellation geometry allows packing multiple bits per symbol over analog carrier channels.
+</p>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Delta Modulation (DM) & Slope Overload Distortion</div>
+  <p><strong>Delta Modulation (DM)</strong> transmits only 1 bit per sample, indicating whether the current analog sample amplitude is higher (Bit 1: $+\delta$) or lower (Bit 0: $-\delta$) than the previous staircase approximation.</p>
+  <ul>
+    <li><strong>Slope Overload Distortion:</strong> Occurs when the input analog signal changes faster than the maximum rate of staircase increase ($|\frac{dx(t)}{dt}| > \frac{\delta}{T_s}$). The staircase cannot keep up with rapid signal rises.</li>
+    <li><strong>Granular Noise:</strong> Occurs when the input analog signal is flat or slowly varying. The staircase oscillates continuously above and below the flat signal by $\pm \delta$.</li>
+    <li><strong>Adaptive Delta Modulation (ADM):</strong> Dynamically scales step size $\delta$ based on successive bit history (doubles $\delta$ on consecutive 1s to prevent slope overload; shrinks $\delta$ on alternating 0101 to eliminate granular noise).</li>
+  </ul>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical: T1 and E1 Digital Carrier Frame Anatomy</div>
+  <p><strong>1. North American T1 Carrier System (24 Voice Channels):</strong></p>
+  $$\text{Each voice channel} = 8\text{ bits/sample} \times 8000\text{ samples/sec} = 64\text{ kbps}$$
+  $$\text{T1 Frame} = (24 \text{ channels} \times 8\text{ bits}) + 1\text{ Framing Bit} = 192 + 1 = \mathbf{193 \text{ bits/frame}}$$
+  $$\mathbf{\text{T1 Bit Rate} = 193 \text{ bits/frame} \times 8000 \text{ frames/sec} = \mathbf{1,544,000 \text{ bps (1.544 Mbps)}}}$$
+  <p><strong>2. European E1 Carrier System (32 Voice Channels):</strong></p>
+  $$\text{E1 Frame} = 32 \text{ channels} \times 8\text{ bits} = \mathbf{256 \text{ bits/frame}}$$
+  $$\mathbf{\text{E1 Bit Rate} = 256 \text{ bits/frame} \times 8000 \text{ frames/sec} = \mathbf{2,048,000 \text{ bps (2.048 Mbps)}}}$$
+  <p><em>Note:</em> Channel 0 is reserved for framing/synchronization; Channel 16 is reserved for out-of-band signaling (SS7).</p>
+</div>
+<h2 class="section-title">Topic 19.3: Comprehensive Modulation Geometry & Companding Physics</h2>
+
+<p>
+  In Pulse Code Modulation (PCM), quantization of speech signals causes higher relative distortion for soft whisper sounds than for loud vowel sounds when linear uniform quantization intervals are used. Non-linear <strong>Companding (Compressor-Expander)</strong> restores a constant dynamic Signal-to-Quantization-Noise Ratio across all volume levels.
+</p>
+
+<div class="formula-card">
+  <strong>The 2 Global Companding Laws:</strong>
+  <p><strong>1. North American $\mu$-Law Companding ($\mu = 255$):</strong></p>
+  $$\mathbf{y = \text{sgn}(x) \frac{\ln(1 + \mu |x|)}{\ln(1 + \mu)} \quad \text{for } -1 \le x \le 1}$$
+  <p><strong>2. European A-Law Companding ($A = 87.6$):</strong></p>
+  $$\mathbf{y = \text{sgn}(x) \begin{cases} \frac{A |x|}{1 + \ln(A)} & 0 \le |x| \le \frac{1}{A} \\ \frac{1 + \ln(A |x|)}{1 + \ln(A)} & \frac{1}{A} \le |x| \le 1 \end{cases}}$$
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: Detailed Constellation Diagram Bit Mapping for QPSK & 16-QAM</div>
+  <p>In Gray-coded 16-QAM, each 4-bit symbol $(b_1 b_2 b_3 b_4)$ is mapped into two independent in-phase ($I$) and quadrature ($Q$) amplitudes taking values from $\{-3d, -d, +d, +3d\}$:</p>
+  <table class="custom-table">
+    <thead><tr><th>Symbol ($b_1 b_2$)</th><th>In-Phase ($I$) Axis</th><th>Symbol ($b_3 b_4$)</th><th>Quadrature ($Q$) Axis</th><th>Net Euclidean Distance</th></tr></thead>
+    <tbody>
+      <tr><td>`00`</td><td>$-3d$</td><td>`00`</td><td>$+3d$</td><td>$d_{\text{min}} = 2d$</td></tr>
+      <tr><td>`01`</td><td>$-1d$</td><td>`01`</td><td>$+1d$</td><td>$d_{\text{min}} = 2d$</td></tr>
+      <tr><td>`11`</td><td>$+1d$</td><td>`11`</td><td>$-1d$</td><td>$d_{\text{min}} = 2d$</td></tr>
+      <tr><td>`10`</td><td>$+3d$</td><td>`10`</td><td>$-3d$</td><td>$d_{\text{min}} = 2d$</td></tr>
+    </tbody>
+  </table>
+  <p><em>Gray Coding Property:</em> Adjacent constellation points differ by strictly <strong>one bit</strong>. Thus, the most probable symbol errors (noise nudging a point into an adjacent decision zone) cause only a single-bit error!</p>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical: SONET / SDH Optical Multiplexing Hierarchy</div>
+  <p>The Synchronous Optical Network (SONET) base electrical signal is **STS-1** (Synchronous Transport Signal level 1), corresponding to optical carrier **OC-1**.</p>
+  $$\text{STS-1 Frame Layout} = 9 \text{ rows} \times 90 \text{ columns (bytes)} = \mathbf{810 \text{ bytes/frame}}$$
+  $$\text{Frame Rate} = 8000 \text{ frames/sec (Frame duration } = 125 \ \mu\text{s})$$
+  $$\mathbf{\text{STS-1 Data Rate} = 810 \text{ bytes/frame} \times 8 \text{ bits/byte} \times 8000 \text{ frames/sec} = \mathbf{51.84 \text{ Mbps}}}$$
+  <ul>
+    <li>$\text{OC-3} = 3 \times 51.84 = \mathbf{155.52 \text{ Mbps}}$ (Matches European STM-1 standard)</li>
+    <li>$\text{OC-12} = 12 \times 51.84 = \mathbf{622.08 \text{ Mbps}}$ (Matches European STM-4 standard)</li>
+    <li>$\text{OC-48} = 48 \times 51.84 = \mathbf{2.488 \text{ Gbps}}$ (Matches European STM-16 standard)</li>
+    <li>$\text{OC-192} = 192 \times 51.84 = \mathbf{9.953 \text{ Gbps} \approx 10\text{ Gbps}}$</li>
+  </ul>
+</div>
+<h2 class="section-title">Topic 19.4: Master University Solved Examination Numerical Bank</h2>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 2: Line Coding Baud Rate & Bandwidth Requirements</div>
+  <p>A digital bitstream of rate $R = 10\text{ Mbps}$ is transmitted using: (a) NRZ-L, (b) Manchester, (c) 4B/5B Block Coding with NRZ-I. Calculate the signal baud rate ($S$) and minimum Nyquist bandwidth ($B_{\text{min}}$) for each scheme.</p>
+  <p><strong>Solution:</strong> $\text{Baud Rate } S = c \times R \times \frac{1}{r}, \quad B_{\text{min}} = \frac{S}{2}$ (for average factor $c = 1/2$).</p>
+  <ul>
+    <li><strong>(a) NRZ-L ($r=1$):</strong> Baud rate $S = 10\text{ Mbaud} \implies B_{\text{min}} = \frac{10}{2} = \mathbf{5 \text{ MHz}}$.</li>
+    <li><strong>(b) Manchester ($r=0.5$):</strong> Baud rate $S = 20\text{ Mbaud} \implies B_{\text{min}} = \frac{20}{2} = \mathbf{10 \text{ MHz}}$ (Requires $2\times$ the bandwidth of NRZ!).</li>
+    <li><strong>(c) 4B/5B with NRZ-I ($r = 4/5 = 0.8$):</strong> Baud rate $S = \frac{10}{0.8} = 12.5\text{ Mbaud} \implies B_{\text{min}} = \frac{12.5}{2} = \mathbf{6.25 \text{ MHz}}$ (Only $25\%$ bandwidth overhead with guaranteed clock synchronization!).</li>
+  </ul>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 3: Pulse Code Modulation (PCM) of Video Signals</div>
+  <p>A television video signal has a maximum frequency bandwidth of $f_{\text{max}} = 4.5\text{ MHz}$. The signal is sampled at $20\%$ above the Nyquist rate and quantized into 1024 discrete levels ($L = 1024$). Calculate: (1) Sampling rate, (2) Bits per sample, (3) Output digital bit rate, and (4) Minimum channel bandwidth.</p>
+  <p><strong>Solution:</strong></p>
+  $$\text{1. Nyquist Rate } = 2 \times 4.5\text{ MHz} = 9\text{ MHz} \implies f_s = 1.20 \times 9\text{ MHz} = \mathbf{10.8 \text{ MHz (10.8 million samples/sec)}}$$
+  $$\text{2. Bits per Sample } n = \log_2(1024) = \mathbf{10 \text{ bits/sample}}$$
+  $$\text{3. Bit Rate } R = f_s \times n = 10.8\text{ MHz} \times 10 = \mathbf{108 \text{ Mbps}}$$
+  $$\text{4. Minimum Bandwidth } B_{\text{min}} = \frac{R}{2} = \frac{108}{2} = \mathbf{54 \text{ MHz}}$$
+</div>
+<h2 class="section-title">Topic 19.5: Mathematical Derivation of PCM Quantization Noise & Constellation Theory</h2>
+
+<p>
+  In Pulse Code Modulation (PCM), a continuous analog signal $x(t)$ with peak-to-peak voltage range $[-V_{\text{max}}, +V_{\text{max}}]$ (total voltage span $2 V_{\text{max}}$) is divided into $L = 2^n$ uniform quantization intervals of step width:
+</p>
+
+<div class="formula-card">
+  <strong>Quantization Step Size & Quantization Noise Power Derivation:</strong>
+  $$\mathbf{\Delta = \frac{2 V_{\text{max}}}{L} = \frac{2 V_{\text{max}}}{2^n}}$$
+  Assuming the quantization error $e = x - x_q$ is uniformly distributed over $\left[-\frac{\Delta}{2}, +\frac{\Delta}{2}\right]$ with probability density function $f_E(e) = \frac{1}{\Delta}$:
+  $$\mathbf{\sigma_q^2 = \int_{-\Delta/2}^{+\Delta/2} e^2 f_E(e) \, de = \frac{1}{\Delta} \left[ \frac{e^3}{3} \right]_{-\Delta/2}^{+\Delta/2} = \frac{1}{\Delta} \left( \frac{\Delta^3}{24} - \left(-\frac{\Delta^3}{24}\right) \right) = \mathbf{\frac{\Delta^2}{12}}}$$
+  $$\mathbf{\text{Signal-to-Quantization-Noise Ratio: } \text{SQNR}_{\text{dB}} = 10 \log_{10}\left(\frac{P_{\text{signal}}}{\sigma_q^2}\right) = \mathbf{6.02 n + 1.76 \text{ dB}}}$$
+  <em>Engineering Axiom:</em> Every additional bit added to each PCM sample increases the Signal-to-Noise Ratio by exactly $\mathbf{6.02 \text{ dB}}$!
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Complete Comparison Matrix: Digital Line Coding Spectral Properties</div>
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th style="width: 18%;">Coding Scheme</th>
+        <th style="width: 20%;">Baud Rate ($S$)</th>
+        <th style="width: 20%;">DC Component?</th>
+        <th style="width: 22%;">Synchronization Quality</th>
+        <th>Primary Real-World Standard</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>NRZ-L</strong></td><td>$S = N$ baud</td><td>Severe DC bias</td><td>Poor (loses clock on 0s & 1s)</td><td>RS-232 Serial COM Ports</td></tr>
+      <tr><td><strong>NRZ-I</strong></td><td>$S = N$ baud</td><td>Severe DC bias</td><td>Partial (syncs on 1s only)</td><td>USB 1.1/2.0 (with Bit Stuffing)</td></tr>
+      <tr><td><strong>Bipolar AMI</strong></td><td>$S = N$ baud</td><td><strong>Zero DC Bias</strong></td><td>Partial (syncs on 1s only)</td><td>ISDN Primary Rate, DS1 lines</td></tr>
+      <tr><td><strong>Manchester</strong></td><td>$S = 2N$ baud</td><td><strong>Zero DC Bias</strong></td><td><strong>100% Guaranteed</strong></td><td>IEEE 802.3 10BASE-T Ethernet</td></tr>
+      <tr><td><strong>Diff. Manchester</strong></td><td>$S = 2N$ baud</td><td><strong>Zero DC Bias</strong></td><td><strong>100% Guaranteed</strong></td><td>IEEE 802.5 Token Ring LANs</td></tr>
+      <tr><td><strong>4B/5B + NRZ-I</strong></td><td>$S = 1.25N$ baud</td><td>Low DC bias</td><td><strong>100% Guaranteed</strong></td><td>100BASE-TX Fast Ethernet, FDDI</td></tr>
+      <tr><td><strong>8B/10B Coding</strong></td><td>$S = 1.25N$ baud</td><td>Zero DC bias</td><td><strong>100% Guaranteed</strong></td><td>Gigabit Ethernet (1000BASE-X), PCIe, SATA</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 4: Wavelength-Division Multiplexing (WDM) Throughput</div>
+  <p>A single-mode fiber optical communication link utilizes Dense Wavelength Division Multiplexing (DWDM) operating in the C-band ($1530\text{ nm to }1565\text{ nm}$). The system multiplexes 80 distinct optical wavelengths, each modulated at 100 Gbps using DP-QPSK. Calculate: (1) Total aggregate throughput of the single fiber strand in Tbps, and (2) Total bits transmitted in 1 hour.</p>
+  <p><strong>Solution:</strong></p>
+  $$\text{Aggregate Data Rate } R = 80 \text{ channels} \times 100\text{ Gbps/channel} = \mathbf{8000 \text{ Gbps}} = \mathbf{8 \text{ Tbps (Terabits/sec)}}$$
+  $$\text{Total Bits in 1 Hour } = 8 \times 10^{12} \text{ bps} \times 3600\text{ s} = \mathbf{2.88 \times 10^{16} \text{ bits}} = \mathbf{3.6 \text{ Petabytes (PB)}}$$
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q6. Compare ASK, FSK, BPSK, QPSK, and 16-QAM across bandwidth efficiency, noise immunity, and constellation complexity. (10 Marks)</div>
+  <div class="qa-a">
+    • <strong>ASK:</strong> Simple hardware; highly vulnerable to noise and attenuation; low spectral efficiency ($1\text{ bit/baud}$).<br>
+    • <strong>FSK:</strong> High noise immunity; requires large bandwidth (two separate carrier frequencies); standard in low-speed modems ($1\text{ bit/baud}$).<br>
+    • <strong>BPSK:</strong> Excellent noise immunity (opposite phases $\pm 180^\circ$); $1\text{ bit/baud}$.<br>
+    • <strong>QPSK:</strong> High noise immunity with $2\times$ spectral efficiency ($2\text{ bits/baud}$); standard in satellite/cellular links.<br>
+    • <strong>16-QAM:</strong> Combines amplitude and phase; high spectral efficiency ($4\text{ bits/baud}$); requires high SNR to distinguish adjacent points.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q7. Explain Pulse Amplitude Modulation (PAM), Pulse Width Modulation (PWM), and Pulse Position Modulation (PPM). (8 Marks)</div>
+  <div class="qa-a">
+    These are analog pulse modulation techniques where a periodic pulse train carrier is modulated by an analog message:<br>
+    1. <strong>PAM:</strong> The amplitude of each pulse is proportional to the instantaneous analog sample amplitude (intermediate step in PCM).<br>
+    2. <strong>PWM:</strong> The width (duration) of each pulse varies proportionally with sample amplitude (used in motor control, audio amplifiers).<br>
+    3. <strong>PPM:</strong> The relative position (timing offset) of each constant-width pulse varies proportionally with sample amplitude (high noise immunity).
+  </div>
+</div>
+<h2 class="section-title">Topic 19.6: Exhaustive Digital Carrier Modulation & Constellation Geometry</h2>
+
+<p>
+  Digital passband transmission utilizes Orthogonal In-Phase ($I$) and Quadrature ($Q$) carrier bases to synthesize high-density signal constellations:
+  $$s(t) = I(t) \sqrt{\frac{2}{T_s}} \cos(2\pi f_c t) - Q(t) \sqrt{\frac{2}{T_s}} \sin(2\pi f_c t)$$
+</p>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 18%;">Modulation Scheme</th>
+      <th style="width: 18%;">Bits per Symbol ($k$)</th>
+      <th style="width: 25%;">Spectral Efficiency ($\text{bps/Hz}$)</th>
+      <th style="width: 20%;">Minimum SNR Required</th>
+      <th>Representative Technology</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>BPSK</strong></td><td>$1\text{ bit}$</td><td>$1.0\text{ bps/Hz}$</td><td>Low ($7\text{ dB}$)</td><td>Deep Space, Bluetooth LE</td></tr>
+    <tr><td><strong>QPSK</strong></td><td>$2\text{ bits}$</td><td>$2.0\text{ bps/Hz}$</td><td>Moderate ($10\text{ dB}$)</td><td>DVB-S Satellite, 3G UMTS</td></tr>
+    <tr><td><strong>8-PSK</strong></td><td>$3\text{ bits}$</td><td>$3.0\text{ bps/Hz}$</td><td>Moderate ($14\text{ dB}$)</td><td>EDGE Cellular (2.75G)</td></tr>
+    <tr><td><strong>16-QAM</strong></td><td>$4\text{ bits}$</td><td>$4.0\text{ bps/Hz}$</td><td>High ($17\text{ dB}$)</td><td>Wi-Fi 4 (802.11n), 4G LTE</td></tr>
+    <tr><td><strong>64-QAM</strong></td><td>$6\text{ bits}$</td><td>$6.0\text{ bps/Hz}$</td><td>Very High ($23\text{ dB}$)</td><td>Wi-Fi 5 (802.11ac), DVB-C</td></tr>
+    <tr><td><strong>256-QAM</strong></td><td>$8\text{ bits}$</td><td>$8.0\text{ bps/Hz}$</td><td>Extremely High ($29\text{ dB}$)</td><td>Wi-Fi 6 (802.11ax), DOCSIS 3.1</td></tr>
+    <tr><td><strong>1024-QAM</strong></td><td>$10\text{ bits}$</td><td>$10.0\text{ bps/Hz}$</td><td>Ultra High ($35\text{ dB}$)</td><td>Wi-Fi 6E / Wi-Fi 7 (802.11be)</td></tr>
+    <tr><td><strong>4096-QAM</strong></td><td>$12\text{ bits}$</td><td>$12.0\text{ bps/Hz}$</td><td>Peak Clean SNR ($41\text{ dB}$)</td><td>Wi-Fi 7 Enterprise Channels</td></tr>
+  </tbody>
+</table>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Problem: Detailed Pulse Code Modulation (PCM) Dynamic Range & SNR Analysis</div>
+  <p>An analog instrumentation sensor signal has bandwidth $f_{\text{max}} = 10\text{ kHz}$ and a required dynamic range of $72\text{ dB}$.</p>
+  <ol>
+    <li>What is the minimum number of PCM quantization bits ($n$) required to achieve $\text{SQNR} \ge 72\text{ dB}$?</li>
+    <li>What is the resulting output digital bit rate when sampled at $25\%$ above the Nyquist rate?</li>
+  </ol>
+  <p><strong>Solution:</strong></p>
+  $$\text{SQNR}_{\text{dB}} \approx 6.02 n + 1.76 \ge 72\text{ dB} \implies 6.02 n \ge 72 - 1.76 = 70.24$$
+  $$n \ge \frac{70.24}{6.02} \approx 11.67 \implies \mathbf{n = 12 \text{ bits/sample} \quad (L = 2^{12} = 4096 \text{ levels})}$$
+  $$\text{Sampling Rate: } f_s = 1.25 \times (2 \times 10\text{ kHz}) = 1.25 \times 20\text{ kHz} = \mathbf{25 \text{ kHz (25,000 samples/sec)}}$$
+  $$\mathbf{\text{Output Bit Rate: } R = f_s \times n = 25,000 \times 12 = \mathbf{300,000 \text{ bps (300 kbps)}}}$$
+</div>
+<h2 class="section-title">Topic 19.7: Master University Long-Answer Exam Solutions Bank</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Q8. Explain the 4B/5B and 8B/10B Block Coding mechanisms used in Fast Ethernet and Gigabit Ethernet. Why are they preferred over Manchester? (10 Marks)</div>
+  <div class="qa-a">
+    • <strong>Manchester Limitation:</strong> Manchester encoding has a baud rate efficiency of only $50\%$ ($S = 2N$), requiring a massive $200\text{ MHz}$ signaling rate for $100\text{ Mbps}$ Fast Ethernet.<br>
+    • <strong>4B/5B Block Coding Solution:</strong> Takes 4-bit data nibbles and maps them into 5-bit symbols from a lookup table. The 5-bit codes are chosen such that they contain <strong>at most one leading zero and at most two trailing zeros</strong>. When transmitted using NRZ-I, this guarantees at least one transition every 3 bits for continuous receiver clock recovery with only $\mathbf{25\%}$ baud overhead ($125\text{ Mbaud}$ for $100\text{ Mbps}$)!<br>
+    • <strong>8B/10B Coding (Gigabit Ethernet):</strong> Maps 8-bit bytes into 10-bit symbols, balancing the Running Disparity (DC balance) and providing robust error detection for fiber optic and copper links.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q9. Differentiate between Frequency-Division Multiplexing (FDM), Time-Division Multiplexing (TDM), and Wavelength-Division Multiplexing (WDM) across signals, media, and multiplexing hardware. (8 Marks)</div>
+  <div class="qa-a">
+    • <strong>FDM:</strong> Analog multiplexing; divides total channel frequency band into discrete sub-channels with Guard Bands; requires analog bandpass filters (AM/FM Radio, Cable TV).<br>
+    • <strong>TDM:</strong> Digital multiplexing; interleaves discrete time slices from multiple bitstreams into round-robin frames; requires digital framing logic and buffers (T1/E1, SONET).<br>
+    • <strong>WDM:</strong> Optical multiplexing; combines multiple optical laser beams of different wavelengths ($\lambda$) onto a single optical fiber strand; requires optical prisms and diffraction gratings (DWDM telecommunications).
+  </div>
+</div>
+<div class="qa-card">
+  <div class="qa-q">Q10. Explain Spread Spectrum techniques: Direct Sequence Spread Spectrum (DSSS) and Frequency Hopping Spread Spectrum (FHSS). (10 Marks)</div>
+  <div class="qa-a">
+    <strong>Spread Spectrum</strong> expands the bandwidth of a narrowband message signal across a wide frequency band using a pseudo-random noise (PN) sequence to provide military-grade anti-jamming and multi-user CDMA capability:<br>
+    • <strong>DSSS (Direct Sequence Spread Spectrum):</strong> Each data bit is multiplied ($\mathbf{XOR}$) by a high-rate $n$-bit pseudo-random **Chipping Sequence** (e.g. 11-bit Barker code `10110111000` in IEEE 802.11b Wi-Fi). Even if narrowband interference corrupts part of the band, the receiver cross-correlates with the known chipping code to recover the exact data with high processing gain ($G_p = 10 \log_{10}(B_{\text{ss}} / B_{\text{data}})$).<br>
+    • <strong>FHSS (Frequency Hopping Spread Spectrum):</strong> The carrier frequency rapidly hops across a pseudo-random sequence of frequency channels (e.g. 79 channels in Bluetooth hopping 1600 times per second!). Eavesdroppers and narrow jammers cannot intercept or jam the transmission without knowing the exact hopping seed sequence!
+  </div>
+</div>
+<h2 class="section-title">Topic 19.8: Advanced Digital Signal Processing & Orthogonal Frequency Division Multiplexing (OFDM)</h2>
+
+<p>
+  Modern broadband wireless and wireline standards (Wi-Fi 6/7, 4G LTE, 5G NR, DSL, DVB-T2) replace single-carrier modulation with <strong>Orthogonal Frequency Division Multiplexing (OFDM)</strong>.
+</p>
+
+<div class="diagram-container">
+  <svg width="100%" height="80" viewBox="0 0 740 80" xmlns="http://www.w3.org/2000/svg">
+    <rect x="20" y="15" width="130" height="50" rx="4" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="85" y="38" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#1e40af" text-anchor="middle">Serial Bitstream</text>
+    <text x="85" y="52" font-family="Plus Jakarta Sans" font-size="8.5" fill="#2563eb" text-anchor="middle">High-Speed Data</text>
+
+    <path d="M 150 40 L 210 40" stroke="#0284c7" stroke-width="1.8"/>
+
+    <rect x="215" y="15" width="120" height="50" rx="4" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.2"/>
+    <text x="275" y="38" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#14532d" text-anchor="middle">Serial-to-Parallel</text>
+    <text x="275" y="52" font-family="Plus Jakarta Sans" font-size="8.5" fill="#16a34a" text-anchor="middle">$N$ Parallel Streams</text>
+
+    <path d="M 335 40 L 395 40" stroke="#0284c7" stroke-width="1.8"/>
+
+    <rect x="400" y="15" width="130" height="50" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
+    <text x="465" y="38" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#92400e" text-anchor="middle">IFFT Algorithm</text>
+    <text x="465" y="52" font-family="Plus Jakarta Sans" font-size="8.5" fill="#b45309" text-anchor="middle">Inverse Fast Fourier</text>
+
+    <path d="M 530 40 L 590 40" stroke="#0284c7" stroke-width="1.8"/>
+
+    <rect x="595" y="15" width="125" height="50" rx="4" fill="#faf5ff" stroke="#a855f7" stroke-width="1.2"/>
+    <text x="657" y="38" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#581c87" text-anchor="middle">Cyclic Prefix (CP)</text>
+    <text x="657" y="52" font-family="Plus Jakarta Sans" font-size="8.5" fill="#9333ea" text-anchor="middle">Eliminates ISI</text>
+  </svg>
+  <div class="diagram-caption">Figure 2.2: Orthogonal Frequency Division Multiplexing (OFDM) Baseband Signal Generation</div>
+</div>
+
+<div class="formula-card">
+  <strong>The Orthogonality Condition in OFDM:</strong>
+  Subcarrier frequencies $f_k = k \Delta f = \frac{k}{T_{\text{sym}}}$ are spaced at exact intervals $\Delta f = \frac{1}{T_{\text{sym}}}$, guaranteeing zero mutual inter-carrier interference (ICI):
+  $$\mathbf{\frac{1}{T_{\text{sym}}} \int_0^{T_{\text{sym}}} \cos(2\pi f_i t) \cos(2\pi f_j t) \, dt = \begin{cases} 0 & i \neq j \\ \frac{1}{2} & i = j \end{cases}}$$
+</div>
+
+
+</body>
+</html>

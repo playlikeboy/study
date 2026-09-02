@@ -1,188 +1,455 @@
-# DCCN Module 3 Exhaustive Content (8 Topics Complete)
-# Neuroscience framework: Understand -> Visualize -> Connect -> Recall -> Apply -> Exam-Important Questions & [UPLOADED PYQ]
-
+# DCCN Module 3 Exhaustive Master Content (Topics 20 to 27)
 DCCN_M3_EXHAUSTIVE = r"""
 <div class="toc-box">
-  <div class="toc-title"><i class="fa-solid fa-list-check"></i> Module III: Error Handling, Data Link Control & Multiplexing — Complete Tracker</div>
+  <div class="toc-title"><i class="fa-solid fa-shield-halved"></i> Module III: Data Link Control & Error Handling Protocols — 8-Topic Master Syllabus Guide</div>
   <div class="toc-grid">
-    <div><strong>Topic 20:</strong> Types of Errors (Single-Bit Errors vs. Burst Errors)</div>
-    <div><strong>Topic 21:</strong> Error Detection Techniques (Simple Parity & Limitations)</div>
-    <div><strong>Topic 22:</strong> Checksum (1's Complement Summation & Verification)</div>
-    <div><strong>Topic 23:</strong> Cyclic Redundancy Check (CRC-32 Modulo-2 Division)</div>
-    <div><strong>Topic 24:</strong> Error Correction (Hamming Code & Syndrome Decoding)</div>
-    <div><strong>Topic 25 & 26:</strong> Flow & Error Control ARQ (Stop-and-Wait, GBN, Selective Repeat)</div>
-    <div><strong>Topic 27:</strong> High-Level Data Link Control (HDLC Frame: I, S, U-Frames)</div>
-    <div><strong>Topic 28 & 29:</strong> Multiplexing (FDM, Synchronous TDM vs. Statistical TDM)</div>
+    <div><strong>Topic 20:</strong> Asynchronous vs. Synchronous Data Transmission (Start/Stop Bits vs Clock Framing)</div>
+    <div><strong>Topic 21:</strong> Framing Protocols (Character Count, Byte Stuffing / Character-Oriented, Bit Stuffing HDLC)</div>
+    <div><strong>Topic 22:</strong> Types of Errors (Single-Bit Errors vs. Burst Errors & Error Probability)</div>
+    <div><strong>Topic 23:</strong> Error Detection Techniques (Simple Parity, 2D Parity, Internet Checksum 1's Complement)</div>
+    <div><strong>Topic 24:</strong> Cyclic Redundancy Check (CRC Polynomial Division, Modulo-2 Math & Generator Polynomials)</div>
+    <div><strong>Topic 25:</strong> Error Correction & Linear Block Codes (Hamming Distance $d_{\text{min}}$, Error Detection & Correction Limits)</div>
+    <div><strong>Topic 26:</strong> Hamming Code Encoding & Syndrome Decoding Algorithm ($(7, 4)$ Hamming Code Trace)</div>
+    <div><strong>Topic 27:</strong> Flow & Error Control Protocols (Stop-and-Wait ARQ, Go-Back-N ARQ, Selective Repeat ARQ & Efficiency $\eta$)</div>
   </div>
 </div>
 
-<h2 class="section-title">Topic 20 – 22: Error Types & Basic Detection Techniques</h2>
+<h2 class="section-title">Topic 20 & 21: Transmission Framing & Byte/Bit Stuffing</h2>
 
 <table class="custom-table">
   <thead>
     <tr>
-      <th style="width: 25%;">Error Class</th>
-      <th style="width: 45%;">Mathematical Definition</th>
-      <th>Detection Feasibility</th>
+      <th style="width: 25%;">Framing Method</th>
+      <th style="width: 45%;">Operating Mechanism</th>
+      <th>Key Vulnerability & Solution</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>1. Single-Bit Error</strong></td>
-      <td>Only 1 bit in the data block is inverted from $0 \rightarrow 1$ or $1 \rightarrow 0$.</td>
-      <td>Easily detected by a single Parity Bit.</td>
+      <td><strong>1. Character Count</strong></td>
+      <td>A header field specifies the total number of characters in the frame.</td>
+      <td><strong>Catastrophic Desynchronization:</strong> A single bit error in the count field prevents framing of all subsequent frames!</td>
     </tr>
     <tr>
-      <td><strong>2. Burst Error</strong></td>
-      <td>Two or more bits in a sequence are corrupted. Length of burst is measured from first corrupted bit to last corrupted bit.</td>
-      <td>Requires Cyclic Redundancy Check (CRC) or 2D Parity.</td>
+      <td><strong>2. Byte Stuffing (Character-Oriented)</strong></td>
+      <td>Frames begin and end with special `FLAG` bytes (`0x7E`). Any appearance of `FLAG` inside data is escaped by inserting an `ESC` byte (`0x7D`).</td>
+      <td>Overhead dependent on data content; tied to 8-bit character boundaries (PPP Protocol).</td>
+    </tr>
+    <tr>
+      <td><strong>3. Bit Stuffing (Bit-Oriented HDLC)</strong></td>
+      <td>Frames bounded by flag pattern `01111110` (six consecutive 1s). The sender automatically inserts (stuffs) a `0` after any sequence of <strong>five consecutive 1s</strong> in data.</td>
+      <td><strong>Hardware Standard:</strong> Transparent bit transmission; receiver strips any `0` following five consecutive `1`s (HDLC, SDLC).</td>
     </tr>
   </tbody>
 </table>
-
-<h2 class="section-title">Topic 23: Cyclic Redundancy Check (CRC) Polynomial Division [UPLOADED PYQ]</h2>
 
 <div class="worked-box">
-  <div class="worked-title">🏛️ [UPLOADED PYQ] Solved Problem: CRC for Data `1010011110` with Generator $G = 1011$</div>
-  <p><strong>Step 1: Determine Degree of Generator:</strong> $G = 1011$ has degree $r = 3$.</p>
-  <p><strong>Step 2: Append $r=3$ zeros to Data:</strong> Augmented Dividend = `1010011110000`.</p>
-  <p><strong>Step 3: Modulo-2 XOR Division:</strong></p>
-  <pre><code>        1001001011  (Quotient)
-1011 ) 1010011110000
-       1011
-       ----
-        001011
-          1011
-          ----
-           00001110
-               1011
-               ----
-                1010
-                1011
-                ----
-                 001000
-                   1011
-                   ----
-                    0110  <-- Remainder CRC = 011</code></pre>
-  <p><strong>Step 4: Transmitted Frame:</strong> $\text{Data} + \text{CRC} = \mathbf{1010011110011}$.</p>
+  <div class="worked-title">🏛️ Solved Problem: Bit Stuffing in HDLC Protocol</div>
+  <p><strong>Original Payload Data:</strong> `0 1 1 1 1 1 1 0 1 1 1 1 1 0 0 1 1 1 1 1 1 1 1 0`</p>
+  <p><strong>Sender Stuffed Bitstream:</strong> (Stuffs `0` after every five `1`s):</p>
+  $$\text{Payload: } 0 \ 11111\mathbf{0}10 \ 11111\mathbf{0}00 \ 11111\mathbf{0}111\mathbf{0}0$$
+  <p><strong>Enclosed Frame Transmitted:</strong> `01111110` [Stuffed Bits] `01111110`</p>
 </div>
 
-<h2 class="section-title">Topic 24: Error Correction (Hamming Code $(n, k)$ Derivation)</h2>
+<h2 class="section-title">Topic 23 & 24: Error Detection & Cyclic Redundancy Check (CRC)</h2>
 
 <div class="formula-card">
-  <strong>Hamming Parity Bit Invariants (Hamming, 1950):</strong>
-  For $m$ data bits and $r$ parity check bits:
-  $$2^r \ge m + r + 1$$
-  - Parity bits are placed strictly at bit positions that are powers of 2 ($1, 2, 4, 8, 16, \dots$).
-  - Data bits occupy all remaining positions ($3, 5, 6, 7, 9, 10, \dots$).
-  - Parity bit $P_k$ checks all bit positions whose binary representation has a $1$ in the $k$-th position.
-  - <strong>Syndrome:</strong> Evaluation of parity checks at the receiver forms a binary integer: $000 \implies$ No error; non-zero value indicates the exact corrupted bit position!
+  <strong>CRC Modulo-2 Binary Division Algorithm:</strong>
+  1. Let Dataword have $k$ bits $D$, and Generator polynomial have degree $r$ ($r+1$ bits $G$).
+  2. Append $r$ zero bits to Dataword: $D \cdot 2^r$.
+  3. Perform Modulo-2 binary division (using $\mathbf{XOR}$ operations) of $D \cdot 2^r$ by $G$.
+  4. The resulting $r$-bit remainder is the <strong>CRC Checksum ($R$)</strong>.
+  5. The Codeword transmitted is: $\mathbf{T = D \cdot 2^r + R}$.
+  6. <strong>Receiver Verification:</strong> Divide received frame $T'$ by $G$. If remainder is $\mathbf{0}$, accept frame; otherwise, error detected!
 </div>
 
-<h2 class="section-title">Topic 25 & 26: Sliding Window Flow & Error Control ARQ Protocols [UPLOADED PYQ]</h2>
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: CRC Generation and Error Detection</div>
+  <p>Dataword $D = 1010000$ ($k=7$ bits). Generator Polynomial $G(x) = x^4 + x + 1 \implies G = 10011$ (degree $r=4$).</p>
+  <p><strong>Step 1: Append $r=4$ zeros:</strong> $D \cdot 2^4 = 10100000000$.</p>
+  <p><strong>Step 2: Modulo-2 Division:</strong></p>
+  <pre><code>        1011001  (Quotient)
+10011 | 10100000000
+        10011
+        -----
+          11100
+          10011
+          -----
+           11110
+           10011
+           -----
+            11010
+            10011
+            -----
+             10010
+             10011
+             -----
+              00010  (Bring down remaining 0) -> Remainder = 0110</code></pre>
+  <p><strong>Transmitted Codeword:</strong> $\mathbf{T = 10100000110}$.</p>
+</div>
+
+<h2 class="section-title">Topic 25 & 26: Error Correction & The $(7, 4)$ Hamming Code</h2>
+
+<div class="formula-card">
+  <strong>Hamming Distance & Correction Capability Theorems:</strong>
+  - To <strong>detect $d$ bit errors</strong>: Minimum Hamming Distance must satisfy: $\mathbf{d_{\text{min}} \ge d + 1}$.
+  - To <strong>correct $t$ bit errors</strong>: Minimum Hamming Distance must satisfy: $\mathbf{d_{\text{min}} \ge 2t + 1}$.
+  - <strong>Redundancy Bits Formula:</strong> For $m$ data bits and $r$ parity bits: $\mathbf{2^r \ge m + r + 1}$.
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step $(7, 4)$ Hamming Code Encoding and Syndrome Error Correction</div>
+  <p>Encode Dataword $D = 1011$ ($m=4$ bits) into a 7-bit Hamming codeword ($r=3$ parity bits at positions 1, 2, 4):</p>
+  <ul>
+    <li>Bit positions: $P_1(1), P_2(2), D_3(3), P_4(4), D_5(5), D_6(6), D_7(7)$</li>
+    <li>Place data bits: $\text{Bit } 3 = 1, \text{Bit } 5 = 0, \text{Bit } 6 = 1, \text{Bit } 7 = 1$.</li>
+    <li>$P_1 = D_3 \oplus D_5 \oplus D_7 = 1 \oplus 0 \oplus 1 = \mathbf{0}$</li>
+    <li>$P_2 = D_3 \oplus D_6 \oplus D_7 = 1 \oplus 1 \oplus 1 = \mathbf{1}$</li>
+    <li>$P_4 = D_5 \oplus D_6 \oplus D_7 = 0 \oplus 1 \oplus 1 = \mathbf{0}$</li>
+    <li><strong>Transmitted Codeword:</strong> $\mathbf{0 \ 1 \ 1 \ 0 \ 0 \ 1 \ 1}$.</li>
+  </ul>
+  <p><strong>Receiver Error Detection:</strong> Suppose bit 5 flips during transit $\implies \text{Received: } 0110\mathbf{1}11$.</p>
+  $$\text{Syndrome } S_1 = b_1 \oplus b_3 \oplus b_5 \oplus b_7 = 0 \oplus 1 \oplus 1 \oplus 1 = \mathbf{1}$$
+  $$\text{Syndrome } S_2 = b_2 \oplus b_3 \oplus b_6 \oplus b_7 = 1 \oplus 1 \oplus 1 \oplus 1 = \mathbf{0}$$
+  $$\text{Syndrome } S_4 = b_4 \oplus b_5 \oplus b_6 \oplus b_7 = 0 \oplus 1 \oplus 1 \oplus 1 = \mathbf{1}$$
+  $$\text{Error Position } = S_4 S_2 S_1 = (101)_2 = \mathbf{5} \implies \text{Flip Bit 5 to correct error!}$$
+</div>
+
+<h2 class="section-title">Topic 27: Sliding Window Flow Control Protocols & Channel Efficiency</h2>
 
 <table class="custom-table">
   <thead>
     <tr>
-      <th style="width: 20%;">ARQ Protocol</th>
-      <th style="width: 25%;">Sender Window ($W_s$)</th>
-      <th style="width: 25%;">Receiver Window ($W_r$)</th>
-      <th>Key Retransmission Behavior & Efficiency</th>
+      <th style="width: 18%;">Protocol</th>
+      <th style="width: 22%;">Sender Window Size ($W_S$)</th>
+      <th style="width: 20%;">Receiver Window Size ($W_R$)</th>
+      <th style="width: 22%;">Sequence Numbers ($k$ bits)</th>
+      <th>Channel Efficiency ($\eta$)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>1. Stop-and-Wait ARQ</strong></td>
-      <td>$W_s = 1$</td>
-      <td>$W_r = 1$</td>
-      <td>Sender waits for ACK before sending next frame. Low efficiency on long propagation delays ($\eta = \frac{1}{1 + 2a}$).</td>
+      <td><strong>Stop-and-Wait ARQ</strong></td>
+      <td>$W_S = 1$</td>
+      <td>$W_R = 1$</td>
+      <td>$1\text{ bit } (0, 1)$</td>
+      <td>$$\eta = \frac{1}{1 + 2a}$$</td>
     </tr>
     <tr>
-      <td><strong>2. Go-Back-N (GBN) [UPLOADED PYQ]</strong></td>
-      <td>$W_s \le 2^m - 1$</td>
-      <td>$W_r = 1$ (Cumulative ACK)</td>
-      <td>When frame $k$ is lost or damaged, receiver discards all subsequent out-of-order frames. Sender retransmits all frames from $k$ onwards.</td>
+      <td><strong>Go-Back-N (GBN) ARQ</strong></td>
+      <td>$W_S = N = 2^k - 1$</td>
+      <td>$W_R = 1$ (Discards out-of-order)</td>
+      <td>$k\text{ bits}$ ($0 \dots 2^k - 1$)</td>
+      <td>$$\eta = \frac{N}{1 + 2a} \quad (\text{for } N \le 1+2a)$$</td>
     </tr>
     <tr>
-      <td><strong>3. Selective Repeat (SR)</strong></td>
-      <td>$W_s \le 2^{m-1}$</td>
-      <td>$W_r \le 2^{m-1}$ (Independent ACK)</td>
-      <td>Receiver buffers out-of-order frames. Sender retransmits <em>only the specific missing frame</em> $k$, saving bandwidth.</td>
+      <td><strong>Selective Repeat (SR)</strong></td>
+      <td>$W_S = N = 2^{k-1}$</td>
+      <td>$W_R = N = 2^{k-1}$ (Buffers out-of-order)</td>
+      <td>$k\text{ bits}$</td>
+      <td>$$\eta = \frac{N}{1 + 2a} \quad (\text{for } N \le 1+2a)$$</td>
     </tr>
   </tbody>
 </table>
 
-<h2 class="section-title">Topic 27: High-Level Data Link Control (HDLC Frame Formats)</h2>
-
-<div class="diagram-container">
-  <svg width="100%" height="70" viewBox="0 0 740 70" xmlns="http://www.w3.org/2000/svg">
-    <rect x="20" y="15" width="80" height="40" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
-    <text x="60" y="38" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#1e40af" text-anchor="middle">Flag (8b)</text>
-
-    <rect x="105" y="15" width="90" height="40" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
-    <text x="150" y="38" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#1e40af" text-anchor="middle">Address (8b)</text>
-
-    <rect x="200" y="15" width="95" height="40" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
-    <text x="247" y="38" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#92400e" text-anchor="middle">Control (8/16b)</text>
-
-    <rect x="300" y="15" width="220" height="40" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
-    <text x="410" y="38" font-family="Plus Jakarta Sans" font-size="10.5" font-weight="700" fill="#14532d" text-anchor="middle">Information Payload (Variable)</text>
-
-    <rect x="525" y="15" width="95" height="40" fill="#faf5ff" stroke="#a855f7" stroke-width="1.5"/>
-    <text x="572" y="38" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#581c87" text-anchor="middle">FCS / CRC (16b)</text>
-
-    <rect x="625" y="15" width="80" height="40" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
-    <text x="665" y="38" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#1e40af" text-anchor="middle">Flag (8b)</text>
-  </svg>
-  <div class="diagram-caption">Figure 3.1: Universal HDLC Frame Architecture with Flag `01111110` Delimiters</div>
+<div class="formula-card">
+  <strong>Bandwidth-Delay Product & Parameter $a$ Formula:</strong>
+  $$\mathbf{a = \frac{T_{\text{prop}}}{T_{\text{trans}}} = \frac{\text{Distance} / \text{Propagation Speed}}{\text{Frame Size} / \text{Bandwidth}}}$$
 </div>
 
-<div class="callout callout-info">
-  <div class="callout-title">🧠 The 3 HDLC Frame Formats</div>
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: Satellite Link Protocol Efficiency Comparison</div>
+  <p>A geostationary satellite channel has a one-way propagation delay $T_{\text{prop}} = 250\text{ ms}$, bandwidth $B = 1\text{ Mbps}$, and frame size $L = 1000\text{ bytes}$ ($8000\text{ bits}$). Calculate channel efficiency for: (1) Stop-and-Wait, (2) Go-Back-N ($k=4\text{ bits}$), and (3) Selective Repeat ($k=4\text{ bits}$).</p>
+  <p><strong>Solution:</strong></p>
+  $$T_{\text{trans}} = \frac{8000\text{ bits}}{1,000,000\text{ bps}} = 8\text{ ms}$$
+  $$a = \frac{T_{\text{prop}}}{T_{\text{trans}}} = \frac{250\text{ ms}}{8\text{ ms}} = 31.25 \implies 1 + 2a = 1 + 2(31.25) = \mathbf{63.5}$$
   <ul>
-    <li><strong>1. Information Frames (I-Frames):</strong> Carries user data payload and piggybacked ACKs ($N(S)$ send sequence and $N(R)$ receive sequence).</li>
-    <li><strong>2. Supervisory Frames (S-Frames):</strong> Carries flow/error control without payload (RR - Receive Ready, RNR - Receive Not Ready, REJ - Reject / NAK).</li>
-    <li><strong>3. Unnumbered Frames (U-Frames):</strong> Used for link initialization, mode setting (SABM - Set Asynchronous Balanced Mode), and link disconnection (DISC).</li>
+    <li><strong>1. Stop-and-Wait:</strong> $\eta = \frac{1}{63.5} = 0.0157 = \mathbf{1.57\%}$ (Extremely poor channel utilization!).</li>
+    <li><strong>2. Go-Back-N ($k=4 \implies W_S = 2^4 - 1 = 15$):</strong> $\eta = \frac{15}{63.5} = 0.2362 = \mathbf{23.62\%}$.</li>
+    <li><strong>3. Selective Repeat ($k=4 \implies W_S = 2^{4-1} = 8$):</strong> $\eta = \frac{8}{63.5} = 0.1259 = \mathbf{12.60\%}$.</li>
+    <li><em>Optimal Window Size:</em> $W_{\text{optimal}} \ge 1 + 2a = 64 \implies$ Requires $k = 7$ bit sequence numbers for $100\%$ efficiency!</li>
   </ul>
 </div>
 
-<h2 class="section-title">Topic 28 & 29: Multiplexing (FDM, Synchronous vs. Statistical TDM) [UPLOADED PYQ]</h2>
+<h2 class="section-title">🧠 M3 Active Recall & 10-Question University Exam Master Bank</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Q1. Compare Stop-and-Wait, Go-Back-N, and Selective Repeat ARQ protocols across window sizes, buffer requirements, and efficiency. (10 Marks)</div>
+  <div class="qa-a">
+    • <strong>Stop-and-Wait:</strong> $W_S=1, W_R=1$; 1-bit sequence; $\eta = 1/(1+2a)$; zero receiver buffer.<br>
+    • <strong>Go-Back-N:</strong> $W_S=2^k-1, W_R=1$; cumulative ACKs; retransmits entire window on loss; simple receiver.<br>
+    • <strong>Selective Repeat:</strong> $W_S=2^{k-1}, W_R=2^{k-1}$; individual ACKs / NAKs; retransmits ONLY corrupted frame; receiver buffers out-of-order packets.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q2. A bit stream `1101011011` is transmitted using standard CRC polynomial $x^4 + x + 1$. Generate the transmitted codeword. (10 Marks)</div>
+  <div class="qa-a">
+    $G(x) = x^4 + x + 1 \implies 10011$ ($r=4$). Append 4 zeros to data: `11010110110000`.<br>
+    Performing Modulo-2 binary division by `10011` yields remainder $R = 1110$.<br>
+    The transmitted codeword is $\mathbf{11010110111110}$.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q3. Derive the relationship between Minimum Hamming Distance $d_{\text{min}}$ and the number of detectable and correctable errors. (8 Marks)</div>
+  <div class="qa-a">
+    • <strong>Detection of $d$ errors:</strong> No valid codeword can be transformed into another valid codeword by $d$ bit flips $\implies \mathbf{d_{\text{min}} \ge d + 1}$.<br>
+    • <strong>Correction of $t$ errors:</strong> Spheres of radius $t$ centered at each codeword must be strictly non-overlapping $\implies \mathbf{d_{\text{min}} \ge 2t + 1}$.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q4. Explain Bit Stuffing in HDLC. What happens when the bitstream `01111110111110` is transmitted? (6 Marks)</div>
+  <div class="qa-a">
+    In HDLC, sender inserts a `0` after five consecutive `1`s. The input `0 11111 10 11111 0` becomes `0 111110 10 111110 0`. The receiver strips the stuffed zeros to recover the original payload.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q5. Explain the Internet Checksum algorithm used in IP/TCP headers with a 16-bit binary addition example. (8 Marks)</div>
+  <div class="qa-a">
+    The sender divides data into 16-bit words, sums them using 1's complement arithmetic (adding end-around carry back to sum), and inverts all bits to form the checksum. The receiver sums all 16-bit words including the checksum; if no bit errors occurred, the final sum is all `1`s (`0xFFFF`).
+  </div>
+</div>
+<h2 class="section-title">Topic 27.2: Comprehensive Sliding Window Mathematical Derivations & Buffer Protocols</h2>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Mathematical Proof: Maximum Window Size for Go-Back-N ($W_S = 2^k - 1$)</div>
+  <p>Suppose $k=2$ bit sequence numbers ($0, 1, 2, 3$). If the sender were allowed a window size of $W_S = 2^k = 4$:</p>
+  <ol>
+    <li>Sender transmits frames $0, 1, 2, 3$. Receiver receives all 4 frames and emits $\text{ACK } 0$ (expecting frame 0 next).</li>
+    <li>If all ACKs are lost in transit: Sender times out and retransmits frame 0.</li>
+    <li><strong>Fatal Ambiguity:</strong> Receiver cannot determine whether this incoming frame 0 is a <em>retransmission of the old frame 0</em> or a <em>brand-new frame 0 of the next sequence cycle</em>!</li>
+    <li>To guarantee complete non-overlapping receiver expectations: $\mathbf{W_S + W_R \le 2^k \implies W_S + 1 \le 2^k \implies W_S \le 2^k - 1}$.</li>
+  </ol>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Mathematical Proof: Maximum Window Size for Selective Repeat ($W_S = W_R = 2^{k-1}$)</div>
+  <p>In Selective Repeat, the receiver accepts out-of-order frames within its window $W_R$.</p>
+  $$\text{To prevent window overlap between old and new cycles: } W_S + W_R \le 2^k$$
+  $$\text{Setting symmetric windows } W_S = W_R = N: \quad 2N \le 2^k \implies \mathbf{N \le 2^{k-1}}$$
+  <p>For $k=3$ bits ($0\dots7$): Maximum window size for Selective Repeat is $\mathbf{W_S = 2^{3-1} = 4}$.</p>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical: Stop-and-Wait ARQ Efficiency with Frame Transmission Errors</div>
+  <p>A $1\text{ Mbps}$ link with $T_{\text{prop}} = 20\text{ ms}$ transmits $1000\text{ byte}$ frames. If the frame error probability is $P_f = 0.1$ ($10\%$ packet loss), calculate the effective throughput.</p>
+  <p><strong>Solution:</strong></p>
+  $$T_{\text{trans}} = \frac{8000\text{ bits}}{10^6\text{ bps}} = 8\text{ ms} \implies a = \frac{20\text{ ms}}{8\text{ ms}} = 2.5$$
+  $$\text{Ideal Efficiency: } \eta_0 = \frac{1}{1 + 2a} = \frac{1}{1 + 2(2.5)} = \frac{1}{6} \approx 16.67\%$$
+  $$\text{Efficiency with Error Rate } P_f: \quad \mathbf{\eta = \eta_0 \times (1 - P_f) = \frac{1 - 0.1}{6} = \frac{0.9}{6} = 0.15 = \mathbf{15\%}}$$
+  $$\mathbf{\text{Effective Throughput} = \eta \times \text{Bandwidth} = 0.15 \times 1\text{ Mbps} = \mathbf{150 \text{ kbps}}}$$
+</div>
+<h2 class="section-title">Topic 27.3: Advanced Error Control & Sliding Window State Automata</h2>
+
+<p>
+  In Data Link Layer protocol engineering, reliable sliding window protocols are formally modeled as Finite State Machines (FSM) maintaining transmit and receive state variables:
+</p>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Complete Step-by-Step Go-Back-N vs. Selective Repeat Execution Trace under Frame Loss</div>
+  <p>Suppose 3-bit sequence numbers ($0\dots7$) are used with window size $W_S = 4$. Frame 2 is corrupted/lost during transmission from Sender $A$ to Receiver $B$:</p>
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th style="width: 15%;">Event #</th>
+        <th style="width: 42%;">Go-Back-N (GBN) Protocol Behavior</th>
+        <th>Selective Repeat (SR) Protocol Behavior</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1. Transmit</strong></td>
+        <td>$A$ sends frames $0, 1, 2, 3$. Frame 2 is lost in transit.</td>
+        <td>$A$ sends frames $0, 1, 2, 3$. Frame 2 is lost in transit.</td>
+      </tr>
+      <tr>
+        <td><strong>2. Receive $0, 1$</strong></td>
+        <td>$B$ receives 0, emits ACK 1. $B$ receives 1, emits ACK 2.</td>
+        <td>$B$ receives 0, emits ACK 0. $B$ receives 1, emits ACK 1.</td>
+      </tr>
+      <tr>
+        <td><strong>3. Receive 3</strong></td>
+        <td>$B$ receives frame 3. Since frame 2 is missing, $B$ <strong>discards frame 3</strong> and re-emits cumulative ACK 2.</td>
+        <td>$B$ receives frame 3. $B$ <strong>buffers frame 3</strong> in memory and emits NAK 2 (or ACK 3).</td>
+      </tr>
+      <tr>
+        <td><strong>4. Timeout / NAK</strong></td>
+        <td>$A$'s timer for frame 2 expires. $A$ must <strong>Go-Back-N and retransmit all 2, 3</strong> (even though 3 was already sent).</td>
+        <td>$A$ receives NAK 2. $A$ retransmits <strong>ONLY frame 2</strong>.</td>
+      </tr>
+      <tr>
+        <td><strong>5. Delivery</strong></td>
+        <td>$B$ receives 2, delivers 2 to network layer; then receives 3, delivers 3.</td>
+        <td>$B$ receives retransmitted frame 2, delivers buffered frames $\{2, 3\}$ to network layer instantly!</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><em>Conclusion:</em> Selective Repeat achieves far superior channel utilization on noisy and high-latency links by avoiding redundant retransmissions!</p>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Two-Dimensional (2D) Parity Check Calculation</div>
+  <p>Data block of four 7-bit ASCII characters: `1001100`, `1100110`, `1010101`, `0111001`. Construct Even Parity rows and columns:</p>
+  <pre><code>Data Row 1:  1  0  0  1  1  0  0  |  1 (Row Parity Bit 1)
+Data Row 2:  1  1  0  0  1  1  0  |  0 (Row Parity Bit 2)
+Data Row 3:  1  0  1  0  1  0  1  |  0 (Row Parity Bit 3)
+Data Row 4:  0  1  1  1  0  0  1  |  0 (Row Parity Bit 4)
+------------------------------------------------------
+Col Parity:  1  0  0  0  1  1  0  |  1 (Corner Parity)</code></pre>
+  <p><strong>Error Detection & Correction:</strong> A single-bit flip anywhere in the matrix causes exactly one row parity violation and one column parity violation, pinpointing the intersection coordinates for instant 1-bit error correction!</p>
+</div>
+<h2 class="section-title">Topic 27.4: Master University Solved Examination Numerical Bank</h2>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 4: CRC Hardware Shift-Register Circuit Implementation</div>
+  <p>Design the Linear Feedback Shift Register (LFSR) hardware circuit for generating CRC-4 with polynomial $G(x) = x^4 + x + 1$.</p>
+  <ul>
+    <li>The circuit consists of 4 D-Flip-Flops ($FF_3, FF_2, FF_1, FF_0$) initialized to zero.</li>
+    <li>$\mathbf{XOR}$ gates are placed at positions corresponding to non-zero coefficients of $G(x)$ (specifically before $FF_0$ and between $FF_0$ and $FF_1$).</li>
+    <li>Data bits are shifted in MSB first. After $k$ shifts of data and $r=4$ shifts of zeros, the contents of the 4 flip-flops contain the exact 4-bit CRC remainder!</li>
+  </ul>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 5: Go-Back-N Window Size Optimization under High Propagation Delay</div>
+  <p>A $100\text{ Mbps}$ fiber-optic link connects two data centers separated by $D = 2000\text{ km}$ ($v = 2 \times 10^8\text{ m/s}$). Frame size $L = 1500\text{ bytes}$ ($12,000\text{ bits}$). What is the minimum number of sequence number bits ($k$) required for Go-Back-N ARQ to achieve $100\%$ link utilization?</p>
+  <p><strong>Solution:</strong></p>
+  $$T_{\text{prop}} = \frac{2000 \times 10^3\text{ m}}{2 \times 10^8\text{ m/s}} = 0.010\text{ s} = 10\text{ ms}$$
+  $$T_{\text{trans}} = \frac{12,000\text{ bits}}{100 \times 10^6\text{ bps}} = 0.00012\text{ s} = 0.12\text{ ms}$$
+  $$a = \frac{T_{\text{prop}}}{T_{\text{trans}}} = \frac{10\text{ ms}}{0.12\text{ ms}} = 83.33 \implies 1 + 2a = 1 + 2(83.33) = \mathbf{167.67}$$
+  $$\text{For } 100\% \text{ utilization, sender window must satisfy: } W_S \ge 1 + 2a = 168$$
+  $$\text{In GBN, } W_S = 2^k - 1 \ge 168 \implies 2^k \ge 169 \implies \mathbf{k = 8 \text{ bits}} \quad (2^8 - 1 = 255 \ge 168)$$
+</div>
+<h2 class="section-title">Topic 27.5: HDLC Protocol Architecture & Mathematical Error Analysis</h2>
+
+<p>
+  <strong>High-Level Data Link Control (HDLC)</strong> is the foundational bit-oriented Data Link Layer standard (ISO 13239) governing synchronous point-to-point and multipoint communication lines.
+</p>
 
 <table class="custom-table">
   <thead>
     <tr>
-      <th style="width: 25%;">Feature</th>
-      <th style="width: 37%;">Synchronous TDM</th>
-      <th>Statistical / Asynchronous TDM [UPLOADED PYQ]</th>
+      <th style="width: 22%;">HDLC Frame Type</th>
+      <th style="width: 38%;">Control Field Encoding</th>
+      <th>Operational Purpose</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Time Slot Allocation</strong></td>
-      <td>Pre-assigned, fixed, dedicated time slots to each input line in a round-robin cycle.</td>
-      <td>Time slots allocated dynamically on-demand only to active input lines with data to send.</td>
+      <td><strong>I-Frame (Information)</strong></td>
+      <td>`0 | N(S) [3 bits] | P/F | N(R) [3 bits]`</td>
+      <td>Carries user network payload data with piggybacked sequence numbers $N(S)$ and acknowledgments $N(R)$.</td>
     </tr>
     <tr>
-      <td><strong>Bandwidth Efficiency</strong></td>
-      <td>Low: if an input line has no data to transmit, its allocated time slot goes completely empty/wasted.</td>
-      <td>High: zero wasted empty slots. Total input data rate can exceed the aggregate multiplexed link capacity.</td>
+      <td><strong>S-Frame (Supervisory)</strong></td>
+      <td>`1 0 | Type [2 bits] | P/F | N(R) [3 bits]`</td>
+      <td>Flow and error control when no payload is ready: `00`=Receive Ready (RR), `01`=Receive Not Ready (RNR), `10`=Reject (REJ GBN), `11`=Selective Reject (SREJ).</td>
     </tr>
     <tr>
-      <td><strong>Addressing Overhead</strong></td>
-      <td>No addressing needed in slot (receiver knows source by slot position).</td>
-      <td>Each slot requires header addressing metadata to identify source/destination.</td>
+      <td><strong>U-Frame (Unnumbered)</strong></td>
+      <td>`1 1 | Modifier [5 bits] | P/F`</td>
+      <td>Link connection establishment and teardown: `SABM` (Set Asynchronous Balanced Mode), `DISC` (Disconnect), `UA` (Unnumbered Ack).</td>
     </tr>
   </tbody>
 </table>
 
-<h2 class="section-title">🧠 M3 Active Recall & Exam Questions [UPLOADED PYQ]</h2>
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: Comprehensive CRC-16 Polynomial Division Trace</div>
+  <p>Compute the CRC checksum for 16-bit dataword $D = \text{0xC4D1} = 1100010011010001$ using standard CRC-16-CCITT polynomial $G(x) = x^{16} + x^{12} + x^5 + 1 \implies 10001000000100001$ (degree $r=16$).</p>
+  <ul>
+    <li>Append $r=16$ zeros to $D$: $D \cdot 2^{16} = 11000100110100010000000000000000$.</li>
+    <li>Perform Modulo-2 XOR binary division by the 17-bit divisor $G$.</li>
+    <li>The 16-bit remainder generated is appended to $D$ to produce the exact 32-bit transmitted codeword.</li>
+    <li><em>Error Detection Capability of CRC-16:</em> Detects $100\%$ of single-bit errors, $100\%$ of double-bit errors, $100\%$ of odd-numbered bit errors, and $100\%$ of burst errors of length $\le 16$ bits!</li>
+  </ul>
+</div>
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 6: Checksum Calculation for IPv4 / UDP Packets</div>
+  <p>Calculate the 16-bit Internet Checksum for the following two 16-bit numbers: `0x66A2` and `0x3C42`. Show all binary additions and 1's complement end-around carries.</p>
+  <p><strong>Solution:</strong></p>
+  <pre><code>  0110 0110 1010 0010  (0x66A2)
++ 0011 1100 0100 0010  (0x3C42)
+---------------------
+  1010 0010 1110 0100  (Sum = 0xA2E4, Carry = 0)
+  
+Invert all bits (1's complement):
+~ 1010 0010 1110 0100 = 0101 1101 0001 1011 = 0x5D1B (Checksum)</code></pre>
+  <p><strong>Receiver Check:</strong> `0x66A2 + 0x3C42 + 0x5D1B = 0xFFFF` (All 1s $\implies$ Data Valid!).</p>
+</div>
 
 <div class="qa-card">
-  <div class="qa-q">Q1. [UPLOADED PYQ] Differentiate between Stop-and-Wait ARQ and Go-Back-N ARQ. (8 Marks)</div>
+  <div class="qa-q">Q6. Explain the HDLC Protocol Frame Format and the meaning of Poll/Final (P/F) bit. (8 Marks)</div>
   <div class="qa-a">
-    1. <strong>Sender Window Size:</strong> Stop-and-Wait has $W_s = 1$; Go-Back-N has $W_s = 2^m - 1 > 1$, enabling continuous transmission pipelining.<br>
-    2. <strong>Channel Utilization:</strong> Stop-and-Wait has very poor link utilization ($\eta = \frac{1}{1 + 2a}$); GBN achieves near 100% utilization when $W_s \ge 1 + 2a$.<br>
-    3. <strong>Retransmission Scope:</strong> In Stop-and-Wait, only 1 frame is retransmitted on timeout; in GBN, the entire window of $N$ unacknowledged frames is retransmitted upon a single lost frame.
+    An HDLC frame consists of: `Flag (01111110)` [8b] $\rightarrow$ `Address` [8b] $\rightarrow$ `Control` [8/16b] $\rightarrow$ `Information Payload` [Variable] $\rightarrow$ `FCS Checksum (CRC-16)` [16b] $\rightarrow$ `Flag (01111110)` [8b].<br>
+    The <strong>Poll/Final (P/F) bit</strong> serves dual roles: when sent by a primary station, $P=1$ (Poll) solicits an immediate response from secondary stations; when sent by a secondary station, $F=1$ (Final) indicates the concluding frame of its transmission response.
   </div>
 </div>
+
+<div class="qa-card">
+  <div class="qa-q">Q7. Explain Piggybacking in bidirectional sliding window protocols and its performance benefits. (6 Marks)</div>
+  <div class="qa-a">
+    <strong>Piggybacking</strong> is the technique of attaching acknowledgment information (ACK sequence numbers) into outgoing data frames traveling in the reverse direction, rather than transmitting separate standalone ACK packets. It eliminates dedicated ACK frame headers and packet transmission overhead, significantly improving bidirectional channel efficiency!
+  </div>
+</div>
+<h2 class="section-title">Topic 27.6: Linear Block Codes & Parity-Check Matrix Mathematical Foundations</h2>
+
+<p>
+  In formal algebraic coding theory, a <strong>Linear $(n, k)$ Block Code</strong> maps $k$-bit data vectors $\mathbf{d} = (d_1, \dots, d_k)$ into $n$-bit codewords $\mathbf{c} = (c_1, \dots, c_n)$ via a **Generator Matrix** $G$:
+  $$\mathbf{c = d \cdot G} \quad (\text{Modulo-2 Matrix Multiplication})$$
+  Where $G = [I_k \mid P]$ is a $k \times n$ systematic generator matrix ($I_k$ is $k \times k$ identity matrix, $P$ is $k \times (n-k)$ parity submatrix).
+</p>
+
+<div class="formula-card">
+  <strong>Parity Check Matrix $H$ & Syndrome Decoding Vector $\mathbf{S}$:</strong>
+  $$\mathbf{H = [P^T \mid I_{n-k}]} \quad ((n-k) \times n \text{ Matrix})$$
+  $$\mathbf{S = r \cdot H^T} \quad (\text{Where } \mathbf{r} = \mathbf{c} \oplus \mathbf{e} \text{ is the received vector})$$
+  - If $\mathbf{S} = \mathbf{0}$: Zero errors detected $\implies$ Accept $\mathbf{r}$.
+  - If $\mathbf{S} \neq \mathbf{0}$: The syndrome $\mathbf{S}$ matches the $i$-th column of $H$, identifying that bit position $i$ contains the bit error!
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: Complete Systematic $(7, 4)$ Hamming Code Matrix Trace</div>
+  <p>Let $G = \begin{bmatrix} 1 & 0 & 0 & 0 & 1 & 1 & 0 \\ 0 & 1 & 0 & 0 & 1 & 0 & 1 \\ 0 & 0 & 1 & 0 & 0 & 1 & 1 \\ 0 & 0 & 0 & 1 & 1 & 1 & 1 \end{bmatrix}$. Encode dataword $\mathbf{d} = [1, 0, 1, 1]$:</p>
+  $$\mathbf{c} = [1, 0, 1, 1] \cdot G = \mathbf{[1, 0, 1, 1, 0, 1, 0]}$$
+  <p>Suppose received vector is $\mathbf{r} = [1, 0, \mathbf{0}, 1, 0, 1, 0]$ (Bit 3 corrupted). Then:</p>
+  $$\mathbf{S = r \cdot H^T = [0, 1, 1]}^T \implies \text{Matches Column 3 of } H \implies \mathbf{\text{Error is in Bit 3! Flip Bit 3 to 1 to correct!}}$$
+</div>
+<h2 class="section-title">Topic 27.7: Master University Long-Answer Exam Solutions Bank</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Q8. Derive the Channel Utilization Efficiency ($\eta$) for Go-Back-N ARQ and Selective Repeat ARQ under non-zero transmission error probability ($P_f$). (10 Marks)</div>
+  <div class="qa-a">
+    Let $P_f$ be the frame error probability, and $a = T_{\text{prop}} / T_{\text{trans}}$:<br>
+    • <strong>Stop-and-Wait ARQ with Errors:</strong> Average number of transmissions per frame is $N_{\text{trans}} = \frac{1}{1 - P_f}$.<br>
+      $$\mathbf{\eta_{\text{SW}} = \frac{1 - P_f}{1 + 2a}}$$
+    • <strong>Go-Back-N ARQ with Errors:</strong> If a frame is lost, the entire window of $N = 1 + 2a$ frames must be retransmitted. The average number of transmitted frames per successful delivery is $1 + \frac{N P_f}{1 - P_f}$.<br>
+      $$\mathbf{\eta_{\text{GBN}} = \frac{1 - P_f}{1 + 2a P_f}}$$
+    • <strong>Selective Repeat ARQ with Errors:</strong> Since ONLY the corrupted frame is retransmitted individually:<br>
+      $$\mathbf{\eta_{\text{SR}} = 1 - P_f} \quad (\text{Independent of propagation parameter } a!).$$
+    <em>Conclusion:</em> On high-latency satellite and fiber channels ($a \gg 1$), Selective Repeat is the only viable ARQ protocol!
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q9. Explain the Point-to-Point Protocol (PPP) frame structure, Link Control Protocol (LCP), and Network Control Protocol (NCP). (8 Marks)</div>
+  <div class="qa-a">
+    <strong>PPP (RFC 1661)</strong> is the standard data link protocol for broadband DSL, dial-up, and leased lines:<br>
+    1. <strong>Framing:</strong> Byte-oriented frame with `Flag (0x7E)`, `Address (0xFF)`, `Control (0x03)`, `Protocol (2B)`, `Payload`, `FCS (16/32b)`. Uses byte stuffing (`0x7D`).<br>
+    2. <strong>Link Control Protocol (LCP):</strong> Establishes, configures, authenticates (PAP / CHAP), tests, and terminates the data link connection.<br>
+    3. <strong>Network Control Protocol (NCP):</strong> Establishes and configures network layer protocols over the link (e.g. IPCP assigns IP addresses to clients dynamically).
+  </div>
+</div>
+<div class="qa-card">
+  <div class="qa-q">Q10. Explain the High-Level Data Link Control (HDLC) operational modes: NRM, ABM, and ARM. (8 Marks)</div>
+  <div class="qa-a">
+    HDLC supports three distinct operational station configurations:<br>
+    1. <strong>Normal Response Mode (NRM):</strong> Unbalanced configuration with 1 Primary station and $\ge 1$ Secondary stations. Secondary stations can transmit frames strictly in response to an explicit poll ($P=1$) from the primary.<br>
+    2. <strong>Asynchronous Balanced Mode (ABM):</strong> Balanced point-to-point configuration with 2 Combined stations. Either station can initiate data transmission asynchronously at any time without asking permission (universal standard in Full-Duplex point-to-point links).<br>
+    3. <strong>Asynchronous Response Mode (ARM):</strong> Unbalanced configuration where Secondary stations can initiate transmission asynchronously without waiting for a primary poll.
+  </div>
+</div>
+
 """

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Module 4: Switching & Local Area Networks (LANs)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Fira+Code:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ]});"></script>
+  <style>
+    
+@page {
+  size: A4 portrait;
+  margin: 15mm 12mm 15mm 12mm;
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 8.5pt;
+    color: #64748b;
+  }
+  @bottom-left {
+    content: "DCCN (CS24305) • BIT Mesra CSE";
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 8.5pt;
+    color: #64748b;
+  }
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 11.8px;
+  line-height: 1.60;
+  color: #1e293b;
+  background: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+.cover-container {
+  padding: 30px 20px;
+  text-align: center;
+  border-bottom: 2px solid #0284c7;
+  margin-bottom: 24px;
+}
+
+.course-badge {
+  display: inline-block;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  border: 1px solid #bae6fd;
+}
+
+.book-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+  line-height: 1.25;
+}
+
+.book-subtitle {
+  font-size: 13.5px;
+  color: #475569;
+  margin: 0 0 16px 0;
+  font-weight: 500;
+}
+
+.toc-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 20px 0 28px 0;
+}
+
+.toc-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0369a1;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  font-size: 11px;
+  color: #334155;
+}
+
+h2.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0369a1;
+  border-bottom: 1.5px solid #e2e8f0;
+  padding-bottom: 5px;
+  margin: 26px 0 14px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  page-break-after: avoid;
+}
+
+h3.subsection-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 18px 0 8px 0;
+  page-break-after: avoid;
+}
+
+p {
+  margin: 0 0 10px 0;
+  text-align: justify;
+}
+
+.callout {
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 11.5px;
+  page-break-inside: avoid;
+}
+
+.callout-info {
+  background: #f0f9ff;
+  border-left: 4px solid #0284c7;
+  color: #0c4a6e;
+}
+
+.callout-warning {
+  background: #fefce8;
+  border-left: 4px solid #eab308;
+  color: #713f12;
+}
+
+.callout-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 11px;
+  page-break-inside: avoid;
+}
+
+.custom-table th, .custom-table td {
+  border: 1px solid #cbd5e1;
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.custom-table th {
+  background: #f1f5f9;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.custom-table tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.formula-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #6366f1;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  page-break-inside: avoid;
+}
+
+.worked-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-left: 4px solid #22c55e;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  page-break-inside: avoid;
+}
+
+.worked-title {
+  font-weight: 700;
+  color: #15803d;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.diagram-container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 14px;
+  margin: 14px 0;
+  text-align: center;
+  page-break-inside: avoid;
+}
+
+.diagram-caption {
+  font-size: 10.5px;
+  color: #64748b;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.qa-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin: 12px 0;
+  page-break-inside: avoid;
+}
+
+.qa-q {
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.qa-a {
+  color: #334155;
+  line-height: 1.55;
+}
+
+pre {
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-family: 'Fira Code', monospace;
+  font-size: 10.5px;
+  line-height: 1.45;
+  overflow-x: auto;
+  margin: 12px 0;
+  page-break-inside: avoid;
+}
+
+code {
+  font-family: 'Fira Code', monospace;
+  font-size: 11px;
+  background: #f1f5f9;
+  color: #0369a1;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.page-break {
+  page-break-before: always;
+}
+
+  </style>
+</head>
+<body>
+  <div class="cover-container">
+    <div class="course-badge">CS24305 • Module 4</div>
+    <h1 class="book-title">Module 4: Switching & Local Area Networks (LANs)</h1>
+    <div class="book-subtitle">Topics 28 to 36 • Circuit/Packet Switching, ALOHA, CSMA/CD, Ethernet & STP</div>
+  </div>
+  
+<div class="toc-box">
+  <div class="toc-title"><i class="fa-solid fa-server"></i> Module IV: Switching & Local Area Networks (LANs) — 9-Topic Master Syllabus Guide</div>
+  <div class="toc-grid">
+    <div><strong>Topic 28:</strong> Circuit Switching vs. Packet Switching (Connection Setup, Resource Reservation, Latency)</div>
+    <div><strong>Topic 29:</strong> Packet Switching Modes: Virtual Circuits (Connection-Oriented) vs. Datagram Networks (Connectionless)</div>
+    <div><strong>Topic 30:</strong> Switching Fabric Architectures (Space-Division Crossbar, Banyan Networks & Time-Division TDM Switches)</div>
+    <div><strong>Topic 31:</strong> Local Area Network (LAN) Technologies & Media Access Control (MAC Sublayer Architecture)</div>
+    <div><strong>Topic 32:</strong> Random Access Protocols (Pure ALOHA, Slotted ALOHA, CSMA: 1-Persistent, Non-Persistent, p-Persistent)</div>
+    <div><strong>Topic 33:</strong> CSMA/CD Protocol (Ethernet Collision Detection, Minimum Frame Size Formula & Exponential Backoff)</div>
+    <div><strong>Topic 34:</strong> CSMA/CA & Wireless LANs (IEEE 802.11 Wi-Fi, Hidden/Exposed Terminal Problem & RTS/CTS Handshake)</div>
+    <div><strong>Topic 35:</strong> IEEE 802.3 Ethernet Standards (Standard 10BASE-T, Fast Ethernet 100BASE-TX, Gigabit 1000BASE-T Frame Anatomy)</div>
+    <div><strong>Topic 36:</strong> Interconnecting Devices & Layer 2 Switching (Repeaters, Hubs, Bridges, Switches, Spanning Tree Protocol STP)</div>
+  </div>
+</div>
+
+<h2 class="section-title">Topic 28 & 29: Circuit Switching vs. Packet Switching & Virtual Circuits</h2>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 20%;">Dimension</th>
+      <th style="width: 38%;">Circuit Switching (PSTN Telephone)</th>
+      <th>Packet Switching (Internet IP)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Dedicated Path</strong></td>
+      <td>Dedicated end-to-end physical circuit established prior to data transfer.</td>
+      <td>No dedicated circuit; packets dynamically share statistical communication links.</td>
+    </tr>
+    <tr>
+      <td><strong>Resource Reservation</strong></td>
+      <td>Bandwidth and buffer capacity reserved exclusively along path for duration.</td>
+      <td>On-demand statistical multiplexing (packets queue up in router buffers).</td>
+    </tr>
+    <tr>
+      <td><strong>Setup Delay</strong></td>
+      <td>High initial connection establishment delay; zero delay during transmission.</td>
+      <td>Zero connection setup delay in datagram networks; variable packet queuing jitter.</td>
+    </tr>
+    <tr>
+      <td><strong>Channel Efficiency</strong></td>
+      <td>Low efficiency: idle periods (silence in voice) waste dedicated bandwidth.</td>
+      <td><strong>High Efficiency:</strong> Inactive users consume zero bandwidth.</td>
+    </tr>
+    <tr>
+      <td><strong>Congestion Behavior</strong></td>
+      <td>Call blocking (busy signal) if capacity exhausted; active calls unimpaired.</td>
+      <td>Packet delay, queuing buffers, and packet drops under heavy load.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">Topic 32, 33 & 34: Random Access MAC Protocols (ALOHA, CSMA, CSMA/CD, CSMA/CA)</h2>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 18%;">MAC Protocol</th>
+      <th style="width: 22%;">Vulnerable Time ($T_{\text{vul}}$)</th>
+      <th style="width: 22%;">Maximum Theoretical Throughput ($S_{\text{max}}$)</th>
+      <th>Operating Mechanism</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Pure ALOHA</strong></td>
+      <td>$$T_{\text{vul}} = 2 \times T_{\text{fr}}$$</td>
+      <td>$$S_{\text{max}} = \frac{1}{2e} \approx \mathbf{18.4\%} \quad (\text{at } G = 0.5)$$</td>
+      <td>Stations transmit immediately whenever data is ready; retransmits after random backoff on collision.</td>
+    </tr>
+    <tr>
+      <td><strong>Slotted ALOHA</strong></td>
+      <td>$$T_{\text{vul}} = 1 \times T_{\text{fr}}$$</td>
+      <td>$$S_{\text{max}} = \frac{1}{e} \approx \mathbf{36.8\%} \quad (\text{at } G = 1.0)$$</td>
+      <td>Time divided into discrete slots equal to $T_{\text{fr}}$; stations transmit only at slot start boundaries.</td>
+    </tr>
+    <tr>
+      <td><strong>1-Persistent CSMA</strong></td>
+      <td>$$T_{\text{vul}} = \tau \ (\text{Propagation Delay})$$</td>
+      <td>Significantly higher than ALOHA</td>
+      <td>Listens to channel: if idle, transmits immediately; if busy, continually listens until idle, then transmits instantly.</td>
+    </tr>
+    <tr>
+      <td><strong>Non-Persistent CSMA</strong></td>
+      <td>$$T_{\text{vul}} = \tau$$</td>
+      <td>Higher throughput at heavy load</td>
+      <td>If channel is busy, waits a random duration before sensing again (reduces collisions).</td>
+    </tr>
+    <tr>
+      <td><strong>$p$-Persistent CSMA</strong></td>
+      <td>$$T_{\text{vul}} = \tau$$</td>
+      <td>Optimal trade-off for slotted channels</td>
+      <td>If idle, transmits with probability $p$, and defers to next slot with probability $1-p$.</td>
+    </tr>
+    <tr>
+      <td><strong>CSMA/CD (Ethernet)</strong></td>
+      <td>$$T_{\text{vul}} = 2 \tau$$</td>
+      <td>Approaches $100\%$ on switched networks</td>
+      <td>Listens while transmitting: on collision, halts immediately, emits 32-bit Jam Signal, executes Exponential Backoff.</td>
+    </tr>
+    <tr>
+      <td><strong>CSMA/CA (Wi-Fi)</strong></td>
+      <td>Uses IFS & Contention Window</td>
+      <td>High in wireless media</td>
+      <td>Cannot detect collisions in air: avoids collisions using Inter-Frame Spaces (DIFS/SIFS), RTS/CTS frames, and ACKs.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">Topic 33.1: CSMA/CD Minimum Frame Size Derivation & Exponential Backoff</h2>
+
+<div class="formula-card">
+  <strong>The Fundamental CSMA/CD Collision Detection Condition:</strong>
+  In CSMA/CD, a transmitting station must not finish transmitting its frame before the collision signal propagates back from the furthest point in the network ($2 \times T_{\text{prop}}$):
+  $$\mathbf{T_{\text{trans}} \ge 2 \times T_{\text{prop}}}$$
+  $$\mathbf{\frac{\text{Frame Size}_{\text{min}}}{\text{Bandwidth}} \ge 2 \times \frac{\text{Distance}}{\text{Propagation Velocity}}}$$
+  $$\mathbf{\text{Frame Size}_{\text{min}} = 2 \times T_{\text{prop}} \times \text{Bandwidth}}$$
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: Minimum Ethernet Frame Size Calculation</div>
+  <p>A $1\text{ Gbps}$ Gigabit Ethernet network operates across a maximum cable distance of $1\text{ km}$ with signal propagation speed $v = 2 \times 10^8\text{ m/s}$. Calculate the minimum frame size required for CSMA/CD.</p>
+  <p><strong>Solution:</strong></p>
+  $$T_{\text{prop}} = \frac{\text{Distance}}{v} = \frac{1000\text{ m}}{2 \times 10^8\text{ m/s}} = 5 \times 10^{-6}\text{ s} = 5 \ \mu\text{s}$$
+  $$\text{Round-Trip Propagation Time (Slot Time): } 2 \times T_{\text{prop}} = 2 \times 5 \ \mu\text{s} = 10 \ \mu\text{s}$$
+  $$\mathbf{\text{Frame Size}_{\text{min}} = 2 T_{\text{prop}} \times \text{Bandwidth} = 10 \times 10^{-6}\text{ s} \times 10^9\text{ bps} = 10,000\text{ bits} = \mathbf{1250 \text{ bytes}}}$$
+</div>
+
+<h2 class="section-title">Topic 35: IEEE 802.3 Ethernet Frame Structure</h2>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 15%;">Field</th>
+      <th style="width: 12%;">Size</th>
+      <th>Operational Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Preamble</strong></td><td>7 Bytes</td><td>Alternating `10101010` pattern for receiver clock synchronization.</td></tr>
+    <tr><td><strong>SFD (Start Frame Delimiter)</strong></td><td>1 Byte</td><td>Exact pattern `10101011` indicating start of valid frame payload.</td></tr>
+    <tr><td><strong>Destination MAC</strong></td><td>6 Bytes</td><td>48-bit physical hardware address of destination device or broadcast (`FF:FF:FF:FF:FF:FF`).</td></tr>
+    <tr><td><strong>Source MAC</strong></td><td>6 Bytes</td><td>48-bit physical hardware address of transmitting NIC.</td></tr>
+    <tr><td><strong>Length / Type</strong></td><td>2 Bytes</td><td>$\le 1500$: Length of payload; $\ge 1536$ (`0x0800`): EtherType identifying IPv4, ARP (`0x0806`), IPv6 (`0x86DD`).</td></tr>
+    <tr><td><strong>Data Payload</strong></td><td>$46\text{ to }1500\text{ B}$</td><td>High-level Network layer packet (Padded with zeros if $< 46$ bytes).</td></tr>
+    <tr><td><strong>CRC / FCS Checksum</strong></td><td>4 Bytes</td><td>32-bit Cyclic Redundancy Check (`CRC-32`) for error detection.</td></tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">Topic 36: Interconnecting Devices & Spanning Tree Protocol (STP)</h2>
+
+<div class="callout callout-warning">
+  <div class="callout-title">The Broadcast Storm Problem & Spanning Tree Protocol (IEEE 802.1D)</div>
+  Redundant physical links between Layer 2 bridges/switches create infinite loops, generating catastrophic <strong>Broadcast Storms</strong> and corrupting MAC address learning tables. <strong>STP (Spanning Tree Protocol)</strong> dynamically builds a loop-free logical spanning tree by:
+  <ol>
+    <li>Electing a unique <strong>Root Bridge</strong> (switch with lowest Bridge ID: Priority + MAC).</li>
+    <li>Selecting one <strong>Root Port</strong> on every non-root bridge with minimum path cost to Root.</li>
+    <li>Selecting one <strong>Designated Port</strong> per LAN segment.</li>
+    <li>Placing all other redundant ports into <strong>Blocking State</strong> (disabling packet forwarding).</li>
+  </ol>
+</div>
+
+<h2 class="section-title">🧠 M4 Active Recall & 10-Question University Exam Master Bank</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Q1. Derive the maximum throughput formula for Pure ALOHA ($S = G e^{-2G}$) and Slotted ALOHA ($S = G e^{-G}$). (10 Marks)</div>
+  <div class="qa-a">
+    Assuming Poisson frame arrival with rate $G$ frames per frame-time $T$:<br>
+    • <strong>Pure ALOHA:</strong> Vulnerable period is $2T$. Probability of 0 other frames arriving is $P(0) = e^{-2G}$. Throughput $S = G P(0) = \mathbf{G e^{-2G}}$. Maximum at $dS/dG = 0 \implies G = 0.5 \implies S_{\text{max}} = 1/(2e) \approx \mathbf{18.4\%}$.<br>
+    • <strong>Slotted ALOHA:</strong> Vulnerable period is $1T$. Probability of 0 arrivals in slot is $P(0) = e^{-G}$. Throughput $S = \mathbf{G e^{-G}}$. Maximum at $G = 1.0 \implies S_{\text{max}} = 1/e \approx \mathbf{36.8\%}$.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q2. Explain CSMA/CD operation, 1-persistent sensing, jamming signal, and Binary Exponential Backoff algorithm. (10 Marks)</div>
+  <div class="qa-a">
+    1. <strong>Carrier Sense:</strong> Station senses channel before transmitting.<br>
+    2. <strong>Collision Detection:</strong> Listens while transmitting. If signal amplitude doubles, collision detected!<br>
+    3. <strong>Jamming Signal:</strong> Emits 32-bit jam signal to notify all stations.<br>
+    4. <strong>Binary Exponential Backoff:</strong> After $n$-th collision ($n \le 10$), chooses random integer $k \in [0, 2^n - 1]$ and waits $k \times \text{SlotTime}$. Aborts after 16 failed attempts!
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q3. Why does standard CSMA/CD fail in wireless LANs? Explain the Hidden Terminal Problem and RTS/CTS solution. (8 Marks)</div>
+  <div class="qa-a">
+    In wireless, signals attenuate exponentially ($1/d^2$ to $1/d^4$), making transmit signal drown out weak colliding signals. In the <strong>Hidden Terminal Problem</strong>, stations A and C cannot hear each other but both transmit to B, colliding at B. <strong>CSMA/CA solves this</strong> via 4-way RTS/CTS handshaking: A sends RTS; B responds with CTS (reserving channel for A and silencing C via Network Allocation Vector NAV).
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q4. Compare Repeaters, Hubs, Bridges, Layer 2 Switches, and Routers across OSI layer, collision domain, and broadcast domain. (8 Marks)</div>
+  <div class="qa-a">
+    • <strong>Repeater/Hub (Layer 1):</strong> Extends physical distance; 1 shared Collision Domain, 1 Broadcast Domain.<br>
+    • <strong>Bridge/Switch (Layer 2):</strong> Filters by MAC; separates Collision Domains per port; 1 shared Broadcast Domain.<br>
+    • <strong>Router (Layer 3):</strong> Routes by IP; separates Collision Domains AND separates Broadcast Domains!
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q5. Explain the Spanning Tree Protocol (STP) algorithm with Root Bridge election and port states. (8 Marks)</div>
+  <div class="qa-a">
+    STP prevents broadcast storms in looped Layer 2 networks:<br>
+    1. Elects <strong>Root Bridge</strong> (lowest Bridge ID = Priority + MAC).<br>
+    2. Elects <strong>Root Port</strong> per bridge (lowest cost to root).<br>
+    3. Elects <strong>Designated Port</strong> per segment.<br>
+    4. Places all redundant loop ports in <strong>Blocking</strong> state.
+  </div>
+</div>
+<h2 class="section-title">Topic 36.2: Advanced Ethernet Switching, VLANs & Spanning Tree Calculations</h2>
+
+<p>
+  Modern enterprise local area networks replace shared collision domains with <strong>Full-Duplex Layer 2 Switched Ethernet</strong> and <strong>Virtual Local Area Networks (VLANs, IEEE 802.1Q)</strong>.
+</p>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 25%;">Switching Technique</th>
+      <th style="width: 45%;">Operating Architecture</th>
+      <th>Latency & Error Propagation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. Store-and-Forward</strong></td>
+      <td>Switch buffers entire frame in memory, verifies 32-bit CRC checksum, checks destination MAC in CAM table, and forwards frame.</td>
+      <td>Highest latency (proportional to frame size); 100% immune to corrupt frames (discards CRC errors).</td>
+    </tr>
+    <tr>
+      <td><strong>2. Cut-Through</strong></td>
+      <td>Switch reads only first 6 bytes (Destination MAC) and immediately begins forwarding frame to target port before receiving remainder.</td>
+      <td><strong>Lowest Latency:</strong> Fixed instant forwarding; propagates corrupt frames and collision fragments.</td>
+    </tr>
+    <tr>
+      <td><strong>3. Fragment-Free</strong></td>
+      <td>Switch buffers first 64 bytes (collision window) before forwarding.</td>
+      <td>Filters out all collision fragments (runt frames $< 64$ bytes) with minimal latency penalty.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Spanning Tree Protocol (STP) Bridge Port Calculation</div>
+  <p>Consider 3 switches $S_1, S_2, S_3$ connected in a ring with Gigabit links (Path Cost = 4):</p>
+  <ul>
+    <li>$S_1$ Bridge ID: `32768:00-11-22-33-44-01`</li>
+    <li>$S_2$ Bridge ID: `32768:00-11-22-33-44-02`</li>
+    <li>$S_3$ Bridge ID: `32768:00-11-22-33-44-03`</li>
+  </ul>
+  <p><strong>STP State Derivation:</strong></p>
+  <ol>
+    <li><strong>Root Bridge Election:</strong> $S_1$ has the lowest MAC address $\implies$ $\mathbf{S_1 \text{ is elected ROOT BRIDGE}}$. All ports on $S_1$ become <strong>Designated Ports (Forwarding)</strong>.</li>
+    <li><strong>Root Ports on $S_2$ and $S_3$:</strong> Port facing $S_1$ on $S_2$ has cost 4 $\implies$ <strong>Root Port</strong>. Port facing $S_1$ on $S_3$ has cost 4 $\implies$ <strong>Root Port</strong>.</li>
+    <li><strong>Link between $S_2$ and $S_3$:</strong> Both have cost 4 to Root. Tie-breaker: $S_2$ has lower Bridge ID than $S_3$. Therefore, $S_2$'s port becomes <strong>Designated Port</strong>, and $S_3$'s port is placed in <strong>BLOCKING STATE</strong>, breaking the loop!</li>
+  </ol>
+</div>
+<h2 class="section-title">Topic 36.3: Advanced Switching Fabrics & Ethernet Standards Evolution</h2>
+
+<p>
+  At the physical switching core of enterprise routers and central office telephone exchanges, high-speed non-blocking <strong>Space-Division and Time-Division Switching Fabrics</strong> transfer incoming frames across line cards:
+</p>
+
+<div class="formula-card">
+  <strong>Crossbar vs. Clos Non-Blocking Multi-Stage Network Complexity:</strong>
+  - <strong>Single-Stage $N \times N$ Crossbar Switch:</strong> Requires $\mathbf{N^2 \text{ crosspoints}}$. (For $N=1000$, requires $1,000,000$ crosspoint switches $\implies$ high cost!).
+  - <strong>3-Stage Clos Non-Blocking Network ($N$ inputs, $n$ inputs/stage-1 switch, $k$ middle switches):</strong>
+    $$\text{Strict-Sense Non-Blocking Condition: } \mathbf{k \ge 2n - 1}$$
+    $$\text{Total Crosspoints: } \mathbf{C = 2 N k + k \left(\frac{N}{n}\right)^2} \ll N^2$$
+</div>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 20%;">Ethernet Standard</th>
+      <th style="width: 18%;">Data Rate</th>
+      <th style="width: 25%;">Physical Medium & Connector</th>
+      <th style="width: 18%;">Max Segment Span</th>
+      <th>Line Coding</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>10BASE-T</strong></td>
+      <td>$10\text{ Mbps}$</td>
+      <td>Cat 3/5 UTP, RJ-45</td>
+      <td>$100\text{ meters}$</td>
+      <td>Manchester ($20\text{ MHz}$)</td>
+    </tr>
+    <tr>
+      <td><strong>100BASE-TX (Fast)</strong></td>
+      <td>$100\text{ Mbps}$</td>
+      <td>Cat 5 UTP (2 pairs)</td>
+      <td>$100\text{ meters}$</td>
+      <td>4B/5B + MLT-3</td>
+    </tr>
+    <tr>
+      <td><strong>1000BASE-T (Gigabit)</strong></td>
+      <td>$1000\text{ Mbps} (1\text{ Gbps})$</td>
+      <td>Cat 5e/6 UTP (4 pairs simultaneously)</td>
+      <td>$100\text{ meters}$</td>
+      <td>4D-PAM5 ($125\text{ MBaud}$)</td>
+    </tr>
+    <tr>
+      <td><strong>10GBASE-T (10 GbE)</strong></td>
+      <td>$10\text{ Gbps}$</td>
+      <td>Cat 6A / Cat 7 UTP</td>
+      <td>$100\text{ meters}$</td>
+      <td>PAM-16 + 64B/65B</td>
+    </tr>
+    <tr>
+      <td><strong>1000BASE-SX / LX</strong></td>
+      <td>$1\text{ Gbps}$</td>
+      <td>Multi-Mode / Single-Mode Fiber</td>
+      <td>$550\text{ m (SX)} / 5\text{ km (LX)}$</td>
+      <td>8B/10B NRZ</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Problem: IEEE 802.1Q VLAN Tagging & Trunking</div>
+  <p>In modern switched LANs, multiple Virtual LANs (VLANs) share a common inter-switch trunk link. The **IEEE 802.1Q standard** inserts a **4-byte VLAN tag** into the standard Ethernet frame between the Source MAC and EtherType fields:</p>
+  <ul>
+    <li><strong>TPID (Tag Protocol Identifier, 2 Bytes):</strong> Fixed value `0x8100` identifying 802.1Q frame.</li>
+    <li><strong>TCI (Tag Control Information, 2 Bytes):</strong>
+      <ul>
+        <li><em>PCP (Priority Code Point, 3 Bits):</em> 8 levels of QoS traffic class (IEEE 802.1p).</li>
+        <li><em>DEI (Drop Eligible Indicator, 1 Bit):</em> Flags packets eligible for dropping under congestion.</li>
+        <li><em>VID (VLAN Identifier, 12 Bits):</em> Supports up to $2^{12} = \mathbf{4096 \text{ distinct VLANs}}$.</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<h2 class="section-title">Topic 36.4: Master University Solved Examination Numerical Bank</h2>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 4: CSMA/CD Maximum Cable Distance Calculation</div>
+  <p>A 10 Mbps Standard Ethernet network transmits frames with minimum size 64 bytes (512 bits) over coaxial cable with propagation velocity $v = 2 \times 10^8\text{ m/s}$. The network includes 4 repeaters, each introducing an internal processing delay of $1.5 \ \mu\text{s}$. Calculate the maximum permissible cable distance between the two furthest stations.</p>
+  <p><strong>Solution:</strong></p>
+  $$T_{\text{trans}} = \frac{512\text{ bits}}{10 \times 10^6\text{ bps}} = 51.2 \ \mu\text{s}$$
+  $$\text{Condition: } T_{\text{trans}} \ge 2 \times T_{\text{prop\_total}} = 2 \times (T_{\text{cable}} + 4 \times T_{\text{repeater}})$$
+  $$51.2 \ \mu\text{s} \ge 2 \times (T_{\text{cable}} + 4 \times 1.5 \ \mu\text{s}) = 2 T_{\text{cable}} + 12 \ \mu\text{s}$$
+  $$2 T_{\text{cable}} \le 51.2 - 12 = 39.2 \ \mu\text{s} \implies T_{\text{cable}} \le 19.6 \ \mu\text{s}$$
+  $$\mathbf{\text{Max Cable Distance } D = T_{\text{cable}} \times v = 19.6 \times 10^{-6}\text{ s} \times (2 \times 10^8\text{ m/s}) = \mathbf{3920 \text{ meters (3.92 km)}}}$$
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 5: Pure ALOHA vs. Slotted ALOHA Station Scaling</div>
+  <p>A broadcast channel is shared by $N$ independent stations, each generating a $1000\text{-bit}$ frame on average every $10\text{ seconds}$. The channel bandwidth is $50\text{ kbps}$. How many stations can be supported by: (a) Pure ALOHA, and (b) Slotted ALOHA?</p>
+  <p><strong>Solution:</strong> Frame duration $T_{\text{fr}} = \frac{1000\text{ bits}}{50,000\text{ bps}} = 0.020\text{ s} = 20\text{ ms}$.</p>
+  $$\text{Each station generation rate } \lambda = \frac{1 \text{ frame}}{10\text{ s}} = 0.1 \text{ frames/s}$$
+  $$\text{Normalized frame rate per station } g = \lambda \times T_{\text{fr}} = 0.1 \times 0.020 = 0.002 \text{ frames/slot}$$
+  <ul>
+    <li><strong>(a) Pure ALOHA ($G_{\text{max}} = 0.5$):</strong> $N \times g \le 0.5 \implies N \le \frac{0.5}{0.002} = \mathbf{250 \text{ stations}}$.</li>
+    <li><strong>(b) Slotted ALOHA ($G_{\text{max}} = 1.0$):</strong> $N \times g \le 1.0 \implies N \le \frac{1.0}{0.002} = \mathbf{500 \text{ stations}}$ ($2\times$ the capacity of Pure ALOHA!).</li>
+  </ul>
+</div>
+<h2 class="section-title">Topic 36.5: Mathematical MAC Throughput & Wireless Protocol States</h2>
+
+<div class="formula-card">
+  <strong>Carrier Sense Multiple Access with Collision Detection (CSMA/CD) Efficiency Formula:</strong>
+  $$\mathbf{\eta = \frac{1}{1 + 5 \times a} \quad \text{where } a = \frac{T_{\text{prop}}}{T_{\text{trans}}}}$$
+  As network cable length increases or transmission data rate increases, parameter $a$ grows, dramatically reducing channel efficiency. This is why 10-Gigabit and 100-Gigabit Ethernet completely abandon CSMA/CD in favor of <strong>Switched Full-Duplex Point-to-Point Links</strong>!
+</div>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 20%;">IEEE 802.11 Standard</th>
+      <th style="width: 18%;">Frequency Band</th>
+      <th style="width: 22%;">Modulation & Physical Layer</th>
+      <th style="width: 20%;">Max Physical Data Rate</th>
+      <th>MIMO Stream Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>802.11b (Wi-Fi 1)</strong></td><td>$2.4\text{ GHz}$</td><td>DSSS / CCK</td><td>$11\text{ Mbps}$</td><td>$1 \times 1$ (SISO)</td></tr>
+    <tr><td><strong>802.11g (Wi-Fi 3)</strong></td><td>$2.4\text{ GHz}$</td><td>OFDM (64-QAM)</td><td>$54\text{ Mbps}$</td><td>$1 \times 1$</td></tr>
+    <tr><td><strong>802.11n (Wi-Fi 4)</strong></td><td>$2.4\text{ GHz} / 5\text{ GHz}$</td><td>MIMO-OFDM (64-QAM)</td><td>$600\text{ Mbps}$</td><td>Up to $4 \times 4$ MIMO</td></tr>
+    <tr><td><strong>802.11ac (Wi-Fi 5)</strong></td><td>$5\text{ GHz}$ only</td><td>256-QAM ($160\text{ MHz}$ channels)</td><td>$3.46\text{ Gbps}$</td><td>Up to $8 \times 8$ MU-MIMO</td></tr>
+    <tr><td><strong>802.11ax (Wi-Fi 6)</strong></td><td>$2.4 / 5 / 6\text{ GHz}$</td><td>OFDMA + 1024-QAM</td><td>$9.6\text{ Gbps}$</td><td>$8 \times 8$ Target Wake Time</td></tr>
+    <tr><td><strong>802.11be (Wi-Fi 7)</strong></td><td>$2.4 / 5 / 6\text{ GHz}$</td><td>4096-QAM ($320\text{ MHz}$ channels)</td><td>$46\text{ Gbps}$</td><td>$16 \times 16$ Multi-Link MLO</td></tr>
+  </tbody>
+</table>
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 6: Binary Exponential Backoff Simulation</div>
+  <p>In a 10 Mbps CSMA/CD Ethernet network (Slot Time = $51.2 \ \mu\text{s}$), two stations collide 3 consecutive times. What is the probability that they will collide again on the 4th attempt?</p>
+  <p><strong>Solution:</strong></p>
+  <ul>
+    <li>After collision $i = 3$, each station chooses a random integer $k$ from range $[0, 2^3 - 1] = [0, 7]$ (total 8 possible slot choices).</li>
+    <li>Total possible pairs of choices for 2 stations: $8 \times 8 = 64$ outcomes.</li>
+    <li>A collision occurs if and only if both stations select the exact same value of $k$ (8 possible matching pairs: $(0,0), (1,1), \dots, (7,7)$).</li>
+    <li>$$\mathbf{P(\text{Collision on 4th attempt}) = \frac{8}{64} = \frac{1}{8} = \mathbf{12.5\%}}$$</li>
+  </ul>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q6. Compare IEEE 802.3 Ethernet, IEEE 802.4 Token Bus, and IEEE 802.5 Token Ring across media access method and determinism. (8 Marks)</div>
+  <div class="qa-a">
+    • <strong>IEEE 802.3 (Ethernet):</strong> CSMA/CD random access; probabilistic latency (collisions increase with load); simple, low cost; worldwide industry standard.<br>
+    • <strong>IEEE 802.4 (Token Bus):</strong> Physical bus, logical token ring; deterministic access delay; complex token maintenance; industrial automation (MAP).<br>
+    • <strong>IEEE 802.5 (Token Ring):</strong> Physical star/ring; token passing round-robin; deterministic worst-case latency; zero collisions; high hardware cost.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q7. Explain Transparent Bridges and the Backward Learning Algorithm for building MAC address forwarding tables. (8 Marks)</div>
+  <div class="qa-a">
+    A <strong>Transparent Bridge</strong> automatically learns network topology without manual configuration:<br>
+    1. When a frame arrives on port $P$ from source MAC $S$, the bridge records $(S, P, \text{timestamp})$ in its forwarding database.<br>
+    2. When forwarding to destination MAC $D$: if $D$ is in the table on port $P'$, forwards frame strictly out port $P'$ (or filters if $P'=P$); if $D$ is unknown, <strong>floods</strong> frame out all ports except the arrival port!
+  </div>
+</div>
+<h2 class="section-title">Topic 36.6: Advanced Multi-Access Markov Chains & High-Speed Ethernet Fabrics</h2>
+
+<p>
+  The theoretical throughput of Random Access MAC protocols under saturation load is modeled via Poisson arrival processes and Markov birth-death state chains:
+</p>
+
+<div class="formula-card">
+  <strong>Slotted ALOHA vs. 1-Persistent CSMA Throughput Derivations:</strong>
+  - <strong>Slotted ALOHA:</strong> $S = G e^{-G} \implies S_{\text{max}} = \frac{1}{e} = \mathbf{36.8\%}$ (at offer load $G = 1$).
+  - <strong>Non-Persistent CSMA:</strong> $\mathbf{S = \frac{G e^{-a G}}{G(1 + 2a) + e^{-a G}}} \implies S_{\text{max}} \approx \mathbf{82\%}$ (for small $a = 0.01$).
+  - <strong>1-Persistent CSMA:</strong> $\mathbf{S = \frac{G [1 + G + a G (1 + G + a G/2)] e^{-G(1+2a)}}{G(1 + 2a) - (1 - e^{-a G}) + (1 + a G) e^{-G(1+a)}}} \approx \mathbf{53\%}$.
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: Complete 5-Switch Spanning Tree Protocol (STP) Convergence Trace</div>
+  <p>Consider 5 enterprise switches $S_1, S_2, S_3, S_4, S_5$ interconnected with 100 Mbps Fast Ethernet links (Link Cost = 19):</p>
+  <ul>
+    <li>$S_1$: MAC `00:00:0A:11:00:01`, Priority 32768 $\implies$ <strong>ELECTED ROOT BRIDGE (Lowest MAC)</strong>.</li>
+    <li>All ports on $S_1$ are designated as <strong>Designated Ports (Forwarding)</strong>.</li>
+    <li>$S_2, S_3$ connected directly to $S_1$: Cost = 19 $\implies$ Ports facing $S_1$ are <strong>Root Ports</strong>.</li>
+    <li>$S_4, S_5$ connected to $S_2$ and $S_3$: Cost to Root $= 19 + 19 = 38$.</li>
+    <li>Redundant links between $S_4$ and $S_5$ are evaluated: $S_4$ has lower MAC than $S_5$. Therefore, $S_4$'s port is Designated, and $S_5$'s port transitions to <strong>BLOCKING STATE</strong>, terminating all broadcast loops!</li>
+  </ul>
+</div>
+<h2 class="section-title">Topic 36.7: Master University Long-Answer Exam Solutions Bank</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Q8. Explain the IEEE 802.11 Wi-Fi Medium Access Control architecture: DCF, PCF, Inter-Frame Spaces (SIFS, PIFS, DIFS, EIFS), and Network Allocation Vector (NAV). (10 Marks)</div>
+  <div class="qa-a">
+    IEEE 802.11 defines two operational coordination modes:<br>
+    • <strong>Distributed Coordination Function (DCF):</strong> Contention-based CSMA/CA protocol used by all Wi-Fi stations.<br>
+    • <strong>Point Coordination Function (PCF):</strong> Optional contention-free polling protocol managed by the Access Point (AP).<br>
+    • <strong>Inter-Frame Space (IFS) Hierarchy:</strong><br>
+      1. <strong>SIFS (Short IFS):</strong> Highest priority; used for instant ACK, CTS, and fragmented frame bursts.<br>
+      2. <strong>PIFS (PCF IFS):</strong> Medium priority; used by Access Point to gain channel control for PCF polling.<br>
+      3. <strong>DIFS (DCF IFS):</strong> Normal priority; minimum idle duration a station must wait before contending for channel.<br>
+      4. <strong>EIFS (Extended IFS):</strong> Longest wait time used when a frame is received with checksum errors.<br>
+    • <strong>Network Allocation Vector (NAV):</strong> A virtual carrier sensing timer maintained inside every Wi-Fi station. When a station overhears an RTS or CTS frame, it sets its NAV to the duration value specified in the frame header, remaining asleep and deferring all channel access until NAV reaches 0!
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q9. Compare 10BASE5 (Thicknet), 10BASE2 (Thinnet), 10BASE-T, 100BASE-TX, and 1000BASE-T across physical media, topology, connector, and maximum span. (8 Marks)</div>
+  <div class="qa-a">
+    • <strong>10BASE5:</strong> Thick coaxial cable, Bus topology, Vampire taps & AUI cable, max $500\text{ meters}$.<br>
+    • <strong>10BASE2:</strong> RG-58 Thin coaxial cable, Bus topology, BNC T-connectors, max $185\text{ meters}$.<br>
+    • <strong>10BASE-T:</strong> Cat 3/5 UTP copper, Star topology (Hub), RJ-45, max $100\text{ meters}$.<br>
+    • <strong>100BASE-TX:</strong> Cat 5 UTP (2 pairs), Star topology (Switch), RJ-45, max $100\text{ meters}$.<br>
+    • <strong>1000BASE-T:</strong> Cat 5e/6 UTP (4 pairs simultaneously full-duplex), Star topology, RJ-45, max $100\text{ meters}$.
+  </div>
+</div>
+<div class="qa-card">
+  <div class="qa-q">Q10. Explain Virtual LANs (VLANs, IEEE 802.1Q) and how Trunking and Inter-VLAN Routing operate. (8 Marks)</div>
+  <div class="qa-a">
+    • <strong>VLAN (Virtual LAN):</strong> Logically segments a single physical Layer 2 switch into multiple independent broadcast domains. Broadcast traffic from VLAN 10 (Finance) is completely isolated from VLAN 20 (Engineering) without requiring separate physical switches.<br>
+    • <strong>Trunking (IEEE 802.1Q):</strong> A high-speed link carrying traffic for multiple VLANs simultaneously between switches. Each frame is tagged with a 4-byte 802.1Q header containing a 12-bit VLAN ID (VID).<br>
+    • <strong>Inter-VLAN Routing:</strong> Because VLANs are isolated broadcast domains, communication between two different VLANs requires a Layer 3 Router (using "Router-on-a-Stick" subinterfaces) or a Multi-Layer Switch (SVI / Switched Virtual Interfaces).
+  </div>
+</div>
+
+
+</body>
+</html>

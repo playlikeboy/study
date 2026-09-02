@@ -1,192 +1,461 @@
-# DCCN Module 5 Exhaustive Content (16 Topics Complete)
-# Neuroscience framework: Understand -> Visualize -> Connect -> Recall -> Apply -> Exam-Important Questions & [UPLOADED PYQ]
-
+# DCCN Module 5 Exhaustive Master Content (Topics 37 to 52)
 DCCN_M5_EXHAUSTIVE = r"""
 <div class="toc-box">
-  <div class="toc-title"><i class="fa-solid fa-list-check"></i> Module V: Ethernet, IP, Routing & Applications — Complete 16-Topic Tracker</div>
+  <div class="toc-title"><i class="fa-solid fa-globe"></i> Module V: Networking, Transport & Application Layers — 16-Topic Master Syllabus Guide</div>
   <div class="toc-grid">
-    <div><strong>Topic 39:</strong> Traditional Ethernet (IEEE 802.3 CSMA/CD at 10 Mbps)</div>
-    <div><strong>Topic 40:</strong> High-Speed Ethernet (Fast 100M, Gigabit 1G, 10-Gigabit)</div>
-    <div><strong>Topic 41:</strong> IEEE 802.11 Wi-Fi (CSMA/CA with RTS/CTS, Ethernet vs. Wi-Fi)</div>
-    <div><strong>Topic 42:</strong> Internet Protocol (IPv4 20-Byte Header vs. IPv6 128-Bit)</div>
-    <div><strong>Topic 43:</strong> IP Addressing & Subnetting ($2^{\text{borrowed}}$ & $2^{\text{host}}-2$)</div>
-    <div><strong>Topic 44:</strong> Transport Protocols (TCP 3-Way Handshake vs. UDP Sockets)</div>
-    <div><strong>Topic 45:</strong> Routing in Packet Networks (Hop Count, Cost, Bandwidth)</div>
-    <div><strong>Topic 46:</strong> Distance Vector Routing (Bellman-Ford & RIP Count-to-Infinity)</div>
-    <div><strong>Topic 47:</strong> Link State Routing (Dijkstra's Algorithm & OSPF Flooding)</div>
-    <div><strong>Topic 48:</strong> Path Vector Routing (Border Gateway Protocol BGP-4)</div>
-    <div><strong>Topic 49:</strong> Congestion Control (Leaky Bucket vs. Token Bucket Shaping)</div>
-    <div><strong>Topic 50:</strong> Traffic Management & Quality of Service (QoS Dimensions)</div>
-    <div><strong>Topic 51:</strong> Simple Mail Transfer Protocol (SMTP, POP3, IMAP)</div>
-    <div><strong>Topic 52:</strong> Domain Name System (DNS Hierarchy & Records A, MX)</div>
-    <div><strong>Topic 53:</strong> Hypertext Transfer Protocol (HTTP/1.1 vs. HTTP/2 & Statuses)</div>
-    <div><strong>Topic 54:</strong> Dynamic Host Configuration Protocol (DHCP DORA Sequence)</div>
+    <div><strong>Topic 37:</strong> IPv4 Header Format (20-byte base fields, TTL, Protocol, Header Checksum, Fragmentation)</div>
+    <div><strong>Topic 38:</strong> IPv6 Architecture (128-bit addressing, 40-byte base header, Extension Headers vs. IPv4)</div>
+    <div><strong>Topic 39:</strong> Subnetting, Supernetting & Classless Inter-Domain Routing (CIDR Notation & Prefix Masks)</div>
+    <div><strong>Topic 40:</strong> Address Resolution Protocol (ARP Request/Reply, ARP Cache & RARP / DHCP)</div>
+    <div><strong>Topic 41:</strong> Internet Control Message Protocol (ICMP Error Reporting: Ping, Traceroute Mechanics)</div>
+    <div><strong>Topic 42:</strong> Routing Algorithms: Distance Vector Routing (Bellman-Ford & Count-to-Infinity Problem)</div>
+    <div><strong>Topic 43:</strong> Routing Algorithms: Link State Routing (Dijkstra's Shortest Path Algorithm & OSPF)</div>
+    <div><strong>Topic 44:</strong> Hierarchical Routing & Inter-Domain Routing (Border Gateway Protocol BGP-4 Path Vector)</div>
+    <div><strong>Topic 45:</strong> Transport Layer: User Datagram Protocol (UDP 8-byte Header & Pseudo-Header Checksum)</div>
+    <div><strong>Topic 46:</strong> Transmission Control Protocol (TCP Segment Header Architecture & Flags: SYN, ACK, FIN, RST)</div>
+    <div><strong>Topic 47:</strong> TCP Connection Management (3-Way Handshake SYN/SYN-ACK/ACK & 4-Way FIN Teardown)</div>
+    <div><strong>Topic 48:</strong> TCP Flow Control (Sliding Window & Silly Window Syndrome Prevention: Nagle & Clark Algorithms)</div>
+    <div><strong>Topic 49:</strong> TCP Congestion Control (AIMD, Slow Start, Congestion Avoidance, Fast Retransmit, Fast Recovery)</div>
+    <div><strong>Topic 50:</strong> Domain Name System (DNS Hierarchical Namespace, Root Servers, Iterative vs Recursive Queries)</div>
+    <div><strong>Topic 51:</strong> Electronic Mail Architecture (SMTP, POP3, IMAP4, MIME & Message Transfer Agents)</div>
+    <div><strong>Topic 52:</strong> Web Protocols: HTTP/1.0, HTTP/1.1 (Persistent Connections & Pipelining), HTTP/2 & HTTP/3 QUIC</div>
   </div>
 </div>
 
-<h2 class="section-title">Topic 39 – 41: Ethernet Evolution & Wireless LAN (IEEE 802.11)</h2>
+<h2 class="section-title">Topic 37 & 39: IPv4 Header Architecture, Subnetting & CIDR Math</h2>
 
 <table class="custom-table">
   <thead>
     <tr>
-      <th style="width: 25%;">Standard</th>
-      <th style="width: 25%;">Data Rate</th>
-      <th style="width: 25%;">Physical Media</th>
-      <th>Medium Access Control (MAC)</th>
+      <th style="width: 20%;">IPv4 Field</th>
+      <th style="width: 12%;">Field Size</th>
+      <th>Core Routing Function & Protocols</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td><strong>Traditional Ethernet</strong></td><td>$10 \text{ Mbps}$</td><td>10Base5 (Thick coax), 10BaseT (UTP)</td><td>CSMA/CD (Half-Duplex)</td></tr>
-    <tr><td><strong>Fast Ethernet</strong></td><td>$100 \text{ Mbps}$</td><td>100BaseTX (Cat 5 UTP), 100BaseFX</td><td>CSMA/CD / Switched Full-Duplex</td></tr>
-    <tr><td><strong>Gigabit Ethernet</strong></td><td>$1 \text{ Gbps}$</td><td>1000BaseT (Cat 5e UTP), 1000BaseLX</td><td>Switched Full-Duplex</td></tr>
-    <tr><td><strong>IEEE 802.11 (Wi-Fi)</strong></td><td>Up to $9.6 \text{ Gbps}$ (Wi-Fi 6)</td><td>$2.4 \text{ GHz} / 5 \text{ GHz} / 6 \text{ GHz}$ Radio</td><td>CSMA/CA with RTS/CTS Handshake</td></tr>
+    <tr><td><strong>Version</strong></td><td>4 Bits</td><td>Specifies IP version (`0100` = IPv4, `0110` = IPv6).</td></tr>
+    <tr><td><strong>IHL (Header Length)</strong></td><td>4 Bits</td><td>Header length in 32-bit words (Minimum value = 5 $\implies 20\text{ bytes}$; Maximum = 15 $\implies 60\text{ bytes}$).</td></tr>
+    <tr><td><strong>Total Length</strong></td><td>16 Bits</td><td>Total datagram size (Header + Data) in bytes (Max $65,535\text{ bytes}$).</td></tr>
+    <tr><td><strong>Identification</strong></td><td>16 Bits</td><td>Unique integer tagging all fragments belonging to same original datagram.</td></tr>
+    <tr><td><strong>Flags</strong></td><td>3 Bits</td><td>Bit 0 (Reserved); Bit 1 (DF = Don't Fragment); Bit 2 (MF = More Fragments).</td></tr>
+    <tr><td><strong>Fragment Offset</strong></td><td>13 Bits</td><td>Offset of fragment relative to original unfragmented payload in <strong>8-byte blocks</strong>.</td></tr>
+    <tr><td><strong>TTL (Time to Live)</strong></td><td>8 Bits</td><td>Hop counter decremented by 1 at every router; discarded at 0 with ICMP Time Exceeded.</td></tr>
+    <tr><td><strong>Protocol</strong></td><td>8 Bits</td><td>Specifies Layer 4 payload: ICMP = 1, IGMP = 2, TCP = 6, UDP = 17, OSPF = 89.</td></tr>
+    <tr><td><strong>Header Checksum</strong></td><td>16 Bits</td><td>1's complement checksum covering ONLY the IP header (recomputed at every hop).</td></tr>
+    <tr><td><strong>Source & Dest IP</strong></td><td>32 Bits each</td><td>Origin and final destination IPv4 logical addresses.</td></tr>
   </tbody>
 </table>
 
-<h2 class="section-title">Topic 42 & 43: Internet Protocol (IPv4 Header & Subnetting) [UPLOADED PYQ]</h2>
-
-<table class="custom-table">
-  <thead>
-    <tr>
-      <th style="width: 25%;">IPv4 Header Field [UPLOADED PYQ]</th>
-      <th style="width: 15%;">Bit Width</th>
-      <th>Functional Operational Purpose</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td><strong>Version</strong></td><td>4 bits</td><td>Identifies IP version (`0100` for IPv4).</td></tr>
-    <tr><td><strong>Header Length (IHL)</strong></td><td>4 bits</td><td>Header length in 32-bit words (Minimum value $= 5 \implies 20 \text{ bytes}$).</td></tr>
-    <tr><td><strong>Total Length</strong></td><td>16 bits</td><td>Total datagram length (Header + Payload) in bytes (Max $= 65,535 \text{ bytes}$).</td></tr>
-    <tr><td><strong>Identification, Flags, Offset</strong></td><td>$16+3+13$ bits</td><td>Handles IP fragmentation. `DF`=Don't Fragment, `MF`=More Fragments. Offset in 8-byte units.</td></tr>
-    <tr><td><strong>Time to Live (TTL)</strong></td><td>8 bits</td><td>Decremented at each router hop. When $\text{TTL}=0$, packet is dropped (prevents infinite loops).</td></tr>
-    <tr><td><strong>Protocol</strong></td><td>8 bits</td><td>Demultiplexes to Transport layer (`6` for TCP, `17` for UDP, `1` for ICMP).</td></tr>
-    <tr><td><strong>Header Checksum</strong></td><td>16 bits</td><td>1's complement sum of header fields recalculated at each router hop.</td></tr>
-  </tbody>
-</table>
-
-<div class="formula-card">
-  <strong>Subnetting Formulations:</strong>
-  - Number of Created Subnets $= 2^{\text{borrowed bits}}$
-  - Total IP Addresses per Subnet $= 2^{\text{host bits}}$
-  - Usable Host Addresses per Subnet $= 2^{\text{host bits}} - 2$ (subtracting Subnet Network ID and Directed Broadcast Address).
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem 1: IPv4 Fragmentation Calculation</div>
+  <p>An IPv4 packet with Total Length = $4020\text{ bytes}$ (20 bytes IP header + 4000 bytes data) travels across an Ethernet link with $\text{MTU} = 1500\text{ bytes}$. Calculate the fields for all resulting fragments.</p>
+  <p><strong>Solution:</strong> Max payload per fragment = $1500 - 20 = 1480\text{ bytes}$ (divisible by 8: $1480 / 8 = 185$).</p>
+  <ul>
+    <li><strong>Fragment 1:</strong> Total Length = $1500\text{ B}$ (20 header + 1480 data), $\text{MF} = 1$, $\text{Offset} = 0 / 8 = \mathbf{0}$. (Carries bytes $0\dots1479$).</li>
+    <li><strong>Fragment 2:</strong> Total Length = $1500\text{ B}$ (20 header + 1480 data), $\text{MF} = 1$, $\text{Offset} = 1480 / 8 = \mathbf{185}$. (Carries bytes $1480\dots2959$).</li>
+    <li><strong>Fragment 3:</strong> Total Length = $1060\text{ B}$ (20 header + 1040 data), $\text{MF} = 0$, $\text{Offset} = 2960 / 8 = \mathbf{370}$. (Carries bytes $2960\dots3999$).</li>
+  </ul>
 </div>
 
-<h2 class="section-title">Topic 44: Transport Protocols (TCP vs. UDP) [UPLOADED PYQ]</h2>
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem 2: CIDR Subnetting & Address Allocation</div>
+  <p>An ISP assigns block `198.51.100.0/24` to an organization needing 4 equal subnets. Find: (1) Subnet mask, (2) Usable hosts per subnet, (3) Subnet network addresses, and (4) Broadcast addresses.</p>
+  <p><strong>Solution:</strong></p>
+  <ul>
+    <li>To create 4 subnets: Borrow $k = \log_2(4) = 2$ bits $\implies$ New prefix $= /24 + 2 = \mathbf{/26}$.</li>
+    <li><strong>Subnet Mask:</strong> $255.255.255.192$ (Binary: `11111111.11111111.11111111.11000000`).</li>
+    <li><strong>Usable Hosts per Subnet:</strong> $2^{(32 - 26)} - 2 = 2^6 - 2 = 64 - 2 = \mathbf{62 \text{ hosts}}$.</li>
+    <li><strong>Subnet 1:</strong> Network: `198.51.100.0/26`, Range: `.1 - .62`, Broadcast: `198.51.100.63`</li>
+    <li><strong>Subnet 2:</strong> Network: `198.51.100.64/26`, Range: `.65 - .126`, Broadcast: `198.51.100.127`</li>
+    <li><strong>Subnet 3:</strong> Network: `198.51.100.128/26`, Range: `.129 - .190`, Broadcast: `198.51.100.191`</li>
+    <li><strong>Subnet 4:</strong> Network: `198.51.100.192/26`, Range: `.193 - .254`, Broadcast: `198.51.100.255`</li>
+  </ul>
+</div>
+
+<h2 class="section-title">Topic 42 & 43: Routing Algorithms: Distance Vector vs. Link State (Dijkstra)</h2>
 
 <table class="custom-table">
   <thead>
     <tr>
-      <th style="width: 25%;">Feature</th>
-      <th style="width: 37%;">TCP (Transmission Control Protocol)</th>
-      <th>UDP (User Datagram Protocol)</th>
+      <th style="width: 20%;">Dimension</th>
+      <th style="width: 40%;">Distance Vector Routing (Bellman-Ford / RIP)</th>
+      <th>Link State Routing (Dijkstra / OSPF)</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td><strong>Connection Model</strong></td><td>Connection-Oriented (3-Way Handshake: SYN $\rightarrow$ SYN-ACK $\rightarrow$ ACK).</td><td>Connectionless (no handshake; sends datagrams immediately).</td></tr>
-    <tr><td><strong>Reliability</strong></td><td>100% Reliable (Sequence numbers, ACKs, retransmissions on loss).</td><td>Unreliable Best-Effort (no ACKs, lost packets are not retransmitted).</td></tr>
-    <tr><td><strong>Ordering & Streaming</strong></td><td>Guaranteed strictly in-order byte stream reassembly.</td><td>No ordering guarantee; datagram boundary preserved.</td></tr>
-    <tr><td><strong>Flow & Congestion Control</strong></td><td>Full sliding window flow control + AIMD Congestion Control.</td><td>Zero flow control, zero congestion control.</td></tr>
-    <tr><td><strong>Typical Applications</strong></td><td>Web (HTTP/HTTPS), Email (SMTP), File Transfer (FTP), SSH.</td><td>DNS queries, Video streaming (RTP), VoIP, DHCP, Online Gaming.</td></tr>
+    <tr>
+      <td><strong>Knowledge of Topology</strong></td>
+      <td>Routers know only distance vectors of immediate direct neighbors ("Routing by rumor").</td>
+      <td>Every router possesses complete global topological graph of entire Autonomous System.</td>
+    </tr>
+    <tr>
+      <td><strong>Algorithm</strong></td>
+      <td>Bellman-Ford Equation: $D_x(y) = \min_v \{ c(x, v) + D_v(y) \}$.</td>
+      <td>Dijkstra's Shortest Path Tree algorithm.</td>
+    </tr>
+    <tr>
+      <td><strong>Convergence Speed</strong></td>
+      <td>Slow convergence; suffers from <strong>Count-to-Infinity</strong> problem on link failures.</td>
+      <td><strong>Fast Convergence:</strong> Link State Advertisements (LSAs) flood updates instantly.</td>
+    </tr>
+    <tr>
+      <td><strong>Loop Prevention</strong></td>
+      <td>Split Horizon, Poison Reverse, Maximum Hop Count (= 15 in RIP).</td>
+      <td>Zero routing loops (Dijkstra guarantees unique loop-free shortest path tree).</td>
+    </tr>
   </tbody>
 </table>
 
-<h2 class="section-title">Topic 45 – 48: Routing Protocols (Distance Vector vs. Link State vs. Path Vector)</h2>
+<h2 class="section-title">Topic 46, 47 & 49: TCP Architecture, Handshakes & Congestion Control</h2>
+
+<div class="diagram-container">
+  <svg width="100%" height="85" viewBox="0 0 740 85" xmlns="http://www.w3.org/2000/svg">
+    <line x1="100" y1="15" x2="100" y2="75" stroke="#0284c7" stroke-width="2"/>
+    <text x="100" y="12" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" fill="#0369a1" text-anchor="middle">Client</text>
+
+    <line x1="640" y1="15" x2="640" y2="75" stroke="#0284c7" stroke-width="2"/>
+    <text x="640" y="12" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" fill="#0369a1" text-anchor="middle">Server</text>
+
+    <path d="M 100 25 L 640 40" stroke="#2563eb" stroke-width="1.8"/>
+    <text x="370" y="28" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#1e40af" text-anchor="middle">1. SYN (seq = x)</text>
+
+    <path d="M 640 45 L 100 60" stroke="#16a34a" stroke-width="1.8"/>
+    <text x="370" y="50" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#15803d" text-anchor="middle">2. SYN-ACK (seq = y, ack = x + 1)</text>
+
+    <path d="M 100 65 L 640 75" stroke="#2563eb" stroke-width="1.8"/>
+    <text x="370" y="70" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#1e40af" text-anchor="middle">3. ACK (seq = x + 1, ack = y + 1)</text>
+  </svg>
+  <div class="diagram-caption">Figure 5.1: TCP 3-Way Handshake Connection Establishment Protocol</div>
+</div>
+
+<div class="formula-card">
+  <strong>The 4 Phases of TCP Congestion Control (AIMD):</strong>
+  1. <strong>Slow Start:</strong> Starts with $\text{cwnd} = 1\text{ MSS}$. Doubles $\text{cwnd}$ every RTT ($\text{cwnd} \leftarrow \text{cwnd} \times 2$) exponentially until reaching $\text{ssthresh}$.
+  2. <strong>Congestion Avoidance:</strong> Linear growth: increases $\text{cwnd}$ by $1\text{ MSS}$ per RTT ($\text{cwnd} \leftarrow \text{cwnd} + 1$) until packet loss occurs.
+  3. <strong>Timeout Reaction (TCP Tahoe):</strong> Sets $\text{ssthresh} \leftarrow \text{cwnd} / 2$, resets $\text{cwnd} \leftarrow 1\text{ MSS}$, re-enters Slow Start.
+  4. <strong>3 Duplicate ACKs (TCP Reno):</strong> Fast Retransmit triggers immediate retransmission; sets $\text{ssthresh} \leftarrow \text{cwnd}/2$, $\text{cwnd} \leftarrow \text{ssthresh} + 3\text{ MSS}$, enters Fast Recovery!
+</div>
+
+<h2 class="section-title">Topic 50, 51 & 52: Application Layer Protocols (DNS, Email & HTTP)</h2>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 15%;">Protocol</th>
+      <th style="width: 15%;">Port & Transport</th>
+      <th style="width: 35%;">Architecture & Function</th>
+      <th>Key Evolution Highlights</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>DNS</strong></td>
+      <td>Port 53 (UDP primary, TCP for zone transfer)</td>
+      <td>Hierarchical distributed database: Root $\rightarrow$ TLD (.com, .edu) $\rightarrow$ Authoritative servers.</td>
+      <td>Iterative vs. Recursive resolution; DNSSEC security records.</td>
+    </tr>
+    <tr>
+      <td><strong>SMTP</strong></td>
+      <td>Port 25 / 587 (TCP)</td>
+      <td>Push protocol for sending email between Message Transfer Agents (MTAs).</td>
+      <td>MIME extensions support attachments, audio, HTML formatting.</td>
+    </tr>
+    <tr>
+      <td><strong>POP3 / IMAP4</strong></td>
+      <td>POP3: Port 110; IMAP: Port 143 (TCP)</td>
+      <td>Pull protocols for retrieving email from mail servers to local user mail clients.</td>
+      <td>POP3 downloads and deletes; IMAP syncs folders dynamically across multiple devices.</td>
+    </tr>
+    <tr>
+      <td><strong>HTTP/1.1</strong></td>
+      <td>Port 80 (TCP)</td>
+      <td>Persistent TCP connections (`Keep-Alive`) & pipelining over single connection.</td>
+      <td>Suffers from Head-of-Line (HoL) blocking at application level.</td>
+    </tr>
+    <tr>
+      <td><strong>HTTP/2</strong></td>
+      <td>Port 443 (TLS/TCP)</td>
+      <td>Binary framing layer; multiplexes multiple independent request/response streams over 1 TCP socket.</td>
+      <td>HPACK header compression, Server Push; TCP-level packet drop still stalls all streams.</td>
+    </tr>
+    <tr>
+      <td><strong>HTTP/3 (QUIC)</strong></td>
+      <td>Port 443 (UDP)</td>
+      <td>Replaces TCP with QUIC over UDP: combines TLS 1.3 handshake and transport in single round-trip!</td>
+      <td><strong>Zero Head-of-Line Blocking:</strong> Packet loss in one stream never stalls other streams!</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 class="section-title">🧠 M5 Active Recall & 10-Question University Exam Master Bank</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Q1. Draw the complete IPv4 Header format and explain the function of TTL, Header Checksum, and Fragmentation fields. (10 Marks)</div>
+  <div class="qa-a">
+    • <strong>TTL (8 bits):</strong> Hop counter decremented at each router. Prevents undeliverable packets from looping infinitely.<br>
+    • <strong>Header Checksum (16 bits):</strong> 1's complement sum covering header only. Verified at every hop.<br>
+    • <strong>Identification (16 bits):</strong> Tags fragments of same datagram.<br>
+    • <strong>Flags (3 bits):</strong> DF (Don't Fragment), MF (More Fragments).<br>
+    • <strong>Fragment Offset (13 bits):</strong> Measures data offset in 8-byte blocks relative to unfragmented payload.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q2. Explain TCP 3-Way Handshake Connection Establishment and 4-Way Connection Termination with sequence diagrams. (10 Marks)</div>
+  <div class="qa-a">
+    • <strong>3-Way Establishment:</strong> (1) Client $\rightarrow$ Server: `SYN (seq=x)`; (2) Server $\rightarrow$ Client: `SYN-ACK (seq=y, ack=x+1)`; (3) Client $\rightarrow$ Server: `ACK (seq=x+1, ack=y+1)`.<br>
+    • <strong>4-Way Teardown:</strong> (1) Client $\rightarrow$ Server: `FIN`; (2) Server $\rightarrow$ Client: `ACK` (half-close); (3) Server $\rightarrow$ Client: `FIN`; (4) Client $\rightarrow$ Server: `ACK` (Client waits $2\text{ MSL}$ in `TIME_WAIT` before closing).
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q3. Explain TCP Congestion Control mechanisms: Slow Start, Congestion Avoidance, Fast Retransmit, and Fast Recovery. (10 Marks)</div>
+  <div class="qa-a">
+    • <strong>Slow Start:</strong> Exponential growth: $\text{cwnd} \leftarrow \text{cwnd} \times 2$ per RTT until reaching $\text{ssthresh}$.<br>
+    • <strong>Congestion Avoidance:</strong> Additive linear growth: $\text{cwnd} \leftarrow \text{cwnd} + 1\text{ MSS}$ per RTT.<br>
+    • <strong>Fast Retransmit:</strong> 3 duplicate ACKs trigger immediate retransmission without waiting for RTO timeout.<br>
+    • <strong>Fast Recovery:</strong> Multiplicative decrease: $\text{ssthresh} = \text{cwnd}/2$, sets $\text{cwnd} = \text{ssthresh} + 3\text{ MSS}$, continues congestion avoidance.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q4. Compare Distance Vector (Bellman-Ford) and Link State (Dijkstra) routing algorithms. How is Count-to-Infinity solved? (8 Marks)</div>
+  <div class="qa-a">
+    • <strong>Distance Vector:</strong> Periodic routing table exchange with neighbors only; slow convergence; suffers Count-to-Infinity. Solved by <strong>Split Horizon</strong> (do not advertise route back to neighbor who supplied it) and <strong>Poison Reverse</strong> (advertise cost as $\infty$).<br>
+    • <strong>Link State:</strong> Floods Link State Advertisements (LSAs) to all routers; builds global topology map; runs Dijkstra's algorithm; zero routing loops!
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q5. Compare HTTP/1.1, HTTP/2, and HTTP/3 QUIC across multiplexing, transport layer, and Head-of-Line blocking. (8 Marks)</div>
+  <div class="qa-a">
+    • <strong>HTTP/1.1 (TCP):</strong> Sequential requests per socket; application Head-of-Line (HoL) blocking.<br>
+    • <strong>HTTP/2 (TCP):</strong> Binary multiplexed streams over single TCP connection; single packet drop stalls all streams (TCP HoL blocking).<br>
+    • <strong>HTTP/3 (QUIC/UDP):</strong> Native multiplexed streams over UDP; packet drop in stream 1 never delays stream 2 (Zero HoL blocking!).
+  </div>
+</div>
+<h2 class="section-title">Topic 52.2: Comprehensive Network Layer & Transport Layer Solved Numericals</h2>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 1: Dijkstra's Link State Shortest Path Algorithm Trace</div>
+  <p>Find the shortest paths from source router $A$ to all nodes in network graph:</p>
+  <ul>
+    <li>Edges: $A-B: 2, \ A-C: 5, \ B-C: 2, \ B-D: 4, \ C-D: 1, \ C-E: 5, \ D-E: 1$</li>
+  </ul>
+  <p><strong>Execution Trace Table:</strong></p>
+  <table class="custom-table">
+    <thead><tr><th>Step</th><th>Visited Set $N'$</th><th>$D(B), p(B)$</th><th>$D(C), p(C)$</th><th>$D(D), p(D)$</th><th>$D(E), p(E)$</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>$\{A\}$</td><td>$2, A$</td><td>$5, A$</td><td>$\infty$</td><td>$\infty$</td></tr>
+      <tr><td>1</td><td>$\{A, B\}$</td><td><strong>2, A</strong></td><td>$4, B$</td><td>$6, B$</td><td>$\infty$</td></tr>
+      <tr><td>2</td><td>$\{A, B, C\}$</td><td>2, A</td><td><strong>4, B</strong></td><td>$5, C$</td><td>$9, C$</td></tr>
+      <tr><td>3</td><td>$\{A, B, C, D\}$</td><td>2, A</td><td>4, B</td><td><strong>5, C</strong></td><td>$6, D$</td></tr>
+      <tr><td>4</td><td>$\{A, B, C, D, E\}$</td><td>2, A</td><td>4, B</td><td>5, C</td><td><strong>6, D</strong></td></tr>
+    </tbody>
+  </table>
+  <p><strong>Shortest Paths from $A$:</strong> to $B = 2$, to $C = 4$ ($A \rightarrow B \rightarrow C$), to $D = 5$ ($A \rightarrow B \rightarrow C \rightarrow D$), to $E = 6$ ($A \rightarrow B \rightarrow C \rightarrow D \rightarrow E$).</p>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 2: TCP AIMD Congestion Window Evolution</div>
+  <p>A TCP Reno connection has $\text{ssthresh} = 16\text{ MSS}$. It starts in Slow Start ($\text{cwnd} = 1$). Trace $\text{cwnd}$ over successive RTTs until a timeout occurs at $\text{cwnd} = 20$, followed by 3 duplicate ACKs at $\text{cwnd} = 12$:</p>
+  <ol>
+    <li><strong>RTT 1–5 (Slow Start):</strong> $\text{cwnd}$ doubles: $1 \rightarrow 2 \rightarrow 4 \rightarrow 8 \rightarrow 16\text{ MSS}$ (Reaches $\text{ssthresh}$).</li>
+    <li><strong>RTT 6–9 (Congestion Avoidance):</strong> Linear growth: $17 \rightarrow 18 \rightarrow 19 \rightarrow 20\text{ MSS}$.</li>
+    <li><strong>Timeout at $\text{cwnd} = 20$:</strong> Sets $\text{ssthresh} \leftarrow 20/2 = 10\text{ MSS}$, resets $\text{cwnd} \leftarrow 1\text{ MSS}$, re-enters Slow Start.</li>
+    <li><strong>RTT 10–14:</strong> Doubles $1 \rightarrow 2 \rightarrow 4 \rightarrow 8 \rightarrow 10$ ($\text{ssthresh}$ reached), then linear: $11 \rightarrow 12\text{ MSS}$.</li>
+    <li><strong>3 Duplicate ACKs at $\text{cwnd} = 12$:</strong> Fast Retransmit! Sets $\text{ssthresh} \leftarrow 12/2 = 6\text{ MSS}$, sets $\text{cwnd} \leftarrow 6 + 3 = 9\text{ MSS}$ in Fast Recovery!</li>
+  </ol>
+</div>
+<h2 class="section-title">Topic 52.3: Comprehensive Internetworking, BGP & Transport Internals</h2>
+
+<p>
+  In global autonomous internetworking, routing is divided into **Intra-Domain Interior Gateway Protocols (IGP: OSPF, IS-IS)** and **Inter-Domain Exterior Gateway Protocols (EGP: BGP-4)**:
+</p>
 
 <table class="custom-table">
   <thead>
     <tr>
       <th style="width: 20%;">Routing Protocol</th>
-      <th style="width: 30%;">Mathematical Algorithm</th>
-      <th style="width: 25%;">Scope & Protocol</th>
-      <th>Key Characteristics</th>
+      <th style="width: 18%;">Algorithm Family</th>
+      <th style="width: 25%;">Underlying Transport Protocol</th>
+      <th>Routing Metric & Domain</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Distance Vector</strong></td>
-      <td>Bellman-Ford: $D_x(y) = \min_v \{ c(x, v) + D_v(y) \}$</td>
-      <td>Intra-AS (RIP)</td>
-      <td>Exchanges vector with neighbors; susceptible to Count-to-Infinity.</td>
+      <td><strong>RIPv2</strong></td>
+      <td>Distance Vector (Bellman-Ford)</td>
+      <td>UDP (Port 520)</td>
+      <td>Hop Count (Max = 15 hops; 16 = $\infty$); Small LANs.</td>
     </tr>
     <tr>
-      <td><strong>Link State</strong></td>
-      <td>Dijkstra's Shortest Path Tree Algorithm</td>
-      <td>Intra-AS (OSPF)</td>
-      <td>Floods Link State Advertisements (LSA) globally; builds complete topological map.</td>
+      <td><strong>OSPFv2 / OSPFv3</strong></td>
+      <td>Link State (Dijkstra)</td>
+      <td>Raw IP (Protocol 89)</td>
+      <td>Cost = $\frac{10^8}{\text{Bandwidth (bps)}}$; Large Enterprise / Campus.</td>
     </tr>
     <tr>
-      <td><strong>Path Vector</strong></td>
-      <td>Policy-based sequence of Autonomous System (AS) hops</td>
-      <td>Inter-AS (BGP-4)</td>
-      <td>Prevents loops by checking if local AS number is present in path vector.</td>
+      <td><strong>BGP-4</strong></td>
+      <td>Path Vector</td>
+      <td>TCP (Port 179)</td>
+      <td>AS-Path list, Policy-based routing, Local Preference; Global Internet Core.</td>
     </tr>
   </tbody>
 </table>
 
-<h2 class="section-title">Topic 49 & 50: Congestion Control & Traffic Shaping (Leaky vs. Token Bucket)</h2>
-
-<table class="custom-table">
-  <thead>
-    <tr>
-      <th style="width: 25%;">Traffic Shaper</th>
-      <th style="width: 45%;">Operating Mechanism</th>
-      <th>Burst Handling Capability</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>1. Leaky Bucket</strong></td>
-      <td>Input packet bursts fill a buffer with fixed capacity. Water (packets) leaks out at a <strong>strictly constant uniform output rate</strong>. Excess bursts overflow and are discarded.</td>
-      <td>Completely eliminates bursts; outputs strictly smoothed constant bit-rate traffic.</td>
-    </tr>
-    <tr>
-      <td><strong>2. Token Bucket</strong></td>
-      <td>Tokens generate into the bucket at a constant rate $r$ up to capacity $b$. A packet can only transmit if it captures tokens.</td>
-      <td>Allows controlled, regulated bursts up to bucket capacity $b$ while capping average rate at $r$.</td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 class="section-title">Topic 51 – 54: Application Layer Services (SMTP, DNS, HTTP, DHCP)</h2>
-
-<div class="callout callout-info">
-  <div class="callout-title">🧠 Summary of Core Application Protocols & Ports</div>
+<div class="worked-box">
+  <div class="worked-title">🏛️ Complete Step-by-Step Distance Vector Routing & Count-to-Infinity Trace</div>
+  <p>Consider 3 linear routers $A \leftrightarrow B \leftrightarrow C$ with unit link costs ($1$):</p>
   <ul>
-    <li><strong>SMTP (Port 25/587):</strong> Simple Mail Transfer Protocol; pushes email between client and server and between mail relays.</li>
-    <li><strong>DNS (Port 53 - UDP/TCP):</strong> Hierarchical Domain Name System resolving domain names to IP addresses (Records: `A` for IPv4, `AAAA` for IPv6, `MX` for Mail Exchange, `CNAME` for Canonical Alias).</li>
-    <li><strong>HTTP/HTTPS (Port 80/443):</strong> Stateless request-response web protocol. Status codes: `200 OK`, `301 Moved Permanently`, `404 Not Found`, `500 Internal Server Error`.</li>
-    <li><strong>DHCP (Port 67/68 - UDP):</strong> Dynamic Host Configuration Protocol assigning IP addresses dynamically via the <strong>D-O-R-A</strong> sequence (<strong>D</strong>iscover $\rightarrow$ <strong>O</strong>ffer $\rightarrow$ <strong>R</strong>equest $\rightarrow$ <strong>A</strong>cknowledge).</li>
+    <li>Initial state: $B$ reaches $C$ in 1 hop ($D_B(C) = 1$); $A$ reaches $C$ via $B$ in 2 hops ($D_A(C) = 2$).</li>
+    <li><strong>Link $B-C$ Fails:</strong> $B$ detects failure. But before $B$ advertises $\infty$, $A$ sends its periodic update stating: *"I can reach $C$ with cost 2"*.</li>
+    <li>$B$ incorrectly concludes: *"I can reach $C$ via $A$ with cost $2 + 1 = 3$"*. $B$ updates $D_B(C) = 3$.</li>
+    <li>On next iteration, $A$ learns $B$'s cost is 3, updating $D_A(C) = 3 + 1 = 4$.</li>
+    <li>$B$ updates $D_B(C) = 5 \implies A$ updates $D_A(C) = 6 \dots$ <strong>Counting to Infinity!</strong></li>
   </ul>
+  <p><strong>Remedies:</strong> (1) <em>Split Horizon:</em> $A$ never advertises its route to $C$ back to $B$. (2) <em>Poison Reverse:</em> $A$ advertises $D_A(C) = \infty$ to $B$.</p>
 </div>
 
 <div class="worked-box">
-  <div class="worked-title">🌐 [UPLOADED PYQ] Complete Life Cycle: What Happens When You Type `https://example.com`?</div>
-  <ol>
-    <li><strong>Host IP Configuration (DHCP):</strong> Client uses DHCP DORA sequence to acquire local IP, Subnet Mask, Default Gateway, and DNS Server.</li>
-    <li><strong>DNS Resolution:</strong> Browser queries local DNS cache, then queries Recursive Resolver $\rightarrow$ Root Server $\rightarrow$ TLD Server (`.com`) $\rightarrow$ Authoritative Server to obtain target IP for `example.com`.</li>
-    <li><strong>ARP Translation:</strong> Host uses Address Resolution Protocol (ARP) to map Default Gateway IP to its physical 48-bit MAC address.</li>
-    <li><strong>TCP 3-Way Handshake:</strong> Client sends `SYN` (Port 443) $\rightarrow$ Server replies `SYN-ACK` $\rightarrow$ Client confirms `ACK` (Connection Established).</li>
-    <li><strong>TLS 1.3 Handshake:</strong> Client and server negotiate cipher suites, authenticate server X.509 certificate, and exchange ephemeral Diffie-Hellman keys to establish encrypted session.</li>
-    <li><strong>HTTP GET Request & IP Routing:</strong> Browser transmits encrypted `GET / HTTP/2` request. Packet is encapsulated with IP header and routed across intermediate Autonomous Systems via OSPF and BGP-4.</li>
-    <li><strong>Server Processing & Response:</strong> Web server processes request and returns HTTP `200 OK` response with HTML/CSS payload.</li>
-    <li><strong>Browser Rendering:</strong> Browser parses HTML DOM tree, fetches CSS/JS, and renders the visual webpage!</li>
-  </ol>
+  <div class="worked-title">🏛️ Step-by-Step Silly Window Syndrome Prevention: Nagle vs. Clark Algorithms</div>
+  <p><strong>Silly Window Syndrome</strong> occurs when data is exchanged in tiny 1-byte segments (e.g. typing single characters in Telnet), causing a 40-byte TCP/IP header overhead for every single byte of payload:</p>
+  <ul>
+    <li><strong>Sender-Side Solution (Nagle's Algorithm):</strong> The sender transmits the first small packet immediately. While waiting for ACK, the sender buffers all subsequent outgoing data into a full Maximum Segment Size (MSS) block before transmitting the next segment.</li>
+    <li><strong>Receiver-Side Solution (Clark's Solution):</strong> The receiver prevents sending tiny window update advertisements. It advertises a window size of 0 until its internal buffer has space for either a full MSS or half the receiver buffer capacity!</li>
+  </ul>
+</div>
+<h2 class="section-title">Topic 52.4: Master University Solved Examination Numerical Bank</h2>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 3: Hierarchical CIDR Route Aggregation & Supernetting</div>
+  <p>A regional ISP router receives routing updates for four contiguous IP address blocks:</p>
+  <ul>
+    <li>Block 1: `200.16.0.0/24` (Binary: `11001000.00010000.00000000.00000000`)</li>
+    <li>Block 2: `200.16.1.0/24` (Binary: `11001000.00010000.00000001.00000000`)</li>
+    <li>Block 3: `200.16.2.0/24` (Binary: `11001000.00010000.00000010.00000000`)</li>
+    <li>Block 4: `200.16.3.0/24` (Binary: `11001000.00010000.00000011.00000000`)</li>
+  </ul>
+  <p><strong>Route Aggregation (Supernetting) Solution:</strong></p>
+  <p>Comparing the 3rd octets in binary: `00000000`, `00000001`, `00000010`, `00000011`. All 4 blocks share the identical first 22 bits (`11001000.00010000.000000xx`).</p>
+  $$\mathbf{\text{Single Aggregated Supernet Route} = \mathbf{200.16.0.0/22} \quad (\text{Subnet Mask: } 255.255.252.0)}$$
+  <p><em>Benefit:</em> Replaces 4 independent routing table entries with 1 consolidated entry, reducing router BGP memory table size by $75\%$!</p>
 </div>
 
-<h2 class="section-title">🧠 M5 Active Recall & Exam Questions [UPLOADED PYQ]</h2>
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 4: TCP Maximum Throughput & Mathis Equation</div>
+  <p>A cross-continental $10\text{ Gbps}$ TCP link has an RTT of $100\text{ ms}$ and standard MSS of $1460\text{ bytes}$. If the packet loss rate is $p = 0.0001$ ($0.01\%$), calculate the maximum achievable TCP throughput according to the <strong>Mathis Formula</strong>.</p>
+  <p><strong>Solution (Mathis Formula):</strong></p>
+  $$\mathbf{\text{Throughput} \le \frac{\text{MSS}}{\text{RTT}} \times \frac{1.22}{\sqrt{p}}}$$
+  $$\text{Throughput} \le \frac{1460 \times 8 \text{ bits}}{0.100\text{ s}} \times \frac{1.22}{\sqrt{0.0001}} = 116,800 \times \frac{1.22}{0.01} = 116,800 \times 122 = \mathbf{14,249,600 \text{ bps} \approx \mathbf{14.25 \text{ Mbps}}}$$
+  <p><em>Critical Engineering Insight:</em> Even on a $10\text{ Gbps}$ physical pipe, a tiny $0.01\%$ packet drop throttles standard TCP Reno throughput down to $14.25\text{ Mbps}$ due to aggressive AIMD window halving!</p>
+</div>
+<h2 class="section-title">Topic 52.5: Comprehensive Transport State Machines & Variable Length Subnetting (VLSM)</h2>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 5: Complete Variable-Length Subnet Masking (VLSM) Design</div>
+  <p>An enterprise organization is assigned address block `172.16.0.0/16`. Design an optimal VLSM subnetting plan for 4 distinct departments:</p>
+  <ul>
+    <li>Department A: Requires 4000 host addresses</li>
+    <li>Department B: Requires 2000 host addresses</li>
+    <li>Department C: Requires 1000 host addresses</li>
+    <li>Department D: Requires 500 host addresses</li>
+  </ul>
+  <p><strong>VLSM Allocation Plan:</strong></p>
+  <table class="custom-table">
+    <thead><tr><th>Department</th><th>Hosts Needed</th><th>Bits Needed ($2^h - 2 \ge N$)</th><th>Prefix Mask</th><th>Assigned Network Address</th><th>Usable Host Range</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Dept A</strong></td><td>4000</td><td>$h=12 \ (4094)$</td><td>$/20 \ (255.255.240.0)$</td><td>`172.16.0.0/20`</td><td>`172.16.0.1 - 172.16.15.254`</td></tr>
+      <tr><td><strong>Dept B</strong></td><td>2000</td><td>$h=11 \ (2046)$</td><td>$/21 \ (255.255.248.0)$</td><td>`172.16.16.0/21`</td><td>`172.16.16.1 - 172.16.23.254`</td></tr>
+      <tr><td><strong>Dept C</strong></td><td>1000</td><td>$h=10 \ (1022)$</td><td>$/22 \ (255.255.252.0)$</td><td>`172.16.24.0/22`</td><td>`172.16.24.1 - 172.16.27.254`</td></tr>
+      <tr><td><strong>Dept D</strong></td><td>500</td><td>$h=9 \ (510)$</td><td>$/23 \ (255.255.254.0)$</td><td>`172.16.28.0/23`</td><td>`172.16.28.1 - 172.16.29.254`</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step TCP Jacobson's RTO Calculation Algorithm</div>
+  <p>Given initial $\text{SRTT} = 100\text{ ms}$, $\text{RTTVAR} = 10\text{ ms}$, and $\alpha = 0.125, \beta = 0.25$. If a new sample RTT measurement $R = 140\text{ ms}$ arrives, compute the updated Retransmission Timeout ($\text{RTO}$):</p>
+  $$\text{Error } E = R - \text{SRTT} = 140 - 100 = \mathbf{+40 \text{ ms}}$$
+  $$\text{Updated SRTT} \leftarrow \text{SRTT} + \alpha \times E = 100 + 0.125(40) = 100 + 5 = \mathbf{105 \text{ ms}}$$
+  $$\text{Updated RTTVAR} \leftarrow \text{RTTVAR} + \beta \times (|E| - \text{RTTVAR}) = 10 + 0.25(40 - 10) = 10 + 7.5 = \mathbf{17.5 \text{ ms}}$$
+  $$\mathbf{\text{New RTO} = \text{SRTT} + 4 \times \text{RTTVAR} = 105 + 4(17.5) = 105 + 70 = \mathbf{175 \text{ ms}}}$$
+</div>
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 6: Bellman-Ford Distance Vector Calculation with Routing Table Updates</div>
+  <p>Given 4 routers $A, B, C, D$. Router $B$ has direct neighbor costs: $c(B, A) = 3, c(B, C) = 1, c(B, D) = 6$. $B$ receives distance vectors from $A$ and $C$:</p>
+  <ul>
+    <li>From $A$: $D_A = (A: 0, B: 3, C: 4, D: 2)$</li>
+    <li>From $C$: $D_C = (A: 4, B: 1, C: 0, D: 3)$</li>
+  </ul>
+  <p>Update $B$'s routing table for destination $D$ using Bellman-Ford: $D_B(D) = \min \{ c(B, A) + D_A(D), \ c(B, C) + D_C(D), \ c(B, D) \}$.</p>
+  $$\text{Via } A: 3 + 2 = 5$$
+  $$\text{Via } C: 1 + 3 = 4$$
+  $$\text{Direct } D: 6$$
+  $$\mathbf{D_B(D) = \min(5, 4, 6) = \mathbf{4 \quad (\text{Next Hop: Router } C)}}$$
+</div>
 
 <div class="qa-card">
-  <div class="qa-q">Q1. [UPLOADED PYQ] Explain the structure and working of the IPv4 Header with the purpose of all major fields. (10 Marks)</div>
+  <div class="qa-q">Q6. Compare IPv4 and IPv6 across address space, header size, fragmentation, checksum, and security. (10 Marks)</div>
   <div class="qa-a">
-    The IPv4 header has a minimum size of 20 bytes (up to 60 bytes with options):<br>
-    1. <em>Version (4b):</em> `4` for IPv4.<br>
-    2. <em>IHL (4b):</em> Header length in 32-bit words (min 5).<br>
-    3. <em>Total Length (16b):</em> Header + Data in bytes.<br>
-    4. <em>Identification (16b), Flags (3b), Fragment Offset (13b):</em> Fragmentation management for MTU limits.<br>
-    5. <em>TTL (8b):</em> Hop limit decremented at each router to prevent packet looping.<br>
-    6. <em>Protocol (8b):</em> Transport demultiplexing (`6`=TCP, `17`=UDP).<br>
-    7. <em>Header Checksum (16b):</em> Error detection across header fields.<br>
-    8. <em>Source IP (32b) & Destination IP (32b):</em> Logical sender and receiver addresses.
+    • <strong>Address Space:</strong> IPv4 has 32-bit addresses ($4.3 \times 10^9$); IPv6 has 128-bit addresses ($3.4 \times 10^{38}$).<br>
+    • <strong>Header Size:</strong> IPv4 is variable ($20\text{--}60\text{ B}$); IPv6 has a fixed $40\text{-byte}$ base header with chained Extension Headers.<br>
+    • <strong>Fragmentation:</strong> IPv4 routers perform fragmentation; in IPv6, ONLY the source host fragments packets (Path MTU Discovery).<br>
+    • <strong>Header Checksum:</strong> IPv4 recomputes checksum at every hop; IPv6 eliminates header checksum to maximize router forwarding speed.<br>
+    • <strong>Security:</strong> IPsec is optional add-on in IPv4; IPsec support is built natively into the core IPv6 protocol specification!
   </div>
 </div>
+
+<div class="qa-card">
+  <div class="qa-q">Q7. Explain Address Resolution Protocol (ARP), ARP Request (Broadcast), ARP Reply (Unicast), and ARP Cache Poisoning. (8 Marks)</div>
+  <div class="qa-a">
+    • <strong>ARP:</strong> Maps a known Layer 3 logical IP address to an unknown Layer 2 physical MAC address on the local subnet.<br>
+    • <strong>ARP Request:</strong> Broadcast frame (`FF:FF:FF:FF:FF:FF`) asking: *"Who has IP X.X.X.X? Tell MAC Y."*<br>
+    • <strong>ARP Reply:</strong> Unicast frame from the target host stating: *"I have IP X.X.X.X, my MAC is Z."*<br>
+    • <strong>ARP Poisoning (Spoofing):</strong> An attacker sends gratuitous fake ARP replies associating the gateway's IP with the attacker's MAC, enabling Man-in-the-Middle (MitM) packet sniffing!
+  </div>
+</div>
+<h2 class="section-title">Topic 52.6: Advanced TCP State Transition Machine & Congestion Control Math</h2>
+
+<div class="diagram-container">
+  <svg width="100%" height="80" viewBox="0 0 740 80" xmlns="http://www.w3.org/2000/svg">
+    <rect x="20" y="20" width="90" height="40" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width="1.2"/>
+    <text x="65" y="44" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#991b1b" text-anchor="middle">CLOSED</text>
+
+    <path d="M 110 40 L 160 40" stroke="#0284c7" stroke-width="1.8"/>
+
+    <rect x="165" y="20" width="100" height="40" rx="4" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="215" y="44" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#1e40af" text-anchor="middle">SYN_SENT</text>
+
+    <path d="M 265 40 L 315 40" stroke="#0284c7" stroke-width="1.8"/>
+
+    <rect x="320" y="20" width="120" height="40" rx="4" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.2"/>
+    <text x="380" y="44" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#14532d" text-anchor="middle">ESTABLISHED</text>
+
+    <path d="M 440 40 L 490 40" stroke="#0284c7" stroke-width="1.8"/>
+
+    <rect x="495" y="20" width="110" height="40" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
+    <text x="550" y="44" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#92400e" text-anchor="middle">FIN_WAIT_1/2</text>
+
+    <path d="M 605 40 L 640 40" stroke="#0284c7" stroke-width="1.8"/>
+
+    <rect x="645" y="20" width="85" height="40" rx="4" fill="#faf5ff" stroke="#a855f7" stroke-width="1.2"/>
+    <text x="687" y="44" font-family="Plus Jakarta Sans" font-size="9" font-weight="700" fill="#581c87" text-anchor="middle">TIME_WAIT</text>
+  </svg>
+  <div class="diagram-caption">Figure 5.2: The Classical TCP Client Connection Lifetime State Machine</div>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: Variable Length Subnet Masking (VLSM) Enterprise Plan</div>
+  <p>An enterprise is allocated IP address block `10.0.0.0/16`. Subnet the block for: (1) Head Office: 10,000 hosts, (2) Branch 1: 5,000 hosts, (3) Branch 2: 2,000 hosts, (4) Branch 3: 1,000 hosts, (5) Five WAN point-to-point links (2 hosts each).</p>
+  <ul>
+    <li><strong>Head Office (10,000 hosts):</strong> $2^{14} - 2 = 16,382 \ge 10,000 \implies$ Mask: $/18 \ (255.255.192.0) \implies \mathbf{10.0.0.0/18}$ (`.0.1` to `.63.254`).</li>
+    <li><strong>Branch 1 (5,000 hosts):</strong> $2^{13} - 2 = 8,190 \ge 5,000 \implies$ Mask: $/19 \ (255.255.224.0) \implies \mathbf{10.0.64.0/19}$ (`.64.1` to `.95.254`).</li>
+    <li><strong>Branch 2 (2,000 hosts):</strong> $2^{11} - 2 = 2,046 \ge 2,000 \implies$ Mask: $/21 \ (255.255.248.0) \implies \mathbf{10.0.96.0/21}$ (`.96.1` to `.103.254`).</li>
+    <li><strong>Branch 3 (1,000 hosts):</strong> $2^{10} - 2 = 1,022 \ge 1,000 \implies$ Mask: $/22 \ (255.255.252.0) \implies \mathbf{10.0.104.0/22}$ (`.104.1` to `.107.254`).</li>
+    <li><strong>5 WAN Links (2 hosts each):</strong> Mask $/30 \ (255.255.255.252) \implies$ `10.0.108.0/30`, `10.0.108.4/30`, `10.0.108.8/30`, `10.0.108.12/30`, `10.0.108.16/30`.</li>
+  </ul>
+  <p><em>Efficiency:</em> 100% zero address collisions with over $40,000$ IP addresses preserved for future organizational growth!</p>
+</div>
+
 """

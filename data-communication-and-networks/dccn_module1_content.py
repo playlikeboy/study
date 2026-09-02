@@ -218,4 +218,388 @@ $$\text{Data} \xrightarrow{\text{Transport}} \text{TCP Header} + \text{Data (Seg
     5. <strong>Transport Layer Communication:</strong> OSI supports only Connection-Oriented; TCP/IP supports both Connection-Oriented (TCP) and Connectionless (UDP).
   </div>
 </div>
+<h2 class="section-title">Topic 13.2: Comprehensive Worked Numerical Problems in Physical Layer Physics</h2>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 1: Decibel Loss and Multistage Repeater Amplification</div>
+  <p>A signal travels through a transmission line consisting of three consecutive cable sections and two intermediate in-line amplifiers:</p>
+  <ul>
+    <li>Cable Section 1: Loss of $-12\text{ dB}$</li>
+    <li>Amplifier 1: Gain of $+35\text{ dB}$</li>
+    <li>Cable Section 2: Loss of $-18\text{ dB}$</li>
+    <li>Amplifier 2: Gain of $+20\text{ dB}$</li>
+    <li>Cable Section 3: Loss of $-15\text{ dB}$</li>
+  </ul>
+  <p>If the input signal power is $P_{\text{in}} = 2\text{ mW}$, calculate: (1) Total net gain/loss in dB, and (2) Final output power $P_{\text{out}}$.</p>
+  <p><strong>Solution:</strong></p>
+  $$\text{Total Net dB} = (-12) + (+35) + (-18) + (+20) + (-15) = \mathbf{+10 \text{ dB (Net Amplification)}}$$
+  $$\text{Net dB} = 10 \log_{10}\left(\frac{P_{\text{out}}}{P_{\text{in}}}\right) \implies 10 = 10 \log_{10}\left(\frac{P_{\text{out}}}{2\text{ mW}}\right)$$
+  $$\log_{10}\left(\frac{P_{\text{out}}}{2\text{ mW}}\right) = 1 \implies \frac{P_{\text{out}}}{2\text{ mW}} = 10^1 = 10 \implies \mathbf{P_{\text{out}} = 20 \text{ mW}}$$
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 2: Satellite Link Bandwidth-Delay Product (BDP)</div>
+  <p>A 100 Mbps satellite link has a propagation delay of 250 ms. Calculate the Bandwidth-Delay Product in bits and bytes.</p>
+  <p><strong>Solution:</strong></p>
+  $$\text{BDP} = \text{Bandwidth} \times \text{Round-Trip Time (RTT)} = 100 \times 10^6 \text{ bps} \times (2 \times 0.250\text{ s})$$
+  $$\text{BDP} = 100 \times 10^6 \times 0.500\text{ s} = \mathbf{50,000,000 \text{ bits}} = \mathbf{6,250,000 \text{ bytes (6.25 MB)}}$$
+  <p><em>Interpretation:</em> The sender can transmit 6.25 MB of data before receiving the first ACK acknowledgement!</p>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 3: Multi-Level Signaling Nyquist Limit</div>
+  <p>A digital transmission system must transmit 64 kbps over a channel with bandwidth 4 kHz. What is the minimum Signal-to-Noise Ratio (SNR) in dB required to support this data rate according to Shannon's Theorem?</p>
+  <p><strong>Solution:</strong></p>
+  $$C = B \log_2(1 + \text{SNR}) \implies 64,000 = 4000 \times \log_2(1 + \text{SNR})$$
+  $$\log_2(1 + \text{SNR}) = \frac{64,000}{4000} = 16 \implies 1 + \text{SNR} = 2^{16} = 65,536 \implies \text{SNR} = 65,535$$
+  $$\mathbf{\text{SNR}_{\text{dB}} = 10 \log_{10}(65,535) \approx 10 \times 4.8165 = \mathbf{48.17 \text{ dB}}}$$
+</div>
+<h2 class="section-title">Topic 13.3: In-Depth Theoretical Foundations of Data Transmission</h2>
+
+<p>
+  A physical transmission medium acts as a <strong>Bandpass Linear Time-Invariant (LTI) Filter</strong>, attenuating high-frequency harmonics and causing phase shifts. In electromagnetic wave theory, signal propagation velocity through dielectric media is given by:
+</p>
+
+<div class="formula-card">
+  <strong>Electromagnetic Propagation Velocity & Wavelength:</strong>
+  $$\mathbf{v = \frac{c}{\sqrt{\epsilon_r}} = \frac{3 \times 10^8 \text{ m/s}}{\sqrt{\epsilon_r}}}$$
+  $$\mathbf{\lambda = \frac{v}{f}}$$
+  Where $\epsilon_r$ is the relative dielectric constant of the insulating medium ($\epsilon_r \approx 2.1\text{ to }2.3$ for solid Teflon/Polyethylene in coaxial and twisted pair cables, yielding $v \approx 2 \times 10^8\text{ m/s} = \frac{2}{3} c$).
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: Multistage Communication Link Budget & SNR Cascades</div>
+  <p>An optical fiber transmission link spans $L = 80\text{ km}$. The optical transmitter launches an optical power of $P_{\text{tx}} = 5\text{ mW}$ ($+7\text{ dBm}$) at $\lambda = 1550\text{ nm}$. The fiber cable exhibits an attenuation coefficient of $\alpha = 0.25\text{ dB/km}$. The link contains 10 optical fusion splices with loss $0.1\text{ dB/splice}$ and 2 optical connectors with loss $0.5\text{ dB/connector}$. If the optical receiver has a minimum sensitivity of $-25\text{ dBm}$, calculate the optical power margin (safety margin).</p>
+  <p><strong>Solution:</strong></p>
+  <ul>
+    <li>Total Fiber Cable Loss: $\alpha \times L = 0.25\text{ dB/km} \times 80\text{ km} = \mathbf{20.0 \text{ dB}}$</li>
+    <li>Total Splice Loss: $10 \times 0.1\text{ dB} = \mathbf{1.0 \text{ dB}}$</li>
+    <li>Total Connector Loss: $2 \times 0.5\text{ dB} = \mathbf{1.0 \text{ dB}}$</li>
+    <li><strong>Total Link Channel Attenuation:</strong> $20.0 + 1.0 + 1.0 = \mathbf{22.0 \text{ dB}}$</li>
+    <li><strong>Received Optical Power ($P_{\text{rx}}$):</strong> $P_{\text{tx}} - \text{Total Loss} = +7\text{ dBm} - 22.0\text{ dB} = \mathbf{-15.0 \text{ dBm}}$</li>
+    <li><strong>Optical Power Margin:</strong> $P_{\text{rx}} - \text{Receiver Sensitivity} = -15.0\text{ dBm} - (-25.0\text{ dBm}) = \mathbf{+10.0 \text{ dB}}$</li>
+  </ul>
+  <p><em>Conclusion:</em> The link possesses a robust $10\text{ dB}$ optical power margin, ensuring high operational reliability against laser aging and component degradation!</p>
+</div>
+
+<h2 class="section-title">Topic 13.4: Exhaustive Peer-to-Peer Protocol Encapsulation Mechanics</h2>
+
+<p>
+  When application data travels down the 5-layer TCP/IP protocol stack, each layer prepends a dedicated protocol header containing operational control metadata. This structural encapsulation process is depicted below:
+</p>
+
+<div class="diagram-container">
+  <svg width="100%" height="110" viewBox="0 0 740 110" xmlns="http://www.w3.org/2000/svg">
+    <rect x="250" y="8" width="450" height="18" fill="#faf5ff" stroke="#a855f7" stroke-width="1.2"/>
+    <text x="475" y="21" font-family="Plus Jakarta Sans" font-size="10" font-weight="700" fill="#581c87" text-anchor="middle">Application Message (Data)</text>
+
+    <rect x="200" y="32" width="50" height="18" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
+    <text x="225" y="45" font-family="Plus Jakarta Sans" font-size="9" font-weight="700" fill="#92400e" text-anchor="middle">TCP Hdr</text>
+    <rect x="250" y="32" width="450" height="18" fill="#faf5ff" stroke="#a855f7" stroke-width="1.2"/>
+    <text x="475" y="45" font-family="Plus Jakarta Sans" font-size="9.5" fill="#581c87" text-anchor="middle">Transport Segment</text>
+
+    <rect x="140" y="56" width="60" height="18" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="170" y="69" font-family="Plus Jakarta Sans" font-size="9" font-weight="700" fill="#1e40af" text-anchor="middle">IP Hdr</text>
+    <rect x="200" y="56" width="500" height="18" fill="#fef3c7" stroke="#d97706" stroke-width="1.2"/>
+    <text x="450" y="69" font-family="Plus Jakarta Sans" font-size="9.5" fill="#92400e" text-anchor="middle">Network Packet (Datagram)</text>
+
+    <rect x="70" y="80" width="70" height="18" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.2"/>
+    <text x="105" y="93" font-family="Plus Jakarta Sans" font-size="9" font-weight="700" fill="#14532d" text-anchor="middle">MAC Hdr</text>
+    <rect x="140" y="80" width="560" height="18" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.2"/>
+    <text x="420" y="93" font-family="Plus Jakarta Sans" font-size="9.5" fill="#1e40af" text-anchor="middle">Data Link Frame</text>
+    <rect x="700" y="80" width="30" height="18" fill="#fee2e2" stroke="#dc2626" stroke-width="1.2"/>
+    <text x="715" y="93" font-family="Plus Jakarta Sans" font-size="8.5" font-weight="700" fill="#991b1b" text-anchor="middle">FCS</text>
+  </svg>
+  <div class="diagram-caption">Figure 1.2: End-to-End PDU Header Encapsulation from Application down to Data Link Frame</div>
+</div>
+<h2 class="section-title">Topic 13.5: Master University Solved Examination Numerical Bank</h2>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 4: Nyquist Multi-Level Constellation Design</div>
+  <p>A TV broadcast channel has a bandwidth of $B = 6\text{ MHz}$. We wish to transmit a digital HDTV stream at a data rate of $R = 30\text{ Mbps}$ over this noiseless channel.</p>
+  <ol>
+    <li>What is the minimum number of discrete signal voltage levels ($L$) required by the signaling hardware?</li>
+    <li>If each discrete level is represented by $k$ bits, what is the value of $k$?</li>
+  </ol>
+  <p><strong>Solution:</strong></p>
+  $$R = 2 B \log_2(L) \implies 30 \times 10^6 = 2 \times (6 \times 10^6) \times \log_2(L)$$
+  $$\log_2(L) = \frac{30}{12} = 2.5 \implies L = 2^{2.5} \approx 5.657$$
+  <p>Since the number of physical signal levels $L$ must be an integer power of 2 ($2^k$), we round up to the next power of 2:</p>
+  $$\mathbf{k = 3 \text{ bits/symbol} \implies L = 2^3 = \mathbf{8 \text{ signal levels}}}$$
+  <p><em>Actual Max Bit Rate with $L=8$:</em> $R_{\text{actual}} = 2 \times 6\text{ MHz} \times 3 = \mathbf{36 \text{ Mbps}}$ (exceeds the required $30\text{ Mbps}$).</p>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 5: Shannon Limit on Deep Space Satellite Channel</div>
+  <p>A deep space satellite probe transmits telemetry data over a microwave radio channel with bandwidth $B = 10\text{ MHz}$ and Signal-to-Noise Ratio $\text{SNR}_{\text{dB}} = -3\text{ dB}$ (noise power exceeds signal power!). Calculate the maximum theoretical bit rate.</p>
+  <p><strong>Solution:</strong></p>
+  $$\text{SNR}_{\text{dB}} = -3\text{ dB} \implies -3 = 10 \log_{10}(\text{SNR}) \implies \text{SNR} = 10^{-0.3} \approx 0.5012$$
+  $$\mathbf{C = B \log_2(1 + \text{SNR}) = 10 \times 10^6 \times \log_2(1 + 0.5012) = 10^7 \times \log_2(1.5012)}$$
+  $$\text{Since } \log_2(1.5012) \approx 0.5861: \quad \mathbf{C = 10^7 \times 0.5861 = \mathbf{5,861,000 \text{ bps} \approx \mathbf{5.86 \text{ Mbps}}}}$$
+  <p><em>Significance:</em> Shannon's theorem proves that reliable, error-free communication is mathematically possible even when noise is greater than signal power ($\text{SNR} < 1$), provided robust error-correcting codes are utilized!</p>
+</div>
+<h2 class="section-title">Topic 13.6: Deep Layer-by-Layer Architectural Analysis & Standards Frameworks</h2>
+
+<p>
+  International network standards guarantee interoperability across heterogeneous hardware vendors, operating systems, and physical transmission media. The global standards architecture is governed by four preeminent bodies:
+</p>
+<ol>
+  <li><strong>International Organization for Standardization (ISO):</strong> Promulgated the 7-layer Open Systems Interconnection (OSI) Basic Reference Model (ISO/IEC 7498-1).</li>
+  <li><strong>Institute of Electrical and Electronics Engineers (IEEE):</strong> Governs physical and data link standards via the <strong>IEEE 802 LAN/MAN Standards Committee</strong> (802.1 Bridging & Architecture, 802.3 Ethernet, 802.11 Wireless LAN Wi-Fi, 802.15 Wireless PAN Bluetooth/Zigbee).</li>
+  <li><strong>International Telecommunication Union (ITU-T):</strong> Promulgates global telecommunication recommendations (V-series for modem modulation, X-series for data networks like X.25, G-series for optical transmission like G.709 OTN).</li>
+  <li><strong>Internet Engineering Task Force (IETF):</strong> Publishes <strong>Requests for Comments (RFCs)</strong> defining Internet protocols (RFC 791 IPv4, RFC 793 TCP, RFC 2616 HTTP/1.1, RFC 8200 IPv6).</li>
+</ol>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 15%;">OSI Layer</th>
+      <th style="width: 25%;">Primary Protocol Data Unit (PDU)</th>
+      <th style="width: 30%;">Key Standards & Hardware Devices</th>
+      <th>Security Mechanisms</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Layer 7: Application</strong></td>
+      <td>User Message / Stream Data</td>
+      <td>HTTP/3, DNS, SMTP, SSH; Gateways, Application Load Balancers.</td>
+      <td>Application-layer auth, OAuth2, PGP Email encryption.</td>
+    </tr>
+    <tr>
+      <td><strong>Layer 6: Presentation</strong></td>
+      <td>Formatted / Encoded Data</td>
+      <td>ASCII, UTF-8, ASN.1, MIME, JPEG, MPEG.</td>
+      <td>SSL / TLS 1.3 cryptographic record layer.</td>
+    </tr>
+    <tr>
+      <td><strong>Layer 5: Session</strong></td>
+      <td>Synchronized Dialogue Data</td>
+      <td>RPC, NetBIOS, PPTP, ISO 8327 / ITU-T X.225.</td>
+      <td>Session tokens, Mutual SSL handshake validation.</td>
+    </tr>
+    <tr>
+      <td><strong>Layer 4: Transport</strong></td>
+      <td>TCP Segment / UDP Datagram</td>
+      <td>TCP (RFC 793), UDP (RFC 768), SCTP, QUIC; Layer 4 Firewalls.</td>
+      <td>TLS transport encapsulation, TCP SYN cookies.</td>
+    </tr>
+    <tr>
+      <td><strong>Layer 3: Network</strong></td>
+      <td>IP Datagram (Packet)</td>
+      <td>IPv4, IPv6, ICMP, ARP, OSPF, BGP; Layer 3 Routers.</td>
+      <td>IPsec (AH / ESP), Access Control Lists (ACLs).</td>
+    </tr>
+    <tr>
+      <td><strong>Layer 2: Data Link</strong></td>
+      <td>Network Frame</td>
+      <td>IEEE 802.3 Ethernet, IEEE 802.11 Wi-Fi, PPP, HDLC; Layer 2 Switches, Bridges.</td>
+      <td>WPA3 Wi-Fi encryption, IEEE 802.1AE MACsec, Port Security.</td>
+    </tr>
+    <tr>
+      <td><strong>Layer 1: Physical</strong></td>
+      <td>Raw Binary Bitstream</td>
+      <td>Cat 6A UTP, Single-Mode Fiber, RS-232, 1000BASE-T; Repeaters, Hubs, Modems.</td>
+      <td>Physical conduit shielding, tamper-detection alarms.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 6: End-to-End Packet Delay Calculation (Transmission, Propagation, Queuing, Processing)</div>
+  <p>A host transmits a packet of size $L = 1500\text{ bytes}$ across a path of $N = 4$ identical communication links. Each link has a transmission bandwidth of $R = 10\text{ Mbps}$, a physical length of $D = 250\text{ km}$, and propagation speed $v = 2 \times 10^8\text{ m/s}$. Each intermediate router introduces an average processing delay of $d_{\text{proc}} = 10 \ \mu\text{s}$ and queuing delay of $d_{\text{queue}} = 40 \ \mu\text{s}$. Calculate the total end-to-end latency from source to destination.</p>
+  <p><strong>Solution:</strong> Total Latency $T_{\text{total}} = N \times (T_{\text{trans}} + T_{\text{prop}}) + (N - 1) \times (d_{\text{proc}} + d_{\text{queue}})$.</p>
+  <ul>
+    <li>Transmission Delay per link: $T_{\text{trans}} = \frac{1500 \times 8 \text{ bits}}{10 \times 10^6 \text{ bps}} = \frac{12,000}{10^7} = 0.0012\text{ s} = \mathbf{1.20 \text{ ms}}$.</li>
+    <li>Propagation Delay per link: $T_{\text{prop}} = \frac{250 \times 10^3 \text{ m}}{2 \times 10^8 \text{ m/s}} = 0.00125\text{ s} = \mathbf{1.25 \text{ ms}}$.</li>
+    <li>Nodal Delay per intermediate router: $d_{\text{nodal}} = 10 \ \mu\text{s} + 40 \ \mu\text{s} = 50 \ \mu\text{s} = \mathbf{0.05 \text{ ms}}$.</li>
+    <li>There are $N=4$ links and $(N-1) = 3$ intermediate routers:</li>
+    $$\mathbf{T_{\text{total}} = 4 \times (1.20\text{ ms} + 1.25\text{ ms}) + 3 \times (0.05\text{ ms}) = 4 \times 2.45\text{ ms} + 0.15\text{ ms} = 9.80\text{ ms} + 0.15\text{ ms} = \mathbf{9.95 \text{ ms}}}$$
+  </ul>
+</div>
+<h2 class="section-title">Topic 13.7: Exhaustive Signal Analysis & Fourier Representation</h2>
+
+<p>
+  According to <strong>Fourier Analysis</strong>, any composite analog periodic signal can be decomposed into an infinite sum of simple sine and cosine waves (harmonics):
+  $$x(t) = \frac{a_0}{2} + \sum_{n=1}^\infty \left[ a_n \cos(2\pi n f_0 t) + b_n \sin(2\pi n f_0 t) \right]$$
+  Where $f_0 = 1/T$ is the fundamental harmonic frequency. When a square wave (representing digital binary pulses) is transmitted over a physical channel with finite bandwidth $B$, the channel filters out high-frequency harmonics, rounding the sharp rectangular edges.
+</p>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Problem: Harmonic Bandwidth Requirements for Square Waves</div>
+  <p>A digital system transmits a square wave clock signal at fundamental frequency $f_0 = 1\text{ MHz}$ ($1\text{ Mbps}$ rate for alternating `0101`).</p>
+  <ul>
+    <li>To transmit fundamental only: Bandwidth $B = 1\text{ MHz}$ $\implies$ Approximate sine wave shape.</li>
+    <li>To transmit up to 3rd harmonic ($3\text{ MHz}$): Bandwidth $B = 3\text{ MHz}$ $\implies$ Noticeable squaring of corners.</li>
+    <li>To transmit up to 5th harmonic ($5\text{ MHz}$): Bandwidth $B = 5\text{ MHz}$ $\implies$ Sharp, reliable digital pulse edges!</li>
+  </ul>
+  <p><em>Standard Telecom Rule:</em> A transmission channel must pass at least up to the <strong>5th harmonic</strong> ($B \ge 5 f_0$) to enable reliable, low-jitter threshold detection at the receiver!</p>
+</div>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 7: Signal-to-Noise Ratio (SNR) in Cascaded Amplifiers (Friis Formula)</div>
+  <p>Two amplifiers are connected in cascade: Amplifier 1 has Gain $G_1 = 10\text{ dB}$ ($G_1 = 10$) and Noise Figure $F_1 = 3\text{ dB}$ ($F_1 = 2$). Amplifier 2 has Gain $G_2 = 20\text{ dB}$ ($G_2 = 100$) and Noise Figure $F_2 = 6\text{ dB}$ ($F_2 = 4$). Calculate the total system Noise Figure ($F_{\text{total}}$) using the <strong>Friis Formula</strong>.</p>
+  $$\mathbf{F_{\text{total}} = F_1 + \frac{F_2 - 1}{G_1} = 2 + \frac{4 - 1}{10} = 2 + 0.3 = \mathbf{2.3}}$$
+  $$\mathbf{F_{\text{total(dB)}} = 10 \log_{10}(2.3) \approx \mathbf{3.62 \text{ dB}}}$$
+  <p><em>Design Insight:</em> The noise figure of the first amplifier dominates the overall receiver noise performance, proving that low-noise pre-amplifiers (LNAs) must always be placed at the very front of the antenna receiver chain!</p>
+</div>
+<h2 class="section-title">Topic 13.8: Master University Long-Answer Exam Solutions Bank</h2>
+
+<div class="qa-card">
+  <div class="qa-q">Q13. Explain the detailed structure of the Global Internet Hierarchy: Tier-1, Tier-2, Tier-3 ISPs, Internet Exchange Points (IXPs), and Peering vs Transit agreements. (10 Marks)</div>
+  <div class="qa-a">
+    The Internet is a global hierarchical network of networks:<br>
+    • <strong>Tier-1 ISPs (National/Global Backbones):</strong> AT&T, Lumen, Telia, Tata Communications, NTT. They own intercontinental fiber optic cables and peer with all other Tier-1 providers settlement-free (zero transit fees).<br>
+    • <strong>Tier-2 ISPs (Regional Providers):</strong> Purchase transit from Tier-1 ISPs to reach the global Internet, while peering with other Tier-2 ISPs locally.<br>
+    • <strong>Tier-3 ISPs (Local Access ISPs):</strong> Comcast, Jio, Airtel, local cable providers connecting end-user residential homes and enterprise campuses.<br>
+    • <strong>Internet Exchange Points (IXPs):</strong> Physical data center facilities where multiple ISPs and CDNs (Google, Cloudflare, Akamai) interconnect via high-speed switching fabrics to exchange traffic locally without incurring transit costs.<br>
+    • <strong>Peering vs. Transit:</strong> <em>Peering</em> is a bilateral agreement to exchange mutual customer traffic for free; <em>Transit</em> is a commercial contract where a customer ISP pays an upstream provider for complete global Internet routing access.
+  </div>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q14. Compare Coaxial Cable, Cat 6 UTP, and Optical Fiber across physical bandwidth, attenuation per km, installation difficulty, and maximum repeaterless distance. (8 Marks)</div>
+  <div class="qa-a">
+    • <strong>Cat 6 UTP:</strong> Bandwidth up to $250\text{--}500\text{ MHz}$; high attenuation ($20\text{ dB}/100\text{ m}$ at high freq); standard RJ45 crimping (very easy); max distance $100\text{ meters}$.<br>
+    • <strong>Coaxial Cable (RG-6):</strong> Bandwidth up to $1\text{ GHz}$; moderate attenuation ($6\text{--}10\text{ dB}/100\text{ m}$); BNC/F-type connectors (moderate); max distance $500\text{ meters}$.<br>
+    • <strong>Single-Mode Fiber (SMF):</strong> Bandwidth $>100\text{ THz}$ (virtually unlimited); ultra-low attenuation ($0.2\text{ dB/km}$ at $1550\text{ nm}$); requires precision fusion splicing (specialized training); max repeaterless distance $>80\text{ to }100\text{ km}$!
+  </div>
+</div>
+<h2 class="section-title">Topic 13.9: Advanced Communication Systems & Electromagnetic Wave Spectrum</h2>
+
+<p>
+  The electromagnetic spectrum extends from low-frequency radio waves to high-frequency gamma rays. Telecommunications allocates specific spectrum bands governed by international treaty (ITU-R Radio Regulations):
+</p>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 18%;">Band Name</th>
+      <th style="width: 20%;">Frequency Range</th>
+      <th style="width: 25%;">Propagation Mode</th>
+      <th>Primary Applications</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>VLF (Very Low)</strong></td><td>$3\text{ to }30\text{ kHz}$</td><td>Ground Wave (surface wave)</td><td>Submarine communication, navigation beacons</td></tr>
+    <tr><td><strong>LF (Low)</strong></td><td>$30\text{ to }300\text{ kHz}$</td><td>Ground Wave</td><td>Longwave radio, RFID, aeronautical beacons</td></tr>
+    <tr><td><strong>MF (Medium)</strong></td><td>$300\text{ kHz to }3\text{ MHz}$</td><td>Sky Wave (ionospheric reflection)</td><td>AM Radio broadcasting ($530\text{--}1700\text{ kHz}$)</td></tr>
+    <tr><td><strong>HF (High)</strong></td><td>$3\text{ to }30\text{ MHz}$</td><td>Sky Wave (skip distance reflection)</td><td>Shortwave international radio, amateur radio</td></tr>
+    <tr><td><strong>VHF (Very High)</strong></td><td>$30\text{ to }300\text{ MHz}$</td><td>Line-of-Sight (LOS)</td><td>FM Radio ($88\text{--}108\text{ MHz}$), VHF Television, Air traffic control</td></tr>
+    <tr><td><strong>UHF (Ultra High)</strong></td><td>$300\text{ MHz to }3\text{ GHz}$</td><td>Line-of-Sight (LOS)</td><td>Cellular mobile (4G LTE, 5G sub-6), Wi-Fi ($2.4\text{ GHz}$), GPS ($1.575\text{ GHz}$)</td></tr>
+    <tr><td><strong>SHF (Super High)</strong></td><td>$3\text{ to }30\text{ GHz}$</td><td>Line-of-Sight (Microwave dish)</td><td>Satellite communication, Radar, Wi-Fi ($5\text{ GHz} / 6\text{ GHz}$)</td></tr>
+    <tr><td><strong>EHF (Extremely High)</strong></td><td>$30\text{ to }300\text{ GHz}$</td><td>Millimeter Wave (mmWave)</td><td>5G mmWave ($28\text{--}39\text{ GHz}$), Automotive radar ($77\text{ GHz}$)</td></tr>
+  </tbody>
+</table>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Step-by-Step Solved Problem: Satellite Link Up-Link and Down-Link Frequency Planning</div>
+  <p>Geostationary communication satellites operate in paired frequency bands where the <strong>Up-Link frequency ($f_{\text{up}}$) is intentionally higher than the Down-Link frequency ($f_{\text{down}}$)</strong>:</p>
+  <ul>
+    <li><strong>C-Band:</strong> Up-Link $= 5.925\text{--}6.425\text{ GHz}$ ($6\text{ GHz}$); Down-Link $= 3.700\text{--}4.200\text{ GHz}$ ($4\text{ GHz}$).</li>
+    <li><strong>Ku-Band:</strong> Up-Link $= 14.0\text{--}14.5\text{ GHz}$ ($14\text{ GHz}$); Down-Link $= 11.7\text{--}12.2\text{ GHz}$ ($12\text{ GHz}$).</li>
+    <li><strong>Ka-Band:</strong> Up-Link $= 27.5\text{--}31.0\text{ GHz}$ ($30\text{ GHz}$); Down-Link $= 17.7\text{--}21.2\text{ GHz}$ ($20\text{ GHz}$).</li>
+  </ul>
+  <p><strong>Physical Rationale:</strong> Higher frequencies suffer higher free-space path loss ($L_{\text{path}} \propto f^2$). Ground earth stations have access to virtually unlimited electrical power grids to drive high-wattage Traveling Wave Tube Amplifiers (TWTAs) for the higher up-link frequency, whereas satellite transponders are strictly constrained by onboard solar panel energy budgets, necessitating the lower frequency for the down-link!</p>
+</div>
+<h2 class="section-title">Topic 13.10: Advanced Signal Propagation & Multipath Fading Models</h2>
+
+<p>
+  In terrestrial and cellular wireless networks, electromagnetic radio signals travel from transmitter to receiver across multiple physical paths via reflection from buildings, diffraction around obstacles, and scattering from foliage.
+</p>
+
+<div class="formula-card">
+  <strong>Free-Space Path Loss (Friis Transmission Equation):</strong>
+  $$\mathbf{P_r = P_t \cdot G_t \cdot G_r \cdot \left(\frac{\lambda}{4 \pi d}\right)^2 = P_t \cdot G_t \cdot G_r \cdot \left(\frac{c}{4 \pi d f}\right)^2}$$
+  $$\mathbf{\text{Path Loss (dB)} = 20 \log_{10}(d) + 20 \log_{10}(f) + 20 \log_{10}\left(\frac{4\pi}{c}\right) - G_{t\text{(dBi)}} - G_{r\text{(dBi)}}}$$
+  Where $d$ is the distance between antennas, $f$ is the carrier frequency, $G_t, G_r$ are transmitter and receiver antenna gains.
+</div>
+
+<table class="custom-table">
+  <thead>
+    <tr>
+      <th style="width: 25%;">Fading Phenomenon</th>
+      <th style="width: 45%;">Physical Mechanism</th>
+      <th>Mitigation Strategy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. Large-Scale Path Loss</strong></td>
+      <td>Signal power decays exponentially with distance ($P_r \propto 1/d^n$ where $n = 2\text{ to }4$).</td>
+      <td>Cellular base station micro-cell sectorization & power control.</td>
+    </tr>
+    <tr>
+      <td><strong>2. Shadowing (Log-Normal)</strong></td>
+      <td>Obstruction of line-of-sight path by large physical structures (hills, skyscrapers).</td>
+      <td>Macro-diversity (handover between multiple base stations).</td>
+    </tr>
+    <tr>
+      <td><strong>3. Small-Scale Rayleigh Fading</strong></td>
+      <td>Destructive interference between multiple arriving signal paths shifting over fractions of a wavelength.</td>
+      <td>MIMO spatial diversity, RAKE receivers in CDMA, OFDM subcarriers.</td>
+    </tr>
+    <tr>
+      <td><strong>4. Frequency-Selective Fading</strong></td>
+      <td>Coherence bandwidth of channel is smaller than transmitted signal bandwidth ($B_c < B_s$).</td>
+      <td>Adaptive equalization and Cyclic-Prefix OFDM modulation.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 8: Free-Space Path Loss Calculation for 5G Millimeter Wave Link</div>
+  <p>A 5G NR base station transmits at frequency $f = 28\text{ GHz}$ ($\lambda = \frac{3 \times 10^8}{28 \times 10^9} = 0.0107\text{ m} = 10.7\text{ mm}$) to a user equipment (UE) located $d = 500\text{ meters}$ away. Transmitter antenna gain is $G_t = 15\text{ dBi}$, and receiver antenna gain is $G_r = 5\text{ dBi}$. Calculate the free-space path loss in dB.</p>
+  <p><strong>Solution:</strong></p>
+  $$\text{Path Loss} = 20 \log_{10}(500) + 20 \log_{10}(28 \times 10^9) + 20 \log_{10}\left(\frac{4\pi}{3 \times 10^8}\right) - 15 - 5$$
+  $$\text{Path Loss} = 53.98 + 208.94 - 147.56 - 20 = \mathbf{95.36 \text{ dB}}$$
+  <p><em>Conclusion:</em> High path loss ($>95\text{ dB}$ over $500\text{ m}$) necessitates high-gain beamforming phased array antennas in 5G mmWave base stations!</p>
+</div>
+<h2 class="section-title">Topic 13.11: Comprehensive Protocol Architectures & Network Performance Metrics</h2>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 9: Packetization Delay vs. Propagation Latency in Real-Time Voice (VoIP)</div>
+  <p>In a Voice-over-IP (VoIP) network, human speech is encoded at $64\text{ kbps}$ using G.711 PCM. The voice encoder generates $20\text{ ms}$ voice sample frames before encapsulating into RTP/UDP/IP packets ($40\text{ bytes}$ header). The packet travels across a $2000\text{ km}$ fiber optic link ($v = 2 \times 10^8\text{ m/s}$) with transmission bandwidth $100\text{ Mbps}$. Calculate: (1) Payload size per VoIP packet in bytes, (2) Packetization delay, (3) Transmission delay, (4) Propagation delay, and (5) Total one-way latency.</p>
+  <p><strong>Solution:</strong></p>
+  <ul>
+    <li>Payload size per $20\text{ ms}$ voice block: $\text{Payload} = \frac{64,000 \text{ bps} \times 0.020\text{ s}}{8 \text{ bits/byte}} = \mathbf{160 \text{ bytes}}$.</li>
+    <li>Total Packet Size (Header + Data): $40 + 160 = \mathbf{200 \text{ bytes (1600 bits)}}$.</li>
+    <li><strong>Packetization Delay:</strong> The time required to accumulate $20\text{ ms}$ of continuous human speech = $\mathbf{20.0 \text{ ms}}$.</li>
+    <li><strong>Transmission Delay:</strong> $T_{\text{trans}} = \frac{1600 \text{ bits}}{100 \times 10^6 \text{ bps}} = 0.000016\text{ s} = \mathbf{0.016 \text{ ms}}$.</li>
+    <li><strong>Propagation Delay:</strong> $T_{\text{prop}} = \frac{2000 \times 10^3 \text{ m}}{2 \times 10^8 \text{ m/s}} = 0.010\text{ s} = \mathbf{10.0 \text{ ms}}$.</li>
+    <li><strong>Total One-Way Voice Latency:</strong> $20.0\text{ ms} + 0.016\text{ ms} + 10.0\text{ ms} = \mathbf{30.016 \text{ ms}}$ (Well within ITU-T G.114 target of $< 150\text{ ms}$ for crystal-clear interactive voice!).</li>
+  </ul>
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q15. Explain Network Reliability, Mean Time Between Failures (MTBF), and Mean Time to Repair (MTTR) with Availability formula. (6 Marks)</div>
+  <div class="qa-a">
+    Network Availability measures the percentage of operational uptime in a communication infrastructure:<br>
+    $$\mathbf{\text{Availability } A = \frac{\text{MTBF}}{\text{MTBF} + \text{MTTR}} \times 100\%}$$
+    Where $\text{MTBF}$ is Mean Time Between Failures, and $\text{MTTR}$ is Mean Time to Repair. A telecom-grade "Five Nines" ($99.999\%$) network allows no more than <strong>5.26 minutes of unscheduled downtime per year</strong>, necessitating redundant hot-standby routers, dual-homed BGP links, and rapid failover protocols!
+  </div>
+</div>
+<h2 class="section-title">Topic 13.12: Master Solved Numerical on Shannon Capacity & Eb/N0</h2>
+
+<div class="worked-box">
+  <div class="worked-title">🏛️ Solved Numerical 10: Energy-per-Bit to Noise Power Spectral Density Ratio ($E_b/N_0$)</div>
+  <p>In digital communications, Signal-to-Noise Ratio (SNR) is related to the normalized parameter $\frac{E_b}{N_0}$ (energy per bit to noise power spectral density) by:</p>
+  $$\mathbf{\frac{E_b}{N_0} = \text{SNR} \times \frac{B}{R}}$$
+  <p>Where $B$ is channel bandwidth in Hz, and $R$ is bit rate in bps. If a satellite channel requires a bit rate $R = 2\text{ Mbps}$ over bandwidth $B = 1\text{ MHz}$ with $\text{SNR} = 15$ ($11.76\text{ dB}$):</p>
+  $$\mathbf{\frac{E_b}{N_0} = 15 \times \frac{10^6 \text{ Hz}}{2 \times 10^6 \text{ bps}} = 15 \times 0.5 = \mathbf{7.5}}$$
+  $$\mathbf{\left(\frac{E_b}{N_0}\right)_{\text{dB}} = 10 \log_{10}(7.5) \approx \mathbf{8.75 \text{ dB}}}$$
+  <p><strong>Shannon's Ultimate Limit:</strong> As bandwidth $B \rightarrow \infty$, the minimum theoretical threshold for error-free transmission is the famous <strong>Shannon Limit</strong>:</p>
+  $$\mathbf{\left(\frac{E_b}{N_0}\right)_{\text{min}} = \ln(2) \approx 0.693 = \mathbf{-1.59 \text{ dB}}}$$
+</div>
+
+<div class="qa-card">
+  <div class="qa-q">Q16. Explain Baud Rate (Modulation Rate) vs. Bit Rate (Data Rate) with formula and modulation examples. (6 Marks)</div>
+  <div class="qa-a">
+    • <strong>Bit Rate ($R$):</strong> The number of binary bits ($0, 1$) transmitted per second (bps).<br>
+    • <strong>Baud Rate ($S$):</strong> The number of distinct signal units (symbols) transmitted per second (baud).<br>
+    $$\mathbf{R = S \times r = S \times \log_2(L)}$$
+    Where $L$ is the number of constellation points/levels and $r = \log_2(L)$ is bits/symbol. In 256-QAM ($L=256 \implies r=8$), a baud rate of $S = 1000\text{ baud}$ produces a bit rate of $R = 8000\text{ bps}$!
+  </div>
+</div>
+
 """
